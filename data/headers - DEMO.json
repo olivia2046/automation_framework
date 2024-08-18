@@ -1,0 +1,21 @@
+{
+  "header1": {
+    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+    "Authorization": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "username": "Automation"
+  },
+  "header2": {
+    "Content-Type": "application/json",
+    "Authorization": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "username": "Automation"
+  },
+  "header3": {
+    "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundaryBYdZZh2HsWkBhECX",
+    "Authorization": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "username": "Automation"
+  },
+  "header4": {
+    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+    "Cookie": "SOME_LOGIN_IDENTITY=bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+  }
+}
