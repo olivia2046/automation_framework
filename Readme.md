@@ -17,9 +17,9 @@ testreport：测试报告
 util: 工具函数库  
 
 # 使用方法
-运行：在config目录下新建settings - XXXX.ini文件（XXXX部分不能有空格），内容可参照其他项目对应接口/DB测试配置文件
-      cd main
-      python main_test.py XXXX  [-e any/fail] [-r reportname] [ -a algorithm_name] [--host algorithm_host] [-p/--port algorithm_port] 
+运行：在config目录下新建settings - XXXX.ini文件（XXXX部分不能有空格），内容可参照DEMO项目测试配置文件  
+      cd main  
+      python main_test.py XXXX  [-e any/fail] [-r reportname] [ -a algorithm_name] [--host algorithm_host] [-p/--port algorithm_port]  
       XXXX为配置文件名的后缀, -e为发送email, fail为仅当有失败或错误时发送，any为任意情况都发送  
       使用pytest执行 增加--tests_per_worker参数，即pytest的--tests-per-worker参数
 
@@ -38,17 +38,17 @@ run_case_type: Excel-Excel格式的用例, Code-Python代码的用例，用逗�
 断言内容为比较jsonpath表示的列表中每一个元素，则正常添加断言表达式  
 断言内容为比较jsonpath表示的列表，则在断言表达式末尾增加一个参数"list relation"
      
-接口返回结果为仅一个空列表的情况：
-如果接口仅可能返回一个空列表，可在“期望响应文本”列填[]
+接口返回结果为仅一个空列表的情况：  
+如果接口仅可能返回一个空列表，可在“期望响应文本”列填[]  
 如果接口可能返回一个空列表，也可能为其他结果，则空列表的情况写为：["=","$response_plain_text","[]"]
 
 表达式内包含表达式：
 ["in","$.data[*].id","${proj_spec.DEMO.mudule1.function_a('param1_value,param2='${proj_spec.DEMO.module2.function_b(param1=\"text_value\")}')}"]
 
-Post_Case_Action基于响应结果设置全局变量：
-响应结果为文本类型：
-text:变量名
-响应结果为json格式：
+Post_Case_Action基于响应结果设置全局变量：  
+响应结果为文本类型：  
+text:变量名  
+响应结果为json格式：  
 json:表达式:索引下标:变量名， 如json:$.newsId:[0]:newsId
 
 # 文档生成
