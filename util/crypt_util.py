@@ -7,6 +7,7 @@
 
 import base64
 #from cryptography.hazmat.primitives.ciphers import algorithms
+# install pycryptodome, remove any pycrypto, crypto folders first
 from Crypto.Cipher import AES
 #from binascii import b2a_hex, a2b_hex
 

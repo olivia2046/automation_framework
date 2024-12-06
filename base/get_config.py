@@ -11,7 +11,7 @@ import os, sys, logging
 sys.path.append('..')
 import base.globalvars as glo
 from util.crypt_util import decryption
-from util.data.pandas_tool import data_conversion_list
+
 
 # cf = ConfigParser(os.environ) #使用环境变量进行插值
 cf = ConfigParser()
@@ -479,40 +479,38 @@ def get_value(section, key, default = ''):
 
 # 获取capabilities
 def get_capabilities():
-    if cf.has_section('Caps'):
-        caps={}
-        try:
+    try:
+        caps = {}
+        if cf.has_section('Caps'):
             for cap in cf['Caps'].keys():
                 value = cf.get('Caps', cap)
                 if value in ['True','False']:
                     value = eval(value)
                 caps[cap] = value
+        if cf.has_section('Caps_appium'):
             for appium_cap in cf['Caps_appium'].keys():
                 value = cf.get('Caps_appium', appium_cap)
                 if value in ['True','False']:
                     value = eval(value)
                 caps["appium:%s"%appium_cap] = value
-            if cf.has_section('Caps_bstack'): #browserstack capabilities
-                caps["bstack:options"]={}
-                for bstack_cap in cf['Caps_bstack'].keys():
-                    value = cf.get('Caps_bstack', bstack_cap)
-                    if value in ['True', 'False']:
-                        value = eval(value)
-                    caps["bstack:options"][bstack_cap]=value
-            if cf.has_section('Caps_lt'): #lambdatest capabilities
-                caps["lt:options"] = {}
-                for lt_cap in cf['Caps_lt'].keys():
-                    value = cf.get('Caps_lt', lt_cap)
-                    if value in ['True', 'False']:
-                        value = eval(value)
-                    caps["lt:options"][lt_cap] = value
-            return caps
-        except Exception as e:
-            logging.error("get capability: %s"%e)
-            return {}
-    else:
-        logging.warning("no capabilities set")
-        return {}
+        if cf.has_section('Caps_bstack'): #browserstack capabilities
+            caps["bstack:options"]={}
+            for bstack_cap in cf['Caps_bstack'].keys():
+                value = cf.get('Caps_bstack', bstack_cap)
+                if value in ['True', 'False']:
+                    value = eval(value)
+                caps["bstack:options"][bstack_cap]=value
+        if cf.has_section('Caps_lt'): #lambdatest capabilities
+            caps["lt:options"] = {}
+            for lt_cap in cf['Caps_lt'].keys():
+                value = cf.get('Caps_lt', lt_cap)
+                if value in ['True', 'False']:
+                    value = eval(value)
+                caps["lt:options"][lt_cap] = value
+        return caps
+    except Exception as e:
+        logging.error("get capability: %s" % e)
+        return caps
 
 def get_cmd_executor():
     """获取command_executor配置，用于webdriver初始化参数command_executor。若获取失败，返回默认值http://127.0.0.1:4444/wd/hub
@@ -542,18 +540,7 @@ def get_other_app_activity():
 
 
 # 获取es连接配置信息
-def get_es_dict(section='ES'):
-    try:
-        es_dict = {}
-        for i in cf.options(section):
-            if i == 'hosts':
-                es_dict['hosts'] = data_conversion_list(cf.get(section, 'hosts'))
-            es_dict[i] = cf.get(section, i)
-        es_dict["http_auth"]=(es_dict.pop('Username'),es_dict.pop('Password'))
-        return es_dict
-    except Exception as e:
-        logging.error("获取es配置信息失败:%s" % e)
-        return None
+
 
 
 def get_data_file_mode():

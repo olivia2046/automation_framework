@@ -6,8 +6,6 @@
 
 import json,logging
 
-from util.os.os_tool import get_root_path
-
 
 class JsonUtil:
     def __init__(self, file_path=None):

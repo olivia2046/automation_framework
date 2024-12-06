@@ -32,6 +32,30 @@ class GetData:
             return case_data.to_dict()
         else:
             return {}
+
+    @staticmethod
+    def get_user_credential(user_loc):
+        """
+        get user credential from user file
+
+        :param user_loc: location in the user list
+
+        :return:
+        """
+
+        abs_file_path = get_user_file_path()
+        user_data = pd.read_csv(abs_file_path)
+        row = user_data[(user_data['loc'] == user_loc)]
+        return tuple(row.iloc[0][['username', 'password']])
+
+    def get_user_id_from_file(user_name):
+        abs_file_path = get_user_file_path()
+        user_data = pd.read_csv(abs_file_path)
+        row = user_data[user_data['username'] == user_name]
+        try:
+            return row.iloc[0][['user_id']]
+        except Exception as e:
+            logging.error(e)
         
     
 def get_header(header_file_path,label_name):
@@ -50,33 +74,6 @@ def get_json_data(header_file_path,label_name):
     headers = eval_from_string(repr(header_value))
     return headers
 
-def get_user_credential(role_name,channel='person'):
-    """从指定文件中获取指定角色的用户登录信息,默认渠道为个人版"""
-    abs_file_path = get_user_file_path()
-    user_data = pd.read_csv(abs_file_path)
-    row = user_data[(user_data['rolename']==role_name) & (user_data['channel']==channel)]
-    return tuple(row.iloc[0][['username','password']])
 
-def get_user_id_from_file(user_name):
-    abs_file_path = get_user_file_path()
-    user_data = pd.read_csv(abs_file_path)
-    row = user_data[user_data['username']==user_name]
-    try:
-        return row.iloc[0][['user_id']]
-    except Exception as e:
-        logging.error(e)
 
-def get_user_id_from_db(user_name, db_section='DB_auth', account_type=2):
-    """从数据库获取用户id
 
-    :param user_name:
-    :param db_section:
-    :param account_type: 账号类型1-LDAP, 2-Standard， 默认使用2-Standard标准账号
-    :return:
-    """
-    sql = """select id from t_permission_user where username='%s' and account_type=%s"""%(user_name, account_type)
-    res = execute_query(sql, dbname=db_section)
-    try:
-        return res[0][0]
-    except Exception as e:
-        logging.error(e)

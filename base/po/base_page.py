@@ -86,7 +86,8 @@ class BasePage:
         """
         element = self.find_element(locator, timeout, condition='element_to_be_clickable')
         element.click()
-        element.clear().send_keys(text)
+        element.clear()
+        element.send_keys(text)
 
 
 

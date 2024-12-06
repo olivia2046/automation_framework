@@ -6,10 +6,11 @@
 '''
 import sys, logging, re, inspect
 import os
-from base.get_config import get_es_dict
+
 
 os.environ['NLS_LANG'] = 'SIMPLIFIED CHINESE_CHINA.UTF8'  # cx_Oracle 中文乱码问题
 import pymysql
+# need to install DBUtils==1.4
 from DBUtils.PooledDB import PooledDB
 sys.path.append('..')
 import base.globalvars as glo
@@ -237,49 +238,10 @@ def get_query_result(sql, fetch_one=True, result_type="dict", dbname='DB'):
         raise Exception  # raise exception, 否则出错时用例仍为pass
 
 
-def get_es_connection(**kwargs):
-    """
-    根据配置文件中的配置信息获取es的连接
-    :param hosts: ip 传入的是一个列表或者单个ip 例如:["192.168.250.213", "192.168.250.210", "192.168.250.216"] or ["192.168.250.213"]
-    :param cluster: 集群名
-    :param timeout: 超时时间
-    :param kwargs: Elasticsearch可支持的参数
-    :return:
-    """
-    from elasticsearch import Elasticsearch
-    try:
-        es_dict = get_es_dict()
-        es = Elasticsearch(es_dict["hosts"], cluster=es_dict["cluster"], timeout=int(es_dict["sniff_timeout"]), **kwargs)
-        return es
-    except Exception as e:
-        logging.error("Get ES connection failed")
-        logging.error(e)
-        return None
 
 
-def get_es_query_result(body=None,fetch_one=True):
-    """
-    查询es语句,获取>=1条的数据
-    :param body: 查询语法
-    :param fetch_one: 默认取一条:True
-    :return: 返回指定路径下的es数据
-    """
-    try:
-        es_dict = get_es_dict()
-        es = get_es_connection(
-                               http_auth=es_dict["http_auth"],  # 设置用户名和密码
-                               sniff_timeout=es_dict["sniff_timeout"]  # 设置超时时间
-                               )
-        # 查询es语句
-        result = es.search(index=es_dict["index"], body=body)
-        if fetch_one is True:
-            return result["hits"]["hits"][0] if len(result["hits"]["hits"]) > 0 else None
-        else:
-            return result["hits"]["hits"]
-    except Exception as e:
-        logging.error("查询es失败:%s" % e)
-        logging.error(e)
-        return None
+
+
 
 if __name__ == '__main__':
     """

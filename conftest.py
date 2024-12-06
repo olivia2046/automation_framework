@@ -23,7 +23,7 @@ def pytest_addoption(parser):
         "--config",
         action="store",
         # default: 默认值，命令行没有指定host时，默认用该参数值
-        default="DEMO",       
+        default="triplog_web",
         help="test project name"
     )
 
