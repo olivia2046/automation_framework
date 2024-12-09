@@ -7,5 +7,8 @@
 
 from case.test_web_base import TestWebBase
 class TestTriplogWebBase(TestWebBase):
+    @classmethod
+    def setup_class(cls):
+        pass
 
     pass

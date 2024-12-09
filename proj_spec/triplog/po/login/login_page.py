@@ -8,7 +8,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from base.get_config import get_capabilities
 import base.globalvars as glo
-from proj_spec.triplog.po.dashboard.overview_page import OverviewPage
+
 from proj_spec.triplog.po.triplog_base_page import TriplogBasePage
 
 
@@ -23,13 +23,20 @@ class TriplogLoginPage(TriplogBasePage):
         browser_name = caps['browserName']
         if browser_name=='Chrome':
             self.driver = webdriver.Chrome()
-            self.driver.get(glo.get_value("url1"))
+        elif browser_name=='Firefox':
+            self.driver = webdriver.Firefox()
+        elif browser_name=='Edge':
+            self.driver = webdriver.Edge()
+        self.driver.get(glo.get_value("url1"))
 
     def login(self, email, password):
+        from proj_spec.triplog.po.dashboard.overview_page import OverviewPage
+
+        self.driver.maximize_window()
 
         self.find_element_and_input(self._email_locator, email)
         self.find_element_and_input(self._password_locator, password)
         self.find_element_and_click(self._login_btn_locator)
-
+        #todo: wait for page to load completely
         return OverviewPage(self.driver)
 

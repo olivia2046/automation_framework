@@ -4,7 +4,7 @@
 # @Author : Olivia
 # Desc:
 # **************************************
-from base.po.base_page import BasePage
+
 from base.po.web_base_page import WebBasePage
 
 

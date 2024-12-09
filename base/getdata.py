@@ -11,7 +11,7 @@ from base.get_config import get_user_file_path
 sys.path.append('..')
 from base.expression_evaluation import eval_from_string
 from util.json_util import JsonUtil
-from util.db_util import execute_query
+
 
 class GetData:
 

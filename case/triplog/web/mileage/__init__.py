@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 # **************************************
-# @Time : 2024/12/5 9:58
+# @Time : 2024/12/6 17:27
 # @Author : Olivia
 # Desc:
 # **************************************
-
-from case.test_base import TestBase
-
-class TestWebBase(TestBase):
-
-    pass

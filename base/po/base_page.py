@@ -6,6 +6,7 @@ desc:
 '''
 import logging
 
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
@@ -119,3 +120,12 @@ class BasePage:
         #android
         #self.driver.execute_script('mobile: performEditorAction', {'action': 'done'})
         #self.driver.execute_script("if (window.android) { window.android.hideKeyboard() }")
+
+
+    def hover_over_element(self, locator):
+        element = self.find_element(locator)
+        actions = ActionChains(self.driver)
+        actions.move_to_element(element).perform()
+
+
+
