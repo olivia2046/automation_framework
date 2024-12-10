@@ -10,7 +10,7 @@ from case.triplog.test_triplog_web_base import TestTriplogWebBase
 from proj_spec.triplog.po.login.login_page import TriplogLoginPage
 
 
-class TestTrips(TestTriplogWebBase):
+class TestEnterpriseTrips(TestTriplogWebBase):
 
     @classmethod
     def setup_class(cls):
