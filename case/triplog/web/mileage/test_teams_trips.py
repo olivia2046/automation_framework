@@ -7,18 +7,22 @@
 import pytest
 from base.getdata import GetData
 from case.triplog.test_triplog_web_base import TestTriplogWebBase
+from case.triplog.web.mileage.test_trips import TestTrips
 from proj_spec.triplog.po.login.login_page import TriplogLoginPage
 
 
-class TestTeamsTrips(TestTriplogWebBase):
+class TestTeamsTrips(TestTrips):
+    user_type="teams_paid"
 
-    @classmethod
-    def setup_class(cls):
-        super().setup_class()
-        email, password = GetData.get_user_credential("teams_paid")
-        login_page = TriplogLoginPage()
-        overview_page = login_page.login(email, password)
-        cls.trips_page = overview_page.navigation_bar.goto_trips()
+    # @classmethod
+    # def setup_class(cls):
+    #     super().setup_class()
+    #     email, password = GetData.get_user_credential("teams_paid")
+    #     login_page = TriplogLoginPage()
+    #     overview_page = login_page.login(email, password)
+    #     cls.trips_page = overview_page.navigation_bar.goto_trips()
+
+
 
     @pytest.mark.skip("debug")
     @pytest.mark.parametrize('from_location, to_location, query_distance',[('Golden Gate Bridge','South Lake Tahoe', True)])
