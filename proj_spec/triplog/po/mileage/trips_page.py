@@ -22,6 +22,8 @@ class TripsPage(TriplogNavigablePage):
     # save button when edit trip
     _save_button_loc = (By.XPATH, "//input[@type='button' and @ value='Create Return Trip']/preceding-sibling::input")
     _tips_locator = (By.CSS_SELECTOR, "mask#b + g > path:nth-child(2)")
+    _ytd_mileage_loc = (By.XPATH, "//span[@class='ui-dialog-title' and text()='Year to Date Mileage Required']")
+    _ytd_save_btn_loc = (By.XPATH,"//div[@id='year_to_date_dialog']//input[@type='submit' and @value='Save']")
     #_title_locator = (By.CSS_SELECTOR, "span.n_menu-selected-menuname")
     _trip_row_loc = (By.XPATH, "//div[contains(@id,'trip_row_')]")
     _trips_loc = (By.XPATH, "//tr[contains(@id,'trip_row_')]")
@@ -33,10 +35,13 @@ class TripsPage(TriplogNavigablePage):
         time.sleep(2)
         try:
 
-            self.find_element(self._trip_row_masked_loc,skip_error_handle=True)
+            #self.find_element(self._trip_row_masked_loc,skip_error_handle=True)
+            self.find_element(self._ytd_mileage_loc)
+            self.find_element_and_click(self._ytd_save_btn_loc)
 
         except Exception as e:
-            logging.info("tips not prompted, continue with script")
+            #logging.info("tips not prompted, continue with script")
+            logging.info("Year to Date Mileage window not present")
 
         self.find_element_and_click(self._trip_row_loc)
 
