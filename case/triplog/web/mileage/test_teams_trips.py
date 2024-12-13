@@ -5,10 +5,7 @@
 # Desc: test trips functions using team account(and country of Canada)
 # **************************************
 import pytest
-from base.getdata import GetData
-from case.triplog.test_triplog_web_base import TestTriplogWebBase
 from case.triplog.web.mileage.test_trips import TestTrips
-from proj_spec.triplog.po.login.login_page import TriplogLoginPage
 
 
 class TestTeamsTrips(TestTrips):

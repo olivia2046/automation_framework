@@ -7,7 +7,7 @@
 import pytest
 from abc import ABC, abstractmethod
 from base.getdata import GetData
-from case.triplog.test_triplog_web_base import TestTriplogWebBase
+from case.triplog.web.test_triplog_web_base import TestTriplogWebBase
 from proj_spec.triplog.po.login.login_page import TriplogLoginPage
 
 
