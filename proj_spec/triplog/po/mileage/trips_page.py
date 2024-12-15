@@ -9,12 +9,12 @@ import time
 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
-
+import base.globalvars as glo
 from proj_spec.triplog.po.triplog_navigable_page import TriplogNavigablePage
 
 
 class TripsPage(TriplogNavigablePage):
-
+    url = glo.get_value("url1") + "/trip"
     _add_trip_locator = (By.CSS_SELECTOR,"#add_button")
     _from_location_loc = (By.CSS_SELECTOR, "#fromLocation\.id")
     _to_location_loc = (By.CSS_SELECTOR, "#toLocation\.id")
@@ -32,11 +32,12 @@ class TripsPage(TriplogNavigablePage):
 
     def __init__(self,driver):
         super().__init__(driver)
+        self.driver.get(self.url)
         time.sleep(2)
         try:
 
             #self.find_element(self._trip_row_masked_loc,skip_error_handle=True)
-            self.find_element(self._ytd_mileage_loc)
+            self.find_element(self._ytd_mileage_loc,skip_error_handle=True)
             self.find_element_and_click(self._ytd_save_btn_loc)
 
         except Exception as e:

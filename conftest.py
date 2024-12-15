@@ -131,7 +131,11 @@ def pytest_html_results_table_header(cells):
 
 @pytest.mark.optionalhook
 def pytest_html_results_table_row(report, cells):
-    cells.insert(2, html.td(report.description))
+    if hasattr(report,'description'):
+        cells.insert(2, html.td(report.description))
+    else:
+        cells.insert(2, html.td('no description'))
+    # cells.insert(2, html.td(report.description))
     cells.insert(2, html.td(report.nodeid))
     # cells.insert(1, html.td(datetime.utcnow(), class_='col-time'))
     cells.pop(2)
@@ -153,21 +157,24 @@ def pytest_runtest_makereport(item):
     report = outcome.get_result()
     extra = getattr(report, 'extra', [])
 
-    if report.when == 'call' or report.when == "setup":
-        xfail = hasattr(report, 'wasxfail')
-        # if (report.skipped and xfail) or (report.failed and not xfail):
-        #     file_name = report.nodeid.replace("::", "_")+".png"
-        #     screen_img = _capture_screenshot()
-        #     if file_name:
-        #         html = '<div><img src="data:image/png;base64,%s" alt="screenshot" style="width:600px;height:300px;" ' \
-        #                'onclick="window.open(this.src)" align="right"/></div>' % screen_img
-        #         extra.append(pytest_html.extras.html(html))
-        report.extra = extra
-        #report.description = str(item.function.__doc__)
-        if item.function.__doc__ is not None:
-            report.description = str(item.function.__doc__.split('\n')[0]) #docstring仅取第一行内容
-        else:
-            report.description = ""
+    # if report.when == 'call' or report.when == "setup":
+    #     xfail = hasattr(report, 'wasxfail')
+    #     # if (report.skipped and xfail) or (report.failed and not xfail):
+    #     #     file_name = report.nodeid.replace("::", "_")+".png"
+    #     #     screen_img = _capture_screenshot()
+    #     #     if file_name:
+    #     #         html = '<div><img src="data:image/png;base64,%s" alt="screenshot" style="width:600px;height:300px;" ' \
+    #     #                'onclick="window.open(this.src)" align="right"/></div>' % screen_img
+    #     #         extra.append(pytest_html.extras.html(html))
+    report.extra = extra
+    #report.description = str(item.function.__doc__)
+    if item.function.__doc__ is not None:
+        #report.description = str(item.function.__doc__.split('\n')[0]) #docstring仅取第一行内容
+        setattr(report, 'description', str(item.function.__doc__.split('\n')[0])) # take the first line of docstring
+    else:
+        #report.description = ""
+        setattr(report, 'description','No description provided')
+
         #report.nodeid = report.nodeid.encode("utf-8").decode("unicode_escape")
 
 
