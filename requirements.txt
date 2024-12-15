@@ -49,8 +49,8 @@ PyMySQL==0.9.3
 pyparsing==2.4.7
 pyrsistent==0.19.3
 PySocks==1.7.1
-pytest==7.4.4
-pytest-html==1.19.0
+pytest==6.2.5
+pytest-html==3.1.1
 pytest-instafail==0.4.2
 pytest-metadata==2.0.4
 pytest-multithreading-allure==1.0.8
