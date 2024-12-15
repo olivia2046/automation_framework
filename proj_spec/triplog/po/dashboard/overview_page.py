@@ -9,7 +9,7 @@ from proj_spec.triplog.po.triplog_navigable_page import TriplogNavigablePage
 
 
 class OverviewPage(TriplogNavigablePage):
-    _title_loc = (By.XPATH,'//*[@id="triplog-body"]/div[1]/div[2]/div[2]/span[1]')
+    _title_loc = (By.XPATH,"//span[@class='n_menu-selected-menuname']")
     
 
     def get_title(self):
