@@ -26,7 +26,9 @@ class TripsPage(TriplogNavigablePage):
     _ytd_save_btn_loc = (By.XPATH,"//div[@id='year_to_date_dialog']//input[@type='submit' and @value='Save']")
     #_title_locator = (By.CSS_SELECTOR, "span.n_menu-selected-menuname")
     _trip_row_loc = (By.XPATH, "//div[contains(@id,'trip_row_')]")
-    _trips_loc = (By.XPATH, "//tr[contains(@id,'trip_row_')]")
+
+    #_trips_loc = (By.XPATH, "//tr[contains(@id,'trip_row_')]")
+    _trips_xpath = "//tr[contains(@id,'trip_row_')]"
     _trip_row_masked_loc = (By.XPATH, "//div[contains(@id,'trip_row_') and contains(@id,'_mask_outer')]")
     _query_distance_loc = (By.CSS_SELECTOR,"input[type='button'][class='green_button'][value='Query Driving Distance']")
 
@@ -74,10 +76,16 @@ class TripsPage(TriplogNavigablePage):
         :param kwargs:
         :return:
         """
+        self.driver.get(self.url)
         row_index=kwargs['row_index']
-        nth_trip = self.find_elements(self._trips_loc)[row_index]
+        nth_trip_loc = (By.XPATH,"(%s)[%s]"%(self._trips_xpath,row_index+1)) #xpath index starts from 1
+        self.find_element_and_click(nth_trip_loc)
+        # trip_row_element = self.find_element(nth_trip_loc)
+        # trip_row_element.click()
+
         #nth_trip.screenshot("nth_trip")
-        nth_trip.click()
+
+        #nth_trip.click()
 
         if "from_location" in kwargs:
             from_select = Select(self.find_element(self._from_location_loc))
