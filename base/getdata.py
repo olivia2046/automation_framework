@@ -7,7 +7,8 @@ import logging
 
 import pandas as pd
 import sys
-from base.get_config import get_user_file_path
+#from base.get_config import get_user_file_path
+from base.get_config import GetConfig
 sys.path.append('..')
 from base.expression_evaluation import eval_from_string
 from util.json_util import JsonUtil
@@ -17,12 +18,12 @@ class GetData:
 
     def get_case_data(self,caseid,file_path=None):
         '''根据test case id，以字典形式返回test case'''
-        from base.get_config import get_testcase_file
+        # from base.get_config import get_testcase_file
         #print("caseid%s"%caseid)
         #print(file_path)
 
         if file_path is None:
-            file_path = get_testcase_file()
+            file_path = GetConfig.get_testcase_file()
         datafrm = pd.read_excel(file_path).fillna('') #把空值替换成空字符串
         #case_data = datafrm[datafrm['CaseId']==caseid]#取出一行仍为DataFrame类型，需要取Series
         #print("get case data")
@@ -43,13 +44,13 @@ class GetData:
         :return:
         """
 
-        abs_file_path = get_user_file_path()
+        abs_file_path = GetConfig.get_user_file_path()
         user_data = pd.read_csv(abs_file_path)
         row = user_data[(user_data['loc'] == user_loc)]
         return tuple(row.iloc[0][['username', 'password']])
 
     def get_user_id_from_file(user_name):
-        abs_file_path = get_user_file_path()
+        abs_file_path = GetConfig.get_user_file_path()
         user_data = pd.read_csv(abs_file_path)
         row = user_data[user_data['username'] == user_name]
         try:
@@ -59,17 +60,17 @@ class GetData:
         
     
 def get_header(header_file_path,label_name):
-    from base.get_config import get_header_file
+    #from base.get_config import get_header_file
 
-    jutil = JsonUtil(get_header_file())
+    jutil = JsonUtil(GetConfig.get_header_file())
     header_value = jutil.get_data(label_name)
     headers = eval_from_string(repr(header_value))
     return headers
 
 def get_json_data(header_file_path,label_name):
-    from base.get_config import get_header_file
+    #from base.get_config import get_header_file
 
-    jutil = JsonUtil(get_header_file())
+    jutil = JsonUtil(GetConfig.get_header_file())
     header_value = jutil.get_data(label_name)
     headers = eval_from_string(repr(header_value))
     return headers

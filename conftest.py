@@ -12,6 +12,7 @@ from pathlib import Path
 import pytest
 from urllib.parse import urlparse
 import base.globalvars as glo
+
 from py.xml import html
 
 from util.clean_expired_files import delfile
@@ -198,18 +199,21 @@ def pytest_runtest_makereport(item):
 # 通过config.pluginmanager.register（）这个函数可以实现注册插件的功能，后续pytest这个框架在运行过程中就会调用你注册的插件
 def pytest_configure(config):
     def _get_config():
+
         glo.init()
         # 设置运行环境名:{'config_name':BMV_QA}
         glo.set_value("config_name", config.option.config)
+        from base.get_config import GetConfig
         print("当前用例运行环境配置:%s" % glo.get_value("config_name"))
 
-        from base.get_config import get_and_set_global_vars, get_url_dict
+
+        #from base.get_config import get_and_set_global_vars, get_url_dict
         #from util import db_util
 
         # 获取并设置
-        get_and_set_global_vars()
+        GetConfig.get_and_set_global_vars()
         # 获取ini文件中URLS的字典数据
-        url_dict = get_url_dict()
+        url_dict = GetConfig.get_url_dict()
         # 判断ini文件中URLs不能为空字典
         if url_dict != {}:
             for item in url_dict.items():
@@ -228,11 +232,10 @@ def pytest_configure(config):
         # else:
         #     glo.set_value("check_std_entity", False)
 
+
     _get_config()
-
+    from base.get_config import GetConfig
     config_name = glo.get_value("config_name")
-
-    from base.get_config import get_log_level
     logger = logging.getLogger(__name__)
     # logger.setLevel(level=logging.INFO)
     abspath = os.path.split(os.path.realpath(__file__))[0]
@@ -242,7 +245,7 @@ def pytest_configure(config):
     dir_path.mkdir(exist_ok=True, parents=True)
     handler = TimedRotatingFileHandler(root_path + os.sep + 'run.log', when='d', interval=1, backupCount=30,
                                        encoding='utf-8')
-    handler.setLevel(eval("logging." + get_log_level()))
+    handler.setLevel(eval("logging." + GetConfig.get_log_level()))
     formatter = logging.Formatter('%(asctime)s  - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
     logging.getLogger('').addHandler(handler)
@@ -287,6 +290,7 @@ def pytest_configure(config):
 
 
 def pytest_unconfigure(config):
+    from base.get_config import GetConfig
 
     abspath = os.path.split(os.path.realpath(__file__))[0]
     xml_report_path = '%s/testreport/xml/' % abspath
@@ -302,8 +306,8 @@ def pytest_unconfigure(config):
 
     report_file_path = glo.get_value("report_file_path")
     config_name = glo.get_value("config_name")
-    from base.get_config import get_test_type
-    test_type = get_test_type()
+
+    test_type = GetConfig.get_test_type()
 
     if config.option.email:
         from base.email_pytest_report import Email_Pytest_Report
