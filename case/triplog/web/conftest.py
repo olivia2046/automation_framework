@@ -42,13 +42,10 @@ def driver_init(request):
         driver = webdriver.Edge()
     request.cls.driver = driver
     login_page = TriplogLoginPage(request.cls.driver)
-    email, password = GetData.get_user_credential(request.cls.user_identifier)
-    request.cls.overview_page = login_page.login(email, password)
+    if request.cls.user_identifier is not None:
+        email, password = GetData.get_user_credential(request.cls.user_identifier)
+        request.cls.overview_page = login_page.login(email, password)
     yield
     driver.quit()
 
 
-# def pytest_ignore_collect(path, config):
-#     if "test_trips.TestTrips"  in str(path) or "test_trips::TestTrips"  in str(path):
-#         return True  # ignore
-#     return False
