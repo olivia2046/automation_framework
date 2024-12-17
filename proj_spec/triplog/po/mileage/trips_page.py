@@ -16,6 +16,11 @@ from proj_spec.triplog.po.triplog_navigable_page import TriplogNavigablePage
 class TripsPage(TriplogNavigablePage):
     url = glo.get_value("url1") + "/trip"
     _add_trip_locator = (By.CSS_SELECTOR,"#add_button")
+
+    _confirm_delete_multiple_loc = (By.XPATH, "//div[@id='delete_multiple_dialog']//input[@type='submit' and "
+                                              "@class='red_border_button' and @value='Delete']")
+
+
     _from_location_loc = (By.CSS_SELECTOR, "#fromLocation\.id")
     _to_location_loc = (By.CSS_SELECTOR, "#toLocation\.id")
     _create_button_loc = (By.XPATH, "//input[@type='submit' and @value='Create' and not(@class='blue_button')]")
@@ -29,6 +34,7 @@ class TripsPage(TriplogNavigablePage):
 
     #_trips_loc = (By.XPATH, "//tr[contains(@id,'trip_row_')]")
     _trips_xpath = "//tr[contains(@id,'trip_row_')]"
+    _trip_checkboxs_xpath = "(//input[@class='selected_id'])"
     _trip_row_masked_loc = (By.XPATH, "//div[contains(@id,'trip_row_') and contains(@id,'_mask_outer')]")
     _query_distance_loc = (By.CSS_SELECTOR,"input[type='button'][class='green_button'][value='Query Driving Distance']")
 
@@ -47,6 +53,20 @@ class TripsPage(TriplogNavigablePage):
             logging.info("Year to Date Mileage window not present")
 
         self.find_element_and_click(self._trip_row_loc)
+
+
+    def choose_button(self, first_level_text, second_level_text):
+        """
+
+        :param first_level:
+        :param second_level:
+        :return:
+        """
+        _triangle_down_loc = (By.XPATH, "//div[@class='triangle_down' and text()='%s']"%first_level_text)
+        link_loc = (By.XPATH, "//a[text()='%s']"%second_level_text)
+
+        self.hover_over_element(_triangle_down_loc)
+        self.find_element_and_click(link_loc)
 
 
 
@@ -76,7 +96,8 @@ class TripsPage(TriplogNavigablePage):
         :param kwargs:
         :return:
         """
-        self.driver.get(self.url)
+        #self.driver.get(self.url)
+        time.sleep(2)
         row_index=kwargs['row_index']
         nth_trip_loc = (By.XPATH,"(%s)[%s]"%(self._trips_xpath,row_index+1)) #xpath index starts from 1
         self.find_element_and_click(nth_trip_loc)
@@ -101,3 +122,20 @@ class TripsPage(TriplogNavigablePage):
             confirm_popup.accept()
 
         self.find_element_and_click(self._save_button_loc)
+
+
+    def delete_trip_from_menu(self, index=0):
+        """
+
+        :return:
+        """
+        #self.driver.get(self.url)
+
+        nth_trip_checkbox_loc = (By.XPATH, "%s[%s]"%(self._trip_checkboxs_xpath,index+1)) #xpath starts from 1
+        self.find_element_and_click(nth_trip_checkbox_loc)
+
+        self.choose_button("Delete","Delete Selected")
+
+        self.find_element_and_click(self._confirm_delete_multiple_loc)
+
+

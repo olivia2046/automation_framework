@@ -37,6 +37,7 @@ class TestTrips(TestTriplogWebBase):
         self.trips_page.add_trip(from_location, to_location, query_distance)
         assert 1 == 1
 
+    #@pytest.mark.skip("")
     @pytest.mark.parametrize('kwargs', [
         {"row_index": 0, "from_location": "South Lake Tahoe", "to_location": "Golden Gate Bridge",
          "query_distance": True}])
@@ -49,5 +50,16 @@ class TestTrips(TestTriplogWebBase):
 
         # self.trips_page.edit_trip(0,kwargs)
         self.trips_page.edit_trip(**kwargs)
+
+    #@pytest.mark.skip("")
+    def test_delete_trip_from_menu(self):
+        """
+
+
+        :return:
+        """
+        self.trips_page.delete_trip_from_menu(0)
+
+
 
 
