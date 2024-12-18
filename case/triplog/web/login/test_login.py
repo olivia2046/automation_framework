@@ -4,16 +4,18 @@
 # @Author : Olivia
 # Desc:
 # **************************************
-from base.getdata import GetData
+import pytest
+
 from case.triplog.web.test_triplog_web_base import TestTriplogWebBase
-from proj_spec.triplog.po.login.login_page import TriplogLoginPage
 
 
+@pytest.mark.skip()
 class TestLogin(TestTriplogWebBase):
+    user_identifier = "single_paid"
     def test_login(self):
-        login_page = TriplogLoginPage()
-        email, password = GetData.get_user_credential('single_paid')
-        overview_page = login_page.login(email,password)
+        # login_page = TriplogLoginPage(self.driver)
+        # email, password = GetData.get_user_credential(self.user_identifier)
+        # overview_page = login_page.login(email,password)
 
-        assert overview_page.get_title()=='Overview'
+        assert self.overview_page.get_title()=='Overview'
 

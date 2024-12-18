@@ -7,7 +7,7 @@
 import pytest
 
 from case.triplog.web.test_triplog_web_base import TestTriplogWebBase
-from proj_spec.triplog.po.mileage.trips_page import TripsPage
+from proj_spec.triplog.web.po.mileage.trips_page import TripsPage
 
 
 @pytest.mark.abstract

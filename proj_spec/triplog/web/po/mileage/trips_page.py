@@ -10,7 +10,7 @@ import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
 import base.globalvars as glo
-from proj_spec.triplog.po.triplog_navigable_page import TriplogNavigablePage
+from proj_spec.triplog.web.po.triplog_navigable_page import TriplogNavigablePage
 
 
 class TripsPage(TriplogNavigablePage):

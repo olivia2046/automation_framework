@@ -4,12 +4,12 @@
 # @Author : Olivia
 # Desc:
 # **************************************
-from selenium import webdriver
 from selenium.webdriver.common.by import By
-from base.get_config import get_capabilities
+#from base.get_config import get_capabilities
+
 import base.globalvars as glo
 
-from proj_spec.triplog.po.triplog_base_page import TriplogBasePage
+from proj_spec.triplog.web.po.triplog_base_page import TriplogBasePage
 
 
 class TriplogLoginPage(TriplogBasePage):
@@ -18,19 +18,22 @@ class TriplogLoginPage(TriplogBasePage):
     _password_locator = (By.CSS_SELECTOR, "#passwordTxt > input[type=password]")
     _login_btn_locator = (By.CSS_SELECTOR,"#loginForm > div.n_login-row.n_login-row-border.n_login-btn-box > button")
 
-    def __init__(self):
-        caps = get_capabilities()
-        browser_name = caps['browserName']
-        if browser_name=='Chrome':
-            self.driver = webdriver.Chrome()
-        elif browser_name=='Firefox':
-            self.driver = webdriver.Firefox()
-        elif browser_name=='Edge':
-            self.driver = webdriver.Edge()
+    def __init__(self,driver):
+        #caps = get_capabilities()
+        # from base.get_config import GetConfig
+        # caps = GetConfig.get_capabilities()
+        # browser_name = caps['browserName']
+        # if browser_name=='Chrome':
+        #     self.driver = webdriver.Chrome()
+        # elif browser_name=='Firefox':
+        #     self.driver = webdriver.Firefox()
+        # elif browser_name=='Edge':
+        #     self.driver = webdriver.Edge()
+        self.driver=driver
         self.driver.get(glo.get_value("url1"))
 
     def login(self, email, password):
-        from proj_spec.triplog.po.dashboard.overview_page import OverviewPage
+        from proj_spec.triplog.web.po.dashboard.overview_page import OverviewPage
 
         self.driver.maximize_window()
 

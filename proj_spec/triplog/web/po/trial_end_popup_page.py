@@ -6,7 +6,7 @@
 # **************************************
 from selenium.webdriver.common.by import By
 
-from proj_spec.triplog.po.triplog_base_page import TriplogBasePage
+from proj_spec.triplog.web.po.triplog_base_page import TriplogBasePage
 
 
 class TrialEndPage(TriplogBasePage):

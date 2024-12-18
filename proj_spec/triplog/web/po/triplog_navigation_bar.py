@@ -7,7 +7,7 @@
 from selenium.webdriver.common.by import By
 
 
-from proj_spec.triplog.po.triplog_base_page import TriplogBasePage
+from proj_spec.triplog.web.po.triplog_base_page import TriplogBasePage
 
 
 class TriplogNavigationBar(TriplogBasePage):
@@ -24,7 +24,7 @@ class TriplogNavigationBar(TriplogBasePage):
 
 
     def goto_trips(self):
-        from proj_spec.triplog.po.mileage.trips_page import TripsPage
+        from proj_spec.triplog.web.po.mileage.trips_page import TripsPage
         self.find_element(self._product_box_loc)
         self.navigate("Mileage","Trips")
         return TripsPage(self.driver)

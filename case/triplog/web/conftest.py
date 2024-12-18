@@ -2,7 +2,7 @@ import pytest
 from selenium import webdriver
 
 
-from proj_spec.triplog.po.login.login_page import TriplogLoginPage
+from proj_spec.triplog.web.po.login import TriplogLoginPage
 
 
 
