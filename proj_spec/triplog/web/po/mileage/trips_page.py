@@ -38,7 +38,14 @@ class TripsPage(TriplogNavigablePage):
     _trip_row_masked_loc = (By.XPATH, "//div[contains(@id,'trip_row_') and contains(@id,'_mask_outer')]")
     _query_distance_loc = (By.CSS_SELECTOR,"input[type='button'][class='green_button'][value='Query Driving Distance']")
 
-    def __init__(self,driver):
+    def __init__(self,driver,accessible=True):
+        """inistialize the trips page
+        if user is expected to have access to this page(by default), process the possible tips pop up at the end;
+        otherwise don't process the tips pop ups.
+
+        :param driver:
+        :param accessible:
+        """
         super().__init__(driver)
         self.driver.get(self.url)
         time.sleep(2)
@@ -52,7 +59,8 @@ class TripsPage(TriplogNavigablePage):
             #logging.info("tips not prompted, continue with script")
             logging.info("Year to Date Mileage window not present")
 
-        self.find_element_and_click(self._trip_row_loc)
+        if accessible:
+            self.find_element_and_click(self._trip_row_loc)
 
 
     def choose_button(self, first_level_text, second_level_text):
