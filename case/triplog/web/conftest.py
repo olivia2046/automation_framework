@@ -31,8 +31,6 @@ def driver_init(request):
     from base.getdata import GetData
     from base.get_config import GetConfig
     caps = GetConfig.get_capabilities()
-    from base.get_config import GetConfig
-    caps = GetConfig.get_capabilities()
     browser_name = caps['browserName']
     if browser_name=='Chrome':
         driver = webdriver.Chrome()
