@@ -2,7 +2,7 @@
 # **************************************
 # @Time : 2024/12/9 12:30
 # @Author : Olivia
-# Desc:
+# Desc: @todo: make initialize method abstract?
 # **************************************
 import logging
 
@@ -16,10 +16,12 @@ class TriplogNavigablePage(TriplogBasePage):
     """
     page that has the navigation sidebar
     """
+    url = None #to be provides by concrete sub-class
     _layer_popup_loc =(By.CSS_SELECTOR,"div#layui-layer1")
     def __init__(self, driver):
         self.driver = driver
         self.navigation_bar = TriplogNavigationBar(driver)
+        self.driver.get(self.url)
 
 
     def is_layer_popup_visible(self, expected=False):

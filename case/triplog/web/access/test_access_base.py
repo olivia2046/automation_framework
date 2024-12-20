@@ -53,7 +53,7 @@ class TestAccessBase(TestTriplogWebBase):
             assert overview_page.is_layer_popup_visible(expected=True)
 
 
-    @pytest.mark.skip("")
+    #@pytest.mark.skip("")
     def test_trips_page_accessibility(self):
         trips_page = TripsPage(self.driver,accessible=False)
         #accessibility = self.user_row['Mileage->Trips'].item()
@@ -64,7 +64,7 @@ class TestAccessBase(TestTriplogWebBase):
         else:
             assert trips_page.is_layer_popup_visible(expected=True)
 
-    @pytest.mark.skip("")
+    #@pytest.mark.skip("")
     def test_transactions_page_accessibility(self):
         transaction_page = TransactionPage(self.driver)
         accessibility = self.user_data['Expense->Transactions']
@@ -76,7 +76,7 @@ class TestAccessBase(TestTriplogWebBase):
             assert transaction_page.is_layer_popup_visible(expected=True)
 
 
-    @pytest.mark.skip("")
+    #@pytest.mark.skip("")
     def test_time_clock_page_accessibility(self):
         time_clock_page = TimeClockPage(self.driver)
         accessibility = self.user_data['Time->Time Clock Calendar']

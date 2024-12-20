@@ -47,7 +47,7 @@ class TripsPage(TriplogNavigablePage):
         :param accessible:
         """
         super().__init__(driver)
-        self.driver.get(self.url)
+        #self.driver.get(self.url)
         time.sleep(2)
         try:
 
