@@ -27,7 +27,7 @@ from proj_spec.triplog.web.po.login.login_page import TriplogLoginPage
 
 
 @pytest.fixture(scope="class",autouse=True)
-def driver_init(request):
+def driver_init(request,get_login_info):
     from base.getdata import GetData
     from base.get_config import GetConfig
     caps = GetConfig.get_capabilities()
@@ -41,7 +41,8 @@ def driver_init(request):
     request.cls.driver = driver
     login_page = TriplogLoginPage(request.cls.driver)
     if request.cls.user_identifier is not None:
-        email, password = GetData.get_user_credential(request.cls.user_identifier)
+        #email, password = GetData.get_user_credential(request.cls.user_identifier)
+        email, password = get_login_info
         request.cls.overview_page = login_page.login(email, password)
     yield
     driver.quit()

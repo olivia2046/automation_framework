@@ -19,9 +19,10 @@ class TestAccessBase(TestTriplogWebBase):
     @classmethod
     def setup_class(cls):
         user_file = GetConfig.get_user_file_path()
-        df = pd.read_csv(user_file)
+        df = pd.read_csv(user_file,index_col='loc')
         df = df.fillna('')
-        cls.user_row = df.loc[df['loc'] == cls.user_identifier] # cls.user_identifier will be replaced by value in concrete class
+        #cls.user_row = df.loc[df['loc'] == cls.user_identifier] # cls.user_identifier will be replaced by value in concrete class
+        cls.user_data = df[cls.user_identifier]
         pass
 
     # def test_accessibility_by_navigation(self):
@@ -40,7 +41,8 @@ class TestAccessBase(TestTriplogWebBase):
 
     def test_trips_page_accessibility(self):
         trips_page = TripsPage(self.driver,accessible=False)
-        accessibility = self.user_row['Mileage->Trips'].item()
+        #accessibility = self.user_row['Mileage->Trips'].item()
+        accessibility = self.user_data['Mileage->Trips']
 
         if accessibility.lower()=='y':
             assert not trips_page.is_layer_popup_visible()
