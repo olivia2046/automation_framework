@@ -2,7 +2,7 @@
 # **************************************
 # @Time : 2024/12/18 20:05
 # @Author : Olivia
-# Desc:
+# Desc: Todo: parameterize these page access tests??? no, each page should have its own specific assertion
 # **************************************
 import pandas as pd
 import pytest
@@ -42,6 +42,17 @@ class TestAccessBase(TestTriplogWebBase):
         #     second_level = menu_texts[1]
         #
         #     accessibility = user_row[column].item()
+    def test_overview_page_accessibility(self):
+        overview_page = TimeClockPage(self.driver)
+        accessibility = self.user_data['Dashboard->Overview']
+
+        if accessibility.lower() == 'y':
+            assert not overview_page.is_layer_popup_visible()
+            # todo: other assertion to test against trips page itself
+        else:
+            assert overview_page.is_layer_popup_visible(expected=True)
+
+
     @pytest.mark.skip("")
     def test_trips_page_accessibility(self):
         trips_page = TripsPage(self.driver,accessible=False)
@@ -65,6 +76,7 @@ class TestAccessBase(TestTriplogWebBase):
             assert transaction_page.is_layer_popup_visible(expected=True)
 
 
+    @pytest.mark.skip("")
     def test_time_clock_page_accessibility(self):
         time_clock_page = TimeClockPage(self.driver)
         accessibility = self.user_data['Time->Time Clock Calendar']
