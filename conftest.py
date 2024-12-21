@@ -24,7 +24,9 @@ def pytest_addoption(parser):
         "--config",
         action="store",
         # default: 默认值，命令行没有指定host时，默认用该参数值
-        default="triplog_web",
+        #default="triplog_web",
+        default="triplog_mobile_qa6",
+        #default="triplog_mobile_uat",
         help="test project name"
     )
 

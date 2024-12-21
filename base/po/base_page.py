@@ -22,14 +22,22 @@ class BasePage:
         self.driver = driver
 
     def find_element(self, locator, timeout=5, condition='visibility_of_element_located', skip_error_handle=False):
-        """查找元素
+        """find element by locator
 
-        :param locator: 元素定位元组
-        :param timeout: 超时时间，单位为秒
-        :param condition: 预期的expected_conditions条件，默认为visibility_of_element_located
-        :param skip_error_handle: 是否跳过需要handle_exception
-                                正常情况预期找到元素时，可能由于黑名单上一些元素遮挡导致找不到元素，需要handle_exception;
-                                正常情况预期找不到元素时（如成功登录后找不到验证码错误的提示、有权限时找不到无权限提示框等）
+        :param locator: tuple of element locator
+        :param timeout: timeout in seconds
+        :param condition: selenium.webdriver.support.expected_conditions，visibility_of_element_located by default
+                        visibility_of_element_located
+                        presence_of_element_located
+                        element_located_to_be_selected
+                        element_located_selection_state_to_be
+                        element_to_be_clickable
+                        invisibility_of_element
+                        ...
+        :param skip_error_handle: whether needs to skip handle_exception
+                                if expected to find element, but cannot find due to hidden by elmenents in black list, then need to handle exception
+                                if expected not to find element, then no need for exception handling
+
 
         :return:
         """

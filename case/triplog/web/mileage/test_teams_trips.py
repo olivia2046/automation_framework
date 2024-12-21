@@ -10,7 +10,7 @@ from case.triplog.web.mileage.test_trips import TestTrips
 
 
 class TestTeamsTrips(TestTrips):
-    user_identifier="teams_paid" # Canada
+    user_identifier="team_paid" # Canada
 
 
 

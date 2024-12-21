@@ -9,6 +9,7 @@ from base.get_config import GetConfig
 from case.triplog.mobile.test_triplog_mobile_base import TestTriplogMobileBase
 
 
+
 class TestMobileAccessBase(TestTriplogMobileBase):
     user_identifier = None
     #user_identifier = "trial_end"
@@ -18,12 +19,30 @@ class TestMobileAccessBase(TestTriplogMobileBase):
     @classmethod
     def setup_class(cls):
         user_file = GetConfig.get_user_file_path()
-        df = pd.read_csv(user_file)
+        df = pd.read_csv(user_file,index_col='loc')
         df = df.fillna('')
-        cls.user_row = df.loc[df['loc'] == cls.user_identifier] # cls.user_identifier will be replaced by value in concrete class
-        pass
-    def test_bottom_menu_access(self):
-        """test access of bottom menu
+        #cls.user_row = df.loc[df['loc'] == cls.user_identifier] # cls.user_identifier will be replaced by value in concrete class
+        cls.user_data = df[cls.user_identifier]
+
+    # def test_bottom_trips_access(self):
+    #     """test access of bottom trips tab
+    #
+    #     :return:
+    #     """
+
+    def test_left_panel_submission_access(self):
+        """
 
         :return:
         """
+        self.page.show_left_panel()
+        from proj_spec.triplog.mobile.po.tabs.submission_page import SubmissionPage
+
+        page = SubmissionPage(self.driver)
+        accessibility = self.user_data['Dashboard->Overview']
+
+        if accessibility.lower()=='y':
+            assert page.left_panel.is_submission_accessible()
+        else:
+            # todo: assertion when no access
+            assert not page.left_panel.is_submission_accessible()

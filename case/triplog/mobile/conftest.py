@@ -14,7 +14,7 @@ from proj_spec.triplog.mobile.start.start_page import AppStartPage
 
 
 @pytest.fixture(scope="class",autouse=True)
-def driver_init(request):
+def driver_init(request,get_login_info):
     from base.getdata import GetData
     from base.get_config import GetConfig
     caps = GetConfig.get_capabilities()
@@ -31,8 +31,9 @@ def driver_init(request):
     login_page = app_start_page.goto_login_page()
 
     if request.cls.user_identifier is not None:
-        email, password = GetData.get_user_credential(request.cls.user_identifier)
-        request.cls.overview_page = login_page.login(email, password)
+        #email, password = GetData.get_user_credential(request.cls.user_identifier)
+        email, password = get_login_info
+        request.cls.page = login_page.login(email, password)
     yield
     request.cls.driver.quit()
 

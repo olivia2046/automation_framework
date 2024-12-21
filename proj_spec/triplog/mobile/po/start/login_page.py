@@ -4,16 +4,13 @@
 # @Author : Olivia
 # Desc:
 # **************************************
-import os
-import time
-
 from appium.webdriver.common.appiumby import AppiumBy
 
 from base.po.mobile_base_page import MobileBasePage
-from proj_spec.triplog.mobile.po.tabs.trips_page import MobileTripsPage
+from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBasePage
 
 
-class AppLoginPage(MobileBasePage):
+class AppLoginPage(TriplogMobileBasePage):
     # permission
     _agree_btn_loc = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/rtv_agree"]')
 
@@ -29,23 +26,9 @@ class AppLoginPage(MobileBasePage):
         self.find_element_and_input(self._email_input_loc, email)
         self.find_element_and_input(self._pwd_input_loc, password)
         self.find_element_and_click(self._login_btn_loc)
+        # self.driver.hide_keyboard()
 
-        time.sleep(3)
-        if self.get_default_page()=="Trips":
-            return MobileTripsPage(self.driver)
-        # elif self.get_default_page()=="Reports":
-        #     return MobileReportsPage()
-        # elif self.get_default_page()=="Submission":
-        #     return MobileSubmissionPage()
-        # elif self.get_default_page()=="Time":
-        #     return MobileTimePage()
+        #return Mobile
         pass
-
-
-    def get_default_page(self):
-        title_loc_android = (AppiumBy.XPATH,'//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_main_title"]')
-
-        title=self.find_element(eval("title_loc_"+self.os)).text
-        return title
 
 

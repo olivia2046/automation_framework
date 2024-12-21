@@ -94,7 +94,7 @@ class MobileBasePage(BasePage):
             else:
                 return False
 
-    def get_locator(self, prefix):
+    def get_locator_by_os(self, prefix):
         """获取指定os上的locator
 
         :param prefix: locator前缀
@@ -103,7 +103,7 @@ class MobileBasePage(BasePage):
         :return: 指定os对应的locator
         """
 
-        return getattr(self, prefix + self.os)
+        return getattr(self, prefix +'_' + self.os)
 
     def update_location_permission(self, os='ios', permission='Always'):
         """
