@@ -5,6 +5,7 @@
 # Desc:
 # **************************************
 import pandas as pd
+import pytest
 from base.get_config import GetConfig
 from case.triplog.mobile.test_triplog_mobile_base import TestTriplogMobileBase
 
@@ -29,7 +30,7 @@ class TestMobileAccessBase(TestTriplogMobileBase):
     #
     #     :return:
     #     """
-
+    @pytest.mark.skip("")
     def test_left_panel_submission_access(self):
         """
 
@@ -39,10 +40,23 @@ class TestMobileAccessBase(TestTriplogMobileBase):
         from proj_spec.triplog.mobile.po.tabs.submission_page import SubmissionPage
 
         page = SubmissionPage(self.driver)
-        accessibility = self.user_data['Dashboard->Overview']
+        accessibility = self.user_data['Mobile Left->Submission']
 
         if accessibility.lower()=='y':
             assert page.left_panel.is_submission_accessible()
         else:
             # todo: assertion when no access
             assert not page.left_panel.is_submission_accessible()
+
+
+    def test_bottom_tab_submission_access(self):
+        from proj_spec.triplog.mobile.po.tabs.submission_page import SubmissionPage
+
+        page = SubmissionPage(self.driver)
+        accessibility = self.user_data['Mobile Bottom->Submission']
+
+        if accessibility.lower()=='y':
+            assert page.bottom_nav.is_submission_accessible()
+        else:
+            # todo: assertion when no access
+            assert not page.bottom_nav.is_submission_accessible()

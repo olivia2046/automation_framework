@@ -12,8 +12,12 @@ from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBa
 
 class LeftPanel(TriplogMobileBasePage):
 
-    _locations_loc_android = (AppiumBy, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_title" and @text="Locations"]')
-    _submission_loc_android = (AppiumBy, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_title" and @text="Submission"]')
+
+    _adv_feature_switch_android = (AppiumBy.XPATH,'//android.widget.Switch[@resource-id="com.bizlog.triplog:id/switch_btn"]')
+
+
+    def switch_advanced_features(self):
+        self.find_element_and_click(self.get_locator_by_os("adv_feature_switch"))
 
     def get_menu_locator(self,menu_text):
         """
@@ -23,7 +27,8 @@ class LeftPanel(TriplogMobileBasePage):
         :return:
         """
         if self.os=='android':
-            return (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_title" and @text="%s"]/../..'%menu_text)
+            return (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_title" and @text="%s"]/../..'
+                    %menu_text) # only parent of parent element clickable
 
 
     def is_submission_accessible(self):
