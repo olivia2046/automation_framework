@@ -7,7 +7,7 @@
 from case.triplog.web.access.test_access_base import TestAccessBase
 
 
-class TestTeamPaidAccess(TestAccessBase):
+class TestTrialEndAccess(TestAccessBase):
     user_identifier = "trial_end"
 
 

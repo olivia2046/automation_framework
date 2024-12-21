@@ -8,6 +8,6 @@ from case.triplog.web.access.test_access_base import TestAccessBase
 
 
 class TestTeamPaidAccess(TestAccessBase):
-    user_identifier = "teams_paid"
+    user_identifier = "team_paid"
 
 

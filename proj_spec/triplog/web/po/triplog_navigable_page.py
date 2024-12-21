@@ -17,8 +17,10 @@ class TriplogNavigablePage(TriplogBasePage):
     page that has the navigation sidebar
     """
     url = None #to be provides by concrete sub-class
+    _title_loc = (By.XPATH, '//span[@class="n_menu-selected-menuname"]')
     _layer_popup_loc =(By.CSS_SELECTOR,"div#layui-layer1")
     def __init__(self, driver):
+        #super().__init__(driver)
         self.driver = driver
         self.navigation_bar = TriplogNavigationBar(driver)
         self.driver.get(self.url)
@@ -39,3 +41,7 @@ class TriplogNavigablePage(TriplogBasePage):
         except Exception as e:
             logging.info("pop up not found")
             return False
+
+
+    def get_title(self):
+        return self.find_element(self._title_loc).text

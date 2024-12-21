@@ -28,7 +28,6 @@ from proj_spec.triplog.web.po.login.login_page import TriplogLoginPage
 
 @pytest.fixture(scope="class",autouse=True)
 def driver_init(request,get_login_info):
-    from base.getdata import GetData
     from base.get_config import GetConfig
     caps = GetConfig.get_capabilities()
     browser_name = caps['browserName']
