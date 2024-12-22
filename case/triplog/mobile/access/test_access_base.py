@@ -28,13 +28,13 @@ class TestMobileAccessBase(TestTriplogMobileBase):
         cls.user_data = df[cls.user_identifier]
 
     #@pytest.mark.skip("")
-    # @pytest.mark.parametrize('menu_name',['Auto Start on','Work Schedule','Vehicle','Send to Concur','Locations',
-    #     'State Mileage','Approval Management','Submission','Navigate/Route Planning','Frequent Trip Rules','Adjust Odometer',
-    #     'Mileage Rates','Business Activities','Last Known Parking','Banks & Credit Cards','Invite Accoutant'])
-    @pytest.mark.parametrize('menu_name',['Vehicles','Locations','State Mileage',
-                            'Submission','Navigate/Route Planning','Frequent Trip Rules','Adjust Odometer','Mileage Rates',
-                                          'Business Activities','Banks & Credit Cards','Invite Accoutant'])
-    #@pytest.mark.parametrize('menu_name',['Banks & Credit Cards','Invite Accoutant'])
+    @pytest.mark.parametrize('menu_name',['Auto Start on','Work Schedule','Vehicles','Send to Concur','Locations',
+        'State Mileage','Approval Management','Submission','Navigate/Route Planning','Frequent Trip Rules','Adjust Odometer',
+        'Mileage Rates','Business Activities','Last Known Parking','Banks & Credit Cards','Invite Accoutant'])
+    # @pytest.mark.parametrize('menu_name',['Auto Start on','Vehicles','Locations','State Mileage',
+    #                         'Submission','Navigate/Route Planning','Frequent Trip Rules','Adjust Odometer','Mileage Rates',
+    #                                       'Business Activities','Banks & Credit Cards','Invite Accoutant'])
+    # @pytest.mark.parametrize('menu_name',['Work Schedule','Approval Management'])
     def test_left_panel_menus_access(self,menu_name):
         """
 
@@ -57,23 +57,23 @@ class TestMobileAccessBase(TestTriplogMobileBase):
 
 
 
-    @pytest.mark.skip("")
-    def test_left_panel_submission_access(self):
-        """
-
-        :return:
-        """
-        self.page.show_left_panel()
-        from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionTabPage
-
-        page = SubmissionTabPage(self.driver)
-        accessibility = self.user_data['Mobile Left->Submission']
-
-        if accessibility.lower()=='y':
-            assert page.left_panel.is_submission_accessible()
-        else:
-            # todo: assertion when no access
-            assert not page.left_panel.is_submission_accessible()
+    # @pytest.mark.skip("")
+    # def test_left_panel_submission_access(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     self.page.show_left_panel()
+    #     from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionTabPage
+    #
+    #     page = SubmissionTabPage(self.driver)
+    #     accessibility = self.user_data['Mobile Left->Submission']
+    #
+    #     if accessibility.lower()=='y':
+    #         assert page.left_panel.is_submission_accessible()
+    #     else:
+    #         # todo: assertion when no access
+    #         assert not page.left_panel.is_submission_accessible()
 
 
     # def test_bottom_tab_trips_access(self):

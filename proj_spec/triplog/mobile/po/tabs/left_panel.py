@@ -4,6 +4,8 @@
 # @Author : Olivia
 # Desc:
 # **************************************
+import time
+
 from appium.webdriver.common.appiumby import AppiumBy
 from selenium.webdriver.common.by import By
 
@@ -84,7 +86,7 @@ class LeftPanel(TriplogMobileBasePage):
 
     def is_left_menu_accessible(self,menu_name):
 
-        from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
+
         advanced_switch = self.find_element(self.get_locator_by_os("_adv_feature_switch"))
         if (menu_name in ('Navigate/Route Planning','Frequent Trip Rules','Adjust Odometer','Business Activities',
                           'Last Known Parking','Banks & Credit Cards','Invite Accoutant')
@@ -94,10 +96,26 @@ class LeftPanel(TriplogMobileBasePage):
             self.swipe_up(self.get_locator_by_os("_left_panel_loc"),0.5)
 
         try:
+            if menu_name=='Last Known Parking':
+                # do not click
+                self.find_element(self.get_menu_locator("%s" % menu_name))
+                # todo: click menu and handle pop up
+                self.swipe_left(self.get_locator_by_os("_left_panel_loc"), horizontal_rate=1)
+                return True
             self.find_element_and_click(self.get_menu_locator("%s"%menu_name))
-            #page = TabsBasePage(self.driver)
-            from proj_spec.triplog.mobile.po.left_nav.left_nav_base_page import LeftNavBasePage
-            page = LeftNavBasePage(self.driver)
+
+
+            if menu_name=='Work Schedule':
+                from proj_spec.triplog.mobile.po.left_nav.work_schedule_page import WorkSchedulePage
+                page = WorkSchedulePage(self.driver)
+            elif menu_name=='Approval Management':
+                from proj_spec.triplog.mobile.po.left_nav.approval_mgmt_page import ApprovalMgmtPage
+                page = ApprovalMgmtPage(self.driver)
+                while 'loading' in page.get_title():
+                    time.sleep(3)
+            else:
+                from proj_spec.triplog.mobile.po.left_nav.left_nav_base_page import LeftNavBasePage
+                page = LeftNavBasePage(self.driver)
             title = page.get_title()
             if menu_name in self.menu_title_mapping.keys():
                 expected_title = self.menu_title_mapping[menu_name]
