@@ -7,6 +7,7 @@
 import logging
 from appium.webdriver.common.appiumby import AppiumBy
 
+
 from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBasePage
 
 
@@ -16,7 +17,7 @@ class BottomNavigator(TriplogMobileBasePage):
     def get_tab_locator(self, tab_text):
         if self.os=='android':
             return (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_item_customize_btn_name" '
-                                    'and @text="%s"]/../..'%tab_text)  # only parent of parent element clickable
+                                    'and @text="%s"]/..'%tab_text)  # only parent of parent element clickable
 
     def expand_more_or_less(self):
         element = self.find_element(self.get_locator_by_os("_more_or_less_loc"),condition="element_to_be_clickable")
@@ -39,3 +40,14 @@ class BottomNavigator(TriplogMobileBasePage):
             return False
 
 
+    def is_reports_accessible(self):
+        from proj_spec.triplog.mobile.po.tabs.reports_page import ReportsTabPage
+        try:
+            self.expand_more_or_less() #menus may have been reordered, so need to expand first
+            self.find_element_and_click(self.get_tab_locator('Reports'))
+            page = ReportsTabPage(self.driver)
+
+            return page.get_title()=='Reports'
+        except Exception as e:
+            logging.info("Exception accessing mobile bottom tab Submission")
+            return False

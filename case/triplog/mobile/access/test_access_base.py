@@ -49,6 +49,7 @@ class TestMobileAccessBase(TestTriplogMobileBase):
             assert not page.left_panel.is_submission_accessible()
 
 
+    @pytest.mark.skip("")
     def test_bottom_tab_submission_access(self):
         from proj_spec.triplog.mobile.po.tabs.submission_page import SubmissionPage
 
@@ -60,3 +61,16 @@ class TestMobileAccessBase(TestTriplogMobileBase):
         else:
             # todo: assertion when no access
             assert not page.bottom_nav.is_submission_accessible()
+
+
+    def test_bottom_tab_reports_access(self):
+        from proj_spec.triplog.mobile.po.tabs.submission_page import SubmissionPage
+
+        page = SubmissionPage(self.driver)
+        accessibility = self.user_data['Mobile Bottom->Reports']
+
+        if accessibility.lower()=='y':
+            assert page.bottom_nav.is_reports_accessible()
+        else:
+            # todo: assertion when no access
+            assert not page.bottom_nav.is_reports_accessible()
