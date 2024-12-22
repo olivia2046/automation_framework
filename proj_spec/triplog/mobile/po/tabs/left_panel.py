@@ -36,8 +36,13 @@ class LeftPanel(TriplogMobileBasePage):
         from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
 
         self.find_element_and_click(self.get_menu_locator("%s"%menu_name))
-        page = TabsBasePage(self.driver)
-        return page.get_title()=='menu_name'
+        #page = TabsBasePage(self.driver)
+        from proj_spec.triplog.mobile.po.left_nav.left_nav_base_page import LeftNavBasePage
+        page = LeftNavBasePage(self.driver)
+        title = page.get_title()
+        # go back
+        page.go_back()
+        return title=='%s'%menu_name
 
 
     def is_submission_accessible(self):

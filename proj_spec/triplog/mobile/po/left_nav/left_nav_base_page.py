@@ -4,6 +4,18 @@
 # @Author : Olivia
 # Desc: base page of pages accessed from left navigation bar
 # **************************************
+from appium.webdriver.common.appiumby import AppiumBy
+from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
+from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBasePage
 
-class LeftNavBasePage():
-    pass
+
+class LeftNavBasePage(TriplogMobileBasePage):
+    _title_loc_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_main_title"]')
+    _back_loc_android = (AppiumBy.XPATH, '//android.widget.ImageView[@resource-id="com.bizlog.triplog:id/img_main_icon"]')
+    def go_back(self):
+        self.find_element_and_click(self.get_locator_by_os("_back_loc"))
+        return TabsBasePage
+
+
+    def get_title(self):
+        return self.find_element(self.get_locator_by_os("_title_loc")).text

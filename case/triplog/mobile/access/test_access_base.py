@@ -27,29 +27,34 @@ class TestMobileAccessBase(TestTriplogMobileBase):
         #cls.user_row = df.loc[df['loc'] == cls.user_identifier] # cls.user_identifier will be replaced by value in concrete class
         cls.user_data = df[cls.user_identifier]
 
-    @pytest.mark.skip("")
-    @pytest.mark.parametrize('menu_name',['Auto Start on','Work Schedule','Vehicle','Send to Concur','Locations',
-        'State Mileage','Approval Management','Submission','Navigate/Route Planning','Frequent Trip Rules','Adjust Odometer',
-        'Mileage Rates','Business Activities','Last Known Parking','Banks & Credit Cards','Invite Accoutant'])
+    #@pytest.mark.skip("")
+    # @pytest.mark.parametrize('menu_name',['Auto Start on','Work Schedule','Vehicle','Send to Concur','Locations',
+    #     'State Mileage','Approval Management','Submission','Navigate/Route Planning','Frequent Trip Rules','Adjust Odometer',
+    #     'Mileage Rates','Business Activities','Last Known Parking','Banks & Credit Cards','Invite Accoutant'])
+    @pytest.mark.parametrize('menu_name',['Locations'])
     def test_left_panel_menus_access(self,menu_name):
         """
 
         :return:
         """
+
         self.page.show_left_panel()
         from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
 
-        page = TabsBasePage(self.driver)
+        from proj_spec.triplog.mobile.po.tabs.left_panel import LeftPanel
+        #left_nav_page = LeftPanel(self.driver)
         accessibility = self.user_data['Mobile Left->%s'%menu_name]
 
         if accessibility.lower()=='y':
-            assert page.left_panel.is_left_menu_accessible(menu_name)
+            assert self.page.left_panel.is_left_menu_accessible(menu_name)
         else:
             # todo: assertion when no access
-            assert not page.left_panel.is_left_menu_accessible(menu_name)
+            assert not self.page.left_panel.is_left_menu_accessible(menu_name)
 
 
-    #@pytest.mark.skip("")
+
+
+    @pytest.mark.skip("")
     def test_left_panel_submission_access(self):
         """
 
