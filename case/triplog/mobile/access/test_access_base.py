@@ -37,7 +37,7 @@ class TestMobileAccessBase(TestTriplogMobileBase):
         :return:
         """
         self.page.show_left_panel()
-        from proj_spec.triplog.mobile.po.tabs.submission_page import SubmissionPage
+        from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionPage
 
         page = SubmissionPage(self.driver)
         accessibility = self.user_data['Mobile Left->Submission']
@@ -49,28 +49,116 @@ class TestMobileAccessBase(TestTriplogMobileBase):
             assert not page.left_panel.is_submission_accessible()
 
 
-    @pytest.mark.skip("")
-    def test_bottom_tab_submission_access(self):
-        from proj_spec.triplog.mobile.po.tabs.submission_page import SubmissionPage
+    # def test_bottom_tab_trips_access(self):
+    #     from proj_spec.triplog.mobile.po.tabs.trips_tag_page import TripsTabPage
+    #
+    #     page = TripsTabPage(self.driver)
+    #     accessibility = self.user_data['Mobile Bottom->Trips']
+    #
+    #     if accessibility.lower()=='y':
+    #         assert page.bottom_nav.is_reports_accessible()
+    #     else:
+    #         # todo: assertion when no access
+    #         assert not page.bottom_nav.is_reports_accessible()
+    #
+    #
+    # def test_bottom_tab_reports_access(self):
+    #     from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionPage
+    #
+    #     page = SubmissionPage(self.driver)
+    #     accessibility = self.user_data['Mobile Bottom->Reports']
+    #
+    #     if accessibility.lower()=='y':
+    #         assert page.bottom_nav.is_reports_accessible()
+    #     else:
+    #         # todo: assertion when no access
+    #         assert not page.bottom_nav.is_reports_accessible()
 
-        page = SubmissionPage(self.driver)
-        accessibility = self.user_data['Mobile Bottom->Submission']
+    @pytest.mark.parametrize('page_name',[('Reports'),('Submission')])
+    def test_bottom_tabs_access(self, page_name):
+        from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
+        page = TabsBasePage(self.driver)
+        accessibility = self.user_data['Mobile Bottom->%s'%page_name]
 
         if accessibility.lower()=='y':
-            assert page.bottom_nav.is_submission_accessible()
+            assert page.bottom_nav.is_tab_page_accessible(page_name)
         else:
             # todo: assertion when no access
-            assert not page.bottom_nav.is_submission_accessible()
+            assert not page.bottom_nav.is_tab_page_accessible(page_name)
 
-
-    def test_bottom_tab_reports_access(self):
-        from proj_spec.triplog.mobile.po.tabs.submission_page import SubmissionPage
-
-        page = SubmissionPage(self.driver)
-        accessibility = self.user_data['Mobile Bottom->Reports']
-
-        if accessibility.lower()=='y':
-            assert page.bottom_nav.is_reports_accessible()
-        else:
-            # todo: assertion when no access
-            assert not page.bottom_nav.is_reports_accessible()
+    # def test_bottom_tab_reports_access(self):
+    #     from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionPage
+    #
+    #     page = SubmissionPage(self.driver)
+    #     accessibility = self.user_data['Mobile Bottom->Reports']
+    #
+    #     if accessibility.lower()=='y':
+    #         assert page.bottom_nav.is_reports_accessible()
+    #     else:
+    #         # todo: assertion when no access
+    #         assert not page.bottom_nav.is_reports_accessible()
+    #
+    #
+    # def test_bottom_tab_reports_access(self):
+    #     from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionPage
+    #
+    #     page = SubmissionPage(self.driver)
+    #     accessibility = self.user_data['Mobile Bottom->Reports']
+    #
+    #     if accessibility.lower()=='y':
+    #         assert page.bottom_nav.is_reports_accessible()
+    #     else:
+    #         # todo: assertion when no access
+    #         assert not page.bottom_nav.is_reports_accessible()
+    #
+    #
+    # def test_bottom_tab_reports_access(self):
+    #     from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionPage
+    #
+    #     page = SubmissionPage(self.driver)
+    #     accessibility = self.user_data['Mobile Bottom->Reports']
+    #
+    #     if accessibility.lower()=='y':
+    #         assert page.bottom_nav.is_reports_accessible()
+    #     else:
+    #         # todo: assertion when no access
+    #         assert not page.bottom_nav.is_reports_accessible()
+    #
+    #
+    # def test_bottom_tab_reports_access(self):
+    #     from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionPage
+    #
+    #     page = SubmissionPage(self.driver)
+    #     accessibility = self.user_data['Mobile Bottom->Reports']
+    #
+    #     if accessibility.lower()=='y':
+    #         assert page.bottom_nav.is_reports_accessible()
+    #     else:
+    #         # todo: assertion when no access
+    #         assert not page.bottom_nav.is_reports_accessible()
+    #
+    # @pytest.mark.skip("")
+    # def test_bottom_tab_submission_access(self):
+    #     from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionPage
+    #
+    #     page = SubmissionPage(self.driver)
+    #     accessibility = self.user_data['Mobile Bottom->Submission']
+    #
+    #     if accessibility.lower()=='y':
+    #         assert page.bottom_nav.is_submission_accessible()
+    #     else:
+    #         # todo: assertion when no access
+    #         assert not page.bottom_nav.is_submission_accessible()
+    #
+    #
+    # def test_bottom_tab_reports_access(self):
+    #     from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionPage
+    #
+    #     page = SubmissionPage(self.driver)
+    #     accessibility = self.user_data['Mobile Bottom->Reports']
+    #
+    #     if accessibility.lower()=='y':
+    #         assert page.bottom_nav.is_reports_accessible()
+    #     else:
+    #         # todo: assertion when no access
+    #         assert not page.bottom_nav.is_reports_accessible()

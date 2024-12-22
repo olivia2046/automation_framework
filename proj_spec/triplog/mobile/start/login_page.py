@@ -10,7 +10,7 @@ import time
 from appium.webdriver.common.appiumby import AppiumBy
 
 from base.po.mobile_base_page import MobileBasePage
-from proj_spec.triplog.mobile.po.tabs.trips_page import MobileTripsPage
+from proj_spec.triplog.mobile.po.tabs.trips_tab_page import TripsTabPage
 
 
 class AppLoginPage(MobileBasePage):
@@ -32,7 +32,7 @@ class AppLoginPage(MobileBasePage):
 
         time.sleep(3)
         if self.get_default_page()=="Trips":
-            return MobileTripsPage(self.driver)
+            return TripsTabPage(self.driver)
         # elif self.get_default_page()=="Reports":
         #     return MobileReportsPage()
         # elif self.get_default_page()=="Submission":

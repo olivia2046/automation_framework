@@ -33,7 +33,7 @@ class LeftPanel(TriplogMobileBasePage):
 
     def is_submission_accessible(self):
 
-        from proj_spec.triplog.mobile.po.tabs.submission_page import SubmissionPage
+        from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionPage
 
         self.find_element_and_click(self.get_menu_locator("Submission"))
         page = SubmissionPage(self.driver)
