@@ -25,7 +25,7 @@ class TestMobileAccessBase(TestTriplogMobileBase):
         #cls.user_row = df.loc[df['loc'] == cls.user_identifier] # cls.user_identifier will be replaced by value in concrete class
         cls.user_data = df[cls.user_identifier]
 
-    # @pytest.mark.parametrize(menu_name)
+    # @pytest.mark.parametrize(menu_name,[''])
     # def test_left_panel_menus_access(self):
     #     """
     #
@@ -88,7 +88,7 @@ class TestMobileAccessBase(TestTriplogMobileBase):
 
     #         assert not page.bottom_nav.is_reports_accessible()
 
-    @pytest.mark.parametrize('tab_name',['Reports','Submission'])
+    @pytest.mark.parametrize('tab_name',['Trips','Fuel','Submission','Reports','Transactions','Time Clock','Schedule','Time Off'])
     def test_bottom_tabs_access(self, tab_name):
         from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
         page = TabsBasePage(self.driver)

@@ -27,8 +27,15 @@ class BottomNavigator(TriplogMobileBasePage):
         # if text=='More':
         #     # only parent element clickable
         #     self.find_element_and_click(self.get_locator_by_os("_more_or_less_parent_loc"),condition="element_to_be_clickable")
+        # workaround: click the button once, and record height(0 as top of screen) of element before and after clicking
+        height_before_click = self.find_element(self.get_locator_by_os("_more_or_less_loc")).rect['y']
         self.find_element_and_click(self.get_locator_by_os("_more_or_less_parent_loc"),
                                     condition="element_to_be_clickable")
+        height_after_click = self.find_element(self.get_locator_by_os("_more_or_less_loc")).rect['y']
+        if height_before_click < height_after_click: # needs to expand(click again)
+            self.find_element_and_click(self.get_locator_by_os("_more_or_less_parent_loc"),
+                                        condition="element_to_be_clickable")
+
 
     def is_tab_page_accessible(self,page_name):
         from proj_spec.triplog.mobile.po.tabs.trips_tab_page import TripsTabPage
@@ -39,6 +46,7 @@ class BottomNavigator(TriplogMobileBasePage):
 
             return page.get_title()=='%s'%page_name
         except Exception as e:
+            logging.error(e)
             logging.info("Exception accessing mobile bottom tab %s"%page_name)
             return False
 
