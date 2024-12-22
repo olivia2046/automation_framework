@@ -46,7 +46,15 @@ class BasePage:
             return WebDriverWait(self.driver, timeout).until(eval("EC." + condition)(locator))
         except Exception as e:
             if not skip_error_handle:
-                pass
+                self.handle_exception()
+                # 处理完异常（异常弹窗等）后，再次查找指定的元素
+                # self.find_element(locator) # 可处理未按指定顺序处理的多个异常弹窗，但需要添加逻辑避免死循环
+
+                try:
+                    return WebDriverWait(self.driver, timeout).until(eval("EC." + condition)(locator))
+                except Exception as e:
+                    logging.error("e: %s"%str(locator))
+                    raise e
             else:
                 raise e
 
@@ -62,7 +70,7 @@ class BasePage:
             return self.driver.find_elements(*locator)
         except Exception as e:
             logging.error(e)
-            #self.handle_exception()
+            self.handle_exception()
         return self.driver.find_elements(*locator)
 
 

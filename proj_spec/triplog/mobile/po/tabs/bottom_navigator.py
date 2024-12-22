@@ -5,7 +5,9 @@
 # Desc:
 # **************************************
 import logging
+from selenium.common.exceptions import NoSuchElementException
 from appium.webdriver.common.appiumby import AppiumBy
+
 
 
 from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBasePage
@@ -37,67 +39,78 @@ class BottomNavigator(TriplogMobileBasePage):
                                         condition="element_to_be_clickable")
 
 
-    def is_tab_page_accessible(self,page_name):
-        from proj_spec.triplog.mobile.po.tabs.trips_tab_page import TripsTabPage
+    def is_tab_page_accessible(self, tab_name, expected=True):
+
         try:
             self.expand_more_or_less() #menus may have been reordered, so need to expand first
-            self.find_element_and_click(self.get_tab_locator('%s'%page_name))
-            page = TripsTabPage(self.driver)
+            if expected:
+                self.find_element_and_click(self.get_tab_locator('%s' % tab_name))
+            else:
+                if expected:
+                    self.find_element_and_click(self.get_tab_locator('%s' % tab_name),skip_error_handle=True)
+            from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
+            page = TabsBasePage(self.driver)
 
-            return page.get_title()=='%s'%page_name
+            if tab_name== 'Time':
+                return page.get_title() == 'Time Clock'
+            else:
+                return page.get_title()=='%s'%tab_name
+        except NoSuchElementException as nse:
+            if expected:
+                logging.error(nse)
         except Exception as e:
             logging.error(e)
-            logging.info("Exception accessing mobile bottom tab %s"%page_name)
+            logging.info("Exception accessing mobile bottom tab %s" % tab_name)
             return False
 
 
-    def is_trips_accessible(self):
-        from proj_spec.triplog.mobile.po.tabs.trips_tab_page import TripsTabPage
-        try:
-            self.expand_more_or_less() #menus may have been reordered, so need to expand first
-            self.find_element_and_click(self.get_tab_locator('Trips'))
-            page = TripsTabPage(self.driver)
-
-            return page.get_title()=='Trips'
-        except Exception as e:
-            logging.info("Exception accessing mobile bottom tab Trips")
-            return False
-
-
-    def is_fuels_accessible(self):
-        from proj_spec.triplog.mobile.po.tabs.fuels_tab_page import FuelsTabPage
-        try:
-            self.expand_more_or_less() #menus may have been reordered, so need to expand first
-            self.find_element_and_click(self.get_tab_locator('Fuels'))
-            page = FuelsTabPage(self.driver)
-
-            return page.get_title()=='Fuels'
-        except Exception as e:
-            logging.info("Exception accessing mobile bottom tab Fuels")
-            return False
-
-
-    def is_submission_accessible(self):
-        from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionPage
-        try:
-            self.expand_more_or_less() #menus may have been reordered, so need to expand first
-            self.find_element_and_click(self.get_tab_locator('Submission'))
-            page = SubmissionPage(self.driver)
-
-            return page.get_title()=='Submission'
-        except Exception as e:
-            logging.info("Exception accessing mobile bottom tab Submission")
-            return False
-
-
-    def is_reports_accessible(self):
-        from proj_spec.triplog.mobile.po.tabs.reports_tab_page import ReportsTabPage
-        try:
-            self.expand_more_or_less() #menus may have been reordered, so need to expand first
-            self.find_element_and_click(self.get_tab_locator('Reports'))
-            page = ReportsTabPage(self.driver)
-
-            return page.get_title()=='Reports'
-        except Exception as e:
-            logging.info("Exception accessing mobile bottom tab Submission")
-            return False
+    # def is_trips_accessible(self):
+    #     from proj_spec.triplog.mobile.po.tabs.trips_tab_page import TripsTabPage
+    #     try:
+    #         self.expand_more_or_less() #menus may have been reordered, so need to expand first
+    #         self.find_element_and_click(self.get_tab_locator('Trips'))
+    #         page = TripsTabPage(self.driver)
+    #
+    #         return page.get_title()=='Trips'
+    #     except Exception as e:
+    #         logging.info("Exception accessing mobile bottom tab Trips")
+    #         return False
+    #
+    #
+    # def is_fuels_accessible(self):
+    #     from proj_spec.triplog.mobile.po.tabs.fuels_tab_page import FuelsTabPage
+    #     try:
+    #         self.expand_more_or_less() #menus may have been reordered, so need to expand first
+    #         self.find_element_and_click(self.get_tab_locator('Fuels'))
+    #         page = FuelsTabPage(self.driver)
+    #
+    #         return page.get_title()=='Fuels'
+    #     except Exception as e:
+    #         logging.info("Exception accessing mobile bottom tab Fuels")
+    #         return False
+    #
+    #
+    # def is_submission_accessible(self):
+    #     from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionTabPage
+    #     try:
+    #         self.expand_more_or_less() #menus may have been reordered, so need to expand first
+    #         self.find_element_and_click(self.get_tab_locator('Submission'))
+    #         page = SubmissionTabPage(self.driver)
+    #
+    #         return page.get_title()=='Submission'
+    #     except Exception as e:
+    #         logging.info("Exception accessing mobile bottom tab Submission")
+    #         return False
+    #
+    #
+    # def is_reports_accessible(self):
+    #     from proj_spec.triplog.mobile.po.tabs.reports_tab_page import ReportsTabPage
+    #     try:
+    #         self.expand_more_or_less() #menus may have been reordered, so need to expand first
+    #         self.find_element_and_click(self.get_tab_locator('Reports'))
+    #         page = ReportsTabPage(self.driver)
+    #
+    #         return page.get_title()=='Reports'
+    #     except Exception as e:
+    #         logging.info("Exception accessing mobile bottom tab Submission")
+    #         return False

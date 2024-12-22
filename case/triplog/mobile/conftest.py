@@ -10,7 +10,7 @@ from appium import webdriver
 from appium.options.android import UiAutomator2Options
 from appium.options.ios import XCUITestOptions
 
-from proj_spec.triplog.mobile.start.start_page import AppStartPage
+from proj_spec.triplog.mobile.po.start.start_page import AppStartPage
 
 
 @pytest.fixture(scope="class",autouse=True)

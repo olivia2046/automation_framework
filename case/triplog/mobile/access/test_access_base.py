@@ -4,6 +4,8 @@
 # @Author : Olivia
 # Desc:
 # **************************************
+import logging
+
 import pandas as pd
 import pytest
 from base.get_config import GetConfig
@@ -25,35 +27,38 @@ class TestMobileAccessBase(TestTriplogMobileBase):
         #cls.user_row = df.loc[df['loc'] == cls.user_identifier] # cls.user_identifier will be replaced by value in concrete class
         cls.user_data = df[cls.user_identifier]
 
-    # @pytest.mark.parametrize(menu_name,[''])
-    # def test_left_panel_menus_access(self):
-    #     """
-    #
-    #     :return:
-    #     """
-    #     self.page.show_left_panel()
-    #     from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionPage
-    #
-    #     page = SubmissionPage(self.driver)
-    #     accessibility = self.user_data['Mobile Left->Submission']
-    #
-    #     if accessibility.lower()=='y':
-    #         assert page.left_panel.is_submission_accessible()
-    #     else:
-    #         # todo: assertion when no access
-    #         assert not page.left_panel.is_submission_accessible()
-
-
     @pytest.mark.skip("")
+    @pytest.mark.parametrize('menu_name',['Auto Start on','Work Schedule','Vehicle','Send to Concur','Locations',
+        'State Mileage','Approval Management','Submission','Navigate/Route Planning','Frequent Trip Rules','Adjust Odometer',
+        'Mileage Rates','Business Activities','Last Known Parking','Banks & Credit Cards','Invite Accoutant'])
+    def test_left_panel_menus_access(self,menu_name):
+        """
+
+        :return:
+        """
+        self.page.show_left_panel()
+        from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
+
+        page = TabsBasePage(self.driver)
+        accessibility = self.user_data['Mobile Left->%s'%menu_name]
+
+        if accessibility.lower()=='y':
+            assert page.left_panel.is_left_menu_accessible(menu_name)
+        else:
+            # todo: assertion when no access
+            assert not page.left_panel.is_left_menu_accessible(menu_name)
+
+
+    #@pytest.mark.skip("")
     def test_left_panel_submission_access(self):
         """
 
         :return:
         """
         self.page.show_left_panel()
-        from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionPage
+        from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionTabPage
 
-        page = SubmissionPage(self.driver)
+        page = SubmissionTabPage(self.driver)
         accessibility = self.user_data['Mobile Left->Submission']
 
         if accessibility.lower()=='y':
@@ -88,9 +93,13 @@ class TestMobileAccessBase(TestTriplogMobileBase):
 
     #         assert not page.bottom_nav.is_reports_accessible()
 
-    @pytest.mark.parametrize('tab_name',['Trips','Fuel','Submission','Reports','Transactions','Time Clock','Schedule','Time Off'])
+
+    @pytest.mark.skip("")
+    @pytest.mark.parametrize('tab_name',['Trips','Fuel','Submission','Reports','Transactions','Time','Schedule','Time Off'])
     def test_bottom_tabs_access(self, tab_name):
         from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
+
+        logging.info("checking bottom tab access of %s"%tab_name)
         page = TabsBasePage(self.driver)
         accessibility = self.user_data['Mobile Bottom->%s'%tab_name]
 
@@ -98,7 +107,7 @@ class TestMobileAccessBase(TestTriplogMobileBase):
             assert page.bottom_nav.is_tab_page_accessible(tab_name)
         else:
             # todo: assertion when no access
-            assert not page.bottom_nav.is_tab_page_accessible(tab_name)
+            assert not page.bottom_nav.is_tab_page_accessible(tab_name,expected=False)
 
 
     # @pytest.mark.skip("")

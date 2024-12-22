@@ -6,6 +6,6 @@ desc:
 '''
 from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
 
-class SubmissionPage(TabsBasePage):
+class SubmissionTabPage(TabsBasePage):
 
     pass

@@ -31,12 +31,21 @@ class LeftPanel(TriplogMobileBasePage):
                     %menu_text) # only parent of parent element clickable
 
 
+    def is_left_menu_accessible(self,menu_name):
+
+        from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
+
+        self.find_element_and_click(self.get_menu_locator("%s"%menu_name))
+        page = TabsBasePage(self.driver)
+        return page.get_title()=='menu_name'
+
+
     def is_submission_accessible(self):
 
-        from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionPage
+        from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionTabPage
 
         self.find_element_and_click(self.get_menu_locator("Submission"))
-        page = SubmissionPage(self.driver)
+        page = SubmissionTabPage(self.driver)
         return page.get_title()=='Submission'
 
 
