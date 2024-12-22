@@ -31,7 +31,10 @@ class TestMobileAccessBase(TestTriplogMobileBase):
     # @pytest.mark.parametrize('menu_name',['Auto Start on','Work Schedule','Vehicle','Send to Concur','Locations',
     #     'State Mileage','Approval Management','Submission','Navigate/Route Planning','Frequent Trip Rules','Adjust Odometer',
     #     'Mileage Rates','Business Activities','Last Known Parking','Banks & Credit Cards','Invite Accoutant'])
-    @pytest.mark.parametrize('menu_name',['Vehicles','Locations','State Mileage','Frequent Trip Rules','Mileage Rates','Business Activities'])
+    @pytest.mark.parametrize('menu_name',['Vehicles','Locations','State Mileage',
+                            'Submission','Navigate/Route Planning','Frequent Trip Rules','Adjust Odometer','Mileage Rates',
+                                          'Business Activities','Banks & Credit Cards','Invite Accoutant'])
+    #@pytest.mark.parametrize('menu_name',['Banks & Credit Cards','Invite Accoutant'])
     def test_left_panel_menus_access(self,menu_name):
         """
 

@@ -33,66 +33,85 @@ class LeftPanel(TriplogMobileBasePage):
                     %menu_text) # only parent of parent element clickable
 
 
-    def scroll_up_panel(self):
+    def collapse_left_panel(self):
         """
-        from selenium.webdriver import ActionChains
-from selenium.webdriver.common.actions import interaction
-from selenium.webdriver.common.actions.action_builder import ActionBuilder
-from selenium.webdriver.common.actions.pointer_input import PointerInput
 
-actions = ActionChains(driver)
-# override as 'touch' pointer action
-actions.w3c_actions = ActionBuilder(driver, mouse=PointerInput(interaction.POINTER_TOUCH, "touch"))
-actions.w3c_actions.pointer_action.move_to_location(start_x, start_y)
-actions.w3c_actions.pointer_action.pointer_down()
-actions.w3c_actions.pointer_action.pause(2)
-actions.w3c_actions.pointer_action.move_to_location(end_x, end_y)
-actions.w3c_actions.pointer_action.release()
-actions.perform()
         :return:
         """
 
-        pass
-        # # 定位菜单 panel
-        # panel = driver.find_element(By.ID, "panel_id")
-        #
-        # # 初始化 TouchAction
-        # action = TouchAction(driver)
-        #
-        # # 滑动 panel，直到目标菜单项可见
-        # while True:
-        #     try:
-        #         # 尝试查找目标菜单项
-        #         target_item = panel.find_element(By.XPATH, "//android.widget.TextView[@text='Target Menu']")
-        #         if target_item.is_displayed():
-        #             print("目标菜单项已可见")
-        #             break
-        #     except:
-        #         pass
-        #
-        #     # 滑动 panel
-        #     action.press(panel).move_to(x=0, y=-200).release().perform()
+
+
+#     def scroll_up_panel(self):
+#         """
+#         from selenium.webdriver import ActionChains
+# from selenium.webdriver.common.actions import interaction
+# from selenium.webdriver.common.actions.action_builder import ActionBuilder
+# from selenium.webdriver.common.actions.pointer_input import PointerInput
+#
+# actions = ActionChains(driver)
+# # override as 'touch' pointer action
+# actions.w3c_actions = ActionBuilder(driver, mouse=PointerInput(interaction.POINTER_TOUCH, "touch"))
+# actions.w3c_actions.pointer_action.move_to_location(start_x, start_y)
+# actions.w3c_actions.pointer_action.pointer_down()
+# actions.w3c_actions.pointer_action.pause(2)
+# actions.w3c_actions.pointer_action.move_to_location(end_x, end_y)
+# actions.w3c_actions.pointer_action.release()
+# actions.perform()
+#         :return:
+#         """
+#
+#         pass
+#         # # 定位菜单 panel
+#         # panel = driver.find_element(By.ID, "panel_id")
+#         #
+#         # # 初始化 TouchAction
+#         # action = TouchAction(driver)
+#         #
+#         # # 滑动 panel，直到目标菜单项可见
+#         # while True:
+#         #     try:
+#         #         # 尝试查找目标菜单项
+#         #         target_item = panel.find_element(By.XPATH, "//android.widget.TextView[@text='Target Menu']")
+#         #         if target_item.is_displayed():
+#         #             print("目标菜单项已可见")
+#         #             break
+#         #     except:
+#         #         pass
+#         #
+#         #     # 滑动 panel
+#         #     action.press(panel).move_to(x=0, y=-200).release().perform()
 
 
     def is_left_menu_accessible(self,menu_name):
 
         from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
         advanced_switch = self.find_element(self.get_locator_by_os("_adv_feature_switch"))
-        if (menu_name in ('Approval Management','Submission','Navigate/Route Planning','Frequent Trip Rules','Adjust Odometer',
-         'Mileage Rates','Business Activities','Last Known Parking','Banks & Credit Cards','Invite Accoutant')
+        if (menu_name in ('Navigate/Route Planning','Frequent Trip Rules','Adjust Odometer','Business Activities',
+                          'Last Known Parking','Banks & Credit Cards','Invite Accoutant')
                 and advanced_switch.get_attribute("checked")=='false'):
             self.switch_advanced_features()
             # scroll up the left pane
             self.swipe_up(self.get_locator_by_os("_left_panel_loc"),0.5)
 
-        self.find_element_and_click(self.get_menu_locator("%s"%menu_name))
-        #page = TabsBasePage(self.driver)
-        from proj_spec.triplog.mobile.po.left_nav.left_nav_base_page import LeftNavBasePage
-        page = LeftNavBasePage(self.driver)
-        title = page.get_title()
-        # go back
-        page.go_back()
-        return title=='%s'%menu_name
+        try:
+            self.find_element_and_click(self.get_menu_locator("%s"%menu_name))
+            #page = TabsBasePage(self.driver)
+            from proj_spec.triplog.mobile.po.left_nav.left_nav_base_page import LeftNavBasePage
+            page = LeftNavBasePage(self.driver)
+            title = page.get_title()
+            if menu_name in self.menu_title_mapping.keys():
+                expected_title = self.menu_title_mapping[menu_name]
+            else:
+                expected_title = menu_name
+            # go back
+            page.go_back()
+
+            return title=='%s'%expected_title
+        except Exception as e:
+            # collapse the left panel
+            self.swipe_left(self.get_locator_by_os("_left_panel_loc"),horizontal_rate=1)
+            return False
+
 
 
     def is_submission_accessible(self):

@@ -15,11 +15,13 @@ class MobileBasePage(BasePage):
         self.os = str(self.driver.capabilities['platformName']).lower()
 
     def swipe_up(self, frame_locator, height_rate=1, duration = 400):
-        """ 向上滑动整个纵向长度*height_rate，用于UiScrollable的scrollIntoView不工作的情况
+        """ Scroll the element located by frame_locator up, for height_rate of the whole vertical height
+        to be used in where UiScrollable scrollIntoView doesn't work
+        (e.g. scrollIntoView of UiScrollable is only applicable to Android, not for iOS)
 
-        :param frame_locator: 滑动区域的定位
-        :param height_rate: 滑动的纵向比例，1为滑动到底
-        :param n_times: 滑动次数
+        :param frame_locator: locator of the element of scroll area
+        :param height_rate: rate of the vertical scrolling (1 means from bottom to top)
+
 
         :return:
         """
@@ -41,6 +43,27 @@ class MobileBasePage(BasePage):
             height_rate -= 1
 
 
+    def swipe_left(self, frame_locator, horizontal_rate=1, duration = 400):
+        """ Scroll the element located by frame_locator up, for height_rate of the whole vertical height
+        (scrollIntoView of UiScrollable is only applicable to Android)
+
+        :param frame_locator: locator of the element of scroll area
+        :param horizontal_rate: rate of the vertical scrolling (1 means from bottom to top)
+
+
+        :return:
+        """
+
+        frame = self.driver.find_element(*frame_locator)
+        starty = frame.location['y'] + (frame.size['height'] / 2)
+        while horizontal_rate>0:
+            rate = horizontal_rate if horizontal_rate<=1 else 1
+
+            startx = frame.location['x'] + ((frame.size['width']) - 5) * rate
+            endy = starty
+            endx = frame.location['x'] + 5
+            self.driver.swipe(startx, starty, endx, endy, duration)
+            horizontal_rate -= 1
 
 
     def swipe_by_element(self, locator, x_offset, y_offset, duration):
