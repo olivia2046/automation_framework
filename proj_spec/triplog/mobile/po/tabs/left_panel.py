@@ -98,11 +98,16 @@ class LeftPanel(TriplogMobileBasePage):
         try:
             if menu_name=='Last Known Parking':
                 # do not click
-                self.find_element(self.get_menu_locator("%s" % menu_name))
+                if self.find_element(self.get_menu_locator("%s" % menu_name)) is None:
+                    return False
                 # todo: click menu and handle pop up
                 self.swipe_left(self.get_locator_by_os("_left_panel_loc"), horizontal_rate=1)
                 return True
-            self.find_element_and_click(self.get_menu_locator("%s"%menu_name))
+            menu_element = self.find_element(self.get_menu_locator("%s"%menu_name),condition="element_to_be_clickable")
+            if menu_element is None:
+                return False
+            else:
+                menu_element.click()
 
 
             if menu_name=='Work Schedule':

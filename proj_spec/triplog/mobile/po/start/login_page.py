@@ -2,7 +2,7 @@
 # **************************************
 # @Time : 2024/12/19 18:16
 # @Author : Olivia
-# Desc:
+# Desc: todo: batteray
 # **************************************
 import os
 import time
@@ -28,10 +28,25 @@ class AppLoginPage(MobileBasePage):
     #     self.find_element_and_click(self._agree_btn_loc)
 
     def login(self, email, password):
-        from proj_spec.triplog.mobile.po.tabs.trips_tab_page import TripsTabPage
-        from proj_spec.triplog.mobile.po.tabs.reports_tab_page import ReportsTabPage
-        from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionTabPage
-        from proj_spec.triplog.mobile.po.tabs.transactions_tab_page import TransactionsTabPage
+        # cancel battery optimization, to prevent pop up
+        # import os
+        # from base.get_config import GetConfig
+        # # 要取消电池优化的包名
+        # package_name = self.driver.capabilities['appPackage']
+        # if os.name=='nt':
+        #     find_str_cmd = "findstr"
+        # else:
+        #     find_str_cmd = "grep"
+        #
+        # # 检查应用的电池优化状态
+        # os.system(f"adb shell dumpsys deviceidle whitelist | %s %s"%(find_str_cmd, package_name))
+        #
+        # # 添加到电池优化白名单
+        # os.system(f"adb shell dumpsys deviceidle whitelist +%s"%package_name)
+        #
+        # # 确认操作成功
+        # os.system(f"adb shell dumpsys deviceidle whitelist | %s %s"%(find_str_cmd, package_name))
+
 
         self.find_element_and_click(self.get_locator_by_os("_agree_btn_loc"))
         self.find_element_and_input(self.get_locator_by_os("_email_input_loc"), email)
@@ -61,7 +76,9 @@ class AppLoginPage(MobileBasePage):
         # else:
         #     return TripsTabPage(self.driver)
         from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
-        return TabsBasePage(self.driver)
+        tab_page = TabsBasePage(self.driver)
+
+        return tab_page
 
 
 
