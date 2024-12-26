@@ -43,5 +43,13 @@ class TriplogNavigablePage(TriplogBasePage):
             return False
 
 
+    def jumped_to_billing(self):
+        """whether page jumps to the Billing page
+
+        :return:
+        """
+        return self.get_title()=='Billing'
+
+
     def get_title(self):
         return self.find_element(self._title_loc).text
