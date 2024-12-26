@@ -29,23 +29,23 @@ class AppLoginPage(MobileBasePage):
 
     def login(self, email, password):
         # cancel battery optimization, to prevent pop up
-        # import os
-        # from base.get_config import GetConfig
-        # # 要取消电池优化的包名
-        # package_name = self.driver.capabilities['appPackage']
-        # if os.name=='nt':
-        #     find_str_cmd = "findstr"
-        # else:
-        #     find_str_cmd = "grep"
-        #
-        # # 检查应用的电池优化状态
-        # os.system(f"adb shell dumpsys deviceidle whitelist | %s %s"%(find_str_cmd, package_name))
-        #
-        # # 添加到电池优化白名单
-        # os.system(f"adb shell dumpsys deviceidle whitelist +%s"%package_name)
-        #
-        # # 确认操作成功
-        # os.system(f"adb shell dumpsys deviceidle whitelist | %s %s"%(find_str_cmd, package_name))
+        import os
+        from base.get_config import GetConfig
+        # 要取消电池优化的包名
+        package_name = self.driver.capabilities['appPackage']
+        if os.name=='nt':
+            find_str_cmd = "findstr"
+        else:
+            find_str_cmd = "grep"
+
+        # 检查应用的电池优化状态
+        os.system(f"adb shell dumpsys deviceidle whitelist | %s %s"%(find_str_cmd, package_name))
+
+        # 添加到电池优化白名单
+        os.system(f"adb shell dumpsys deviceidle whitelist +%s"%package_name)
+
+        # 确认操作成功
+        os.system(f"adb shell dumpsys deviceidle whitelist | %s %s"%(find_str_cmd, package_name))
 
 
         self.find_element_and_click(self.get_locator_by_os("_agree_btn_loc"))
