@@ -37,6 +37,8 @@ def driver_init(request,get_login_info):
         driver = webdriver.Firefox()
     elif browser_name=='Edge':
         driver = webdriver.Edge()
+    elif browser_name=='Safari':
+        driver = webdriver.Safari()
     request.cls.driver = driver
     login_page = TriplogLoginPage(request.cls.driver)
     if request.cls.user_identifier is not None:

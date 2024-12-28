@@ -8,5 +8,5 @@ from case.triplog.mobile.access.test_access_base import TestMobileAccessBase
 
 
 class TestTeamPaidMobileAccess(TestMobileAccessBase):
-    _user_identifier = "team_paid"
+    user_identifier = "team_paid"
 

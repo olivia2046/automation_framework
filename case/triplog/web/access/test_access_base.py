@@ -111,7 +111,26 @@ class TestAccessBase(TestTriplogWebBase):
             assert not page.is_layer_popup_visible()
             assert page.get_title() == 'Time Clock Calendar'
         else:
-            assert page.is_layer_popup_visible(expected=True)
 
+            #assert page.is_layer_popup_visible(expected=True) or page.jumped_to_billing()
+            # 强制由具体子类决定判断准则
+            assert False
 
+    @pytest.mark.parametrize('menu_path', ['Time->Time Clock Calendar'])
+    def test_url_access(self,menu_path):
+        """
 
+        :return:
+        """
+        page = TriplogNavigablePage(self.driver)
+        accessibility = self.user_data[menu_path]
+        expected_title = menu_path.split('->')[-1]
+
+        if accessibility.lower() == 'y':
+            assert not page.is_layer_popup_visible()
+            assert page.get_title() == expected_title
+        else:
+
+            # assert page.is_layer_popup_visible(expected=True) or page.jumped_to_billing()
+            # 强制由具体子类决定判断准则
+            assert False

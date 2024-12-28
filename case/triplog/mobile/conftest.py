@@ -26,6 +26,7 @@ def driver_init(request,get_login_info):
     else:
         options = XCUITestOptions().load_capabilities(caps)
     request.cls.driver = webdriver.Remote(GetConfig.get_cmd_executor(), options=options)
+    #request.cls.driver = webdriver
 
     app_start_page = AppStartPage(request.cls.driver)
     login_page = app_start_page.goto_login_page()
