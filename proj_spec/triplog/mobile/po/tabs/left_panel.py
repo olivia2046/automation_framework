@@ -9,6 +9,7 @@ import time
 from appium.webdriver.common.appiumby import AppiumBy
 from selenium.webdriver.common.by import By
 
+from proj_spec.triplog.mobile.po.account_page import AccountPage
 from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBasePage
 
 
@@ -18,10 +19,15 @@ class LeftPanel(TriplogMobileBasePage):
 
     _adv_feature_switch_android = (AppiumBy.XPATH,'//android.widget.Switch[@resource-id="com.bizlog.triplog:id/switch_btn"]')
     _left_panel_loc_android = (AppiumBy.XPATH,'//android.widget.LinearLayout[@resource-id="com.bizlog.triplog:id/ll_drawer"]')
+    _account_status_loc_android= (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_account_status_info"]')
+
 
 
     def switch_advanced_features(self):
-        self.find_element_and_click(self.get_locator_by_os("_adv_feature_switch"))
+        #self.find_element_and_click(self.get_locator_by_os("_adv_feature_switch"))
+        switch_element = self.find_element(self.get_locator_by_os("_adv_feature_switch"), condition="element_to_be_clickable")
+        #switch_element.screenshot("switch.png")
+        switch_element.click()
 
     def get_menu_locator(self,menu_text):
         """
@@ -89,18 +95,18 @@ class LeftPanel(TriplogMobileBasePage):
 
         advanced_switch = self.find_element(self.get_locator_by_os("_adv_feature_switch"))
         if (menu_name in ('Navigate/Route Planning','Frequent Trip Rules','Adjust Odometer','Business Activities',
-                          'Last Known Parking','Banks & Credit Cards','Invite Accoutant')
+                          'Last Known Parking','Banks & Credit Cards','Invite Accountant')
                 and advanced_switch.get_attribute("checked")=='false'):
             self.switch_advanced_features()
             # scroll up the left pane
             self.swipe_up(self.get_locator_by_os("_left_panel_loc"),0.5)
 
         try:
-            if menu_name=='Last Known Parking':
+            if menu_name in ('Last Known Parking','Banks & Credit Cards'):
                 # do not click
                 if self.find_element(self.get_menu_locator("%s" % menu_name)) is None:
                     return False
-                # todo: click menu and handle pop up
+                # todo: click menu and handle pop up/long loading page
                 self.swipe_left(self.get_locator_by_os("_left_panel_loc"), horizontal_rate=1)
                 return True
             menu_element = self.find_element(self.get_menu_locator("%s"%menu_name),condition="element_to_be_clickable")
@@ -118,6 +124,11 @@ class LeftPanel(TriplogMobileBasePage):
                 page = ApprovalMgmtPage(self.driver)
                 while 'loading' in page.get_title():
                     time.sleep(3)
+            elif menu_name == 'Adjust Odometer':
+                from proj_spec.triplog.mobile.po.left_nav.adjust_odometer_page import AdjustOdometerPage
+                page = AdjustOdometerPage(self.driver)
+                if page.is_odometer_reading_popup():
+                    page.confirm_odometer_setting()
             else:
                 from proj_spec.triplog.mobile.po.left_nav.left_nav_base_page import LeftNavBasePage
                 page = LeftNavBasePage(self.driver)
@@ -152,3 +163,6 @@ class LeftPanel(TriplogMobileBasePage):
     #     locations_page =
 
 
+    def goto_account_page(self):
+        self.find_element_and_click(self.get_locator_by_os("_account_status_loc"))
+        return AccountPage(self.driver)

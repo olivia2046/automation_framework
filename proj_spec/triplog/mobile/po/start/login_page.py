@@ -8,12 +8,10 @@ import os
 import time
 
 from appium.webdriver.common.appiumby import AppiumBy
-
-from base.po.mobile_base_page import MobileBasePage
-
+from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBasePage
 
 
-class AppLoginPage(MobileBasePage):
+class AppLoginPage(TriplogMobileBasePage):
     # permission
     _agree_btn_loc_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/rtv_agree"]')
 
@@ -29,6 +27,8 @@ class AppLoginPage(MobileBasePage):
 
     _loading_data_loc_android = (AppiumBy.XPATH,'//android.view.ViewGroup[@resource-id="com.bizlog.triplog:id/rcl_all"]')
     _loading_data_loc_ios = (AppiumBy.XPATH, '//XCUIElementTypeOther[@name="Please wait..."]')
+
+
 
     # def agree_permission(self):
     #     self.find_element_and_click(self._agree_btn_loc)
