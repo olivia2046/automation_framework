@@ -10,8 +10,8 @@ from proj_spec.triplog.mobile.po.left_nav.left_nav_base_page import LeftNavBaseP
 
 
 class AdjustOdometerPage(LeftNavBasePage):
-    _odometer_title_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_title"]')
-    _confirm_btn_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/rtv_ok"]')
+    _odometer_title_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_title')
+    _confirm_btn_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rtv_ok')
 
     def is_odometer_reading_popup(self):
         """check if the Current Odomeer Reading from Dashboard windows pops up

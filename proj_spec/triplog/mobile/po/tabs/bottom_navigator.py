@@ -14,8 +14,8 @@ from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBa
 
 
 class BottomNavigator(TriplogMobileBasePage):
-    _more_or_less_loc_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_main_bottom_more"]')
-    _more_or_less_parent_loc_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_main_bottom_more"]/..')
+    _more_or_less_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/ll_main_bottom_menu_more')
+    _more_or_less_parent_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/ll_main_bottom_menu_more')
     def get_tab_locator(self, tab_text):
         if self.os=='android':
             return (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_item_customize_btn_name" '

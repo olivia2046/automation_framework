@@ -11,6 +11,6 @@ from proj_spec.triplog.mobile.po.left_nav.left_nav_base_page import LeftNavBaseP
 
 class BankAccountsPage(LeftNavBasePage):
     _title_loc_android = (AppiumBy.XPATH, '//android.widget.TextView[@text="Bank Accounts"]')
-    _back_loc_android = (AppiumBy.XPATH, '//android.view.View[@content-desc="updateSideBarCollapsed"]')
+    _back_loc_android = (AppiumBy.ACCESSIBILITY_ID, 'updateSideBarCollapsed')
 
     pass

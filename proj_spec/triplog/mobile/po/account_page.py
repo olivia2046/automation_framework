@@ -11,7 +11,7 @@ from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBa
 
 
 class AccountPage(TriplogMobileBasePage):
-    _data_backup_loc_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_action"]')
+    _data_backup_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_action')
 
     def goto_data(self):
         """go to Data Backup Page

@@ -10,8 +10,8 @@ from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBa
 
 
 class LeftNavBasePage(TriplogMobileBasePage):
-    _title_loc_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_main_title"]')
-    _back_loc_android = (AppiumBy.XPATH, '//android.widget.ImageView[@resource-id="com.bizlog.triplog:id/img_main_icon"]')
+    _title_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_main_title')
+    _back_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/img_main_icon')
     def go_back(self):
         self.find_element_and_click(self.get_locator_by_os("_back_loc"))
         return TabsBasePage
@@ -19,3 +19,9 @@ class LeftNavBasePage(TriplogMobileBasePage):
 
     def get_title(self):
         return self.find_element(self.get_locator_by_os("_title_loc")).text
+
+
+    def goto_logout(self):
+        tab_base_page = self.go_back()
+        tab_base_page.show_left_panel()
+        pass

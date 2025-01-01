@@ -17,9 +17,10 @@ class LeftPanel(TriplogMobileBasePage):
     menu_title_mapping = {"Auto Start on":"Auto Start Settings","Work Schedule":"Working Hours",
                           "Navigate/Route Planning":"Route Planning","Adjust Odometer":"Adjust Vehicle Odometer"}
 
-    _adv_feature_switch_android = (AppiumBy.XPATH,'//android.widget.Switch[@resource-id="com.bizlog.triplog:id/switch_btn"]')
-    _left_panel_loc_android = (AppiumBy.XPATH,'//android.widget.LinearLayout[@resource-id="com.bizlog.triplog:id/ll_drawer"]')
-    _account_status_loc_android= (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_account_status_info"]')
+    _adv_feature_switch_android = (AppiumBy.ID,'com.bizlog.triplog:id/switch_btn')
+    _left_panel_loc_android = (AppiumBy.ID,'com.bizlog.triplog:id/nsv_drawer')
+    _account_status_loc_android= (AppiumBy.ID, 'com.bizlog.triplog:id/tv_account_status_info')
+    _account_email_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_account_email')
 
 
 

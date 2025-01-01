@@ -2,7 +2,7 @@
 # **************************************
 # @Time : 2024/12/19 18:16
 # @Author : Olivia
-# Desc: todo: batteray
+# Desc:
 # **************************************
 import os
 import time
@@ -12,6 +12,8 @@ from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBa
 
 
 class AppLoginPage(TriplogMobileBasePage):
+    page_activity = {"Work Schedule":"com.esocialllc.triplog.module.setting.SettingTimeRuleActivity"}
+
     # permission
     _agree_btn_loc_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/rtv_agree"]')
 
@@ -34,6 +36,7 @@ class AppLoginPage(TriplogMobileBasePage):
     #     self.find_element_and_click(self._agree_btn_loc)
 
     def login(self, email, password):
+
         if self.os=='android': # phone os
             # cancel battery optimization, to prevent pop up
             import os
@@ -96,3 +99,10 @@ class AppLoginPage(TriplogMobileBasePage):
         return title
 
 
+    def logout(self):
+        """
+
+        :return:
+        """
+        # 判断当前left navigation panel是否已展开
+        page_source = self.driver.current_activity

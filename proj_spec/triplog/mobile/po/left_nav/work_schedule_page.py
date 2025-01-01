@@ -12,7 +12,9 @@ from proj_spec.triplog.mobile.po.left_nav.left_nav_base_page import LeftNavBaseP
 class WorkSchedulePage(LeftNavBasePage):
 
     _title_loc_android = (AppiumBy.XPATH, '//android.widget.TextView[@text="Working Hours"]')
-    _back_loc_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/img_back"]')
+    _title_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeStaticText[`name == "Work Schedule"`][1]')
+    _back_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/img_back')
+    _back_loc_ios = (AppiumBy.IOS_PREDICATE, 'name == "Back" AND label == "Back" AND type == "XCUIElementTypeButton"')
 
     # def go_back(self):
     #

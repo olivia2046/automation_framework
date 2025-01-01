@@ -4,18 +4,30 @@
 # @Author : Olivia
 # Desc:
 # **************************************
+import logging
+
 from appium.webdriver.common.appiumby import AppiumBy
 
 from base.po.mobile_base_page import MobileBasePage
 
 
 class TriplogMobileBasePage(MobileBasePage):
+    activity_page_mapping = {
+        "com.esocialllc.triplog.module.setting.SettingTimeRuleActivity":"WorkSchedulePage",
+        "com.esocialllc.triplog.module.connectbank.ConnectBankActivity":"BankAccountsPage",
+        "com.esocialllc.triplog.tutorial.AutoStartSettingActivity":"Auto Start on"
 
-    _msg_box_loc_android = (AppiumBy.XPATH, '//android.view.ViewGroup[@resource-id="com.bizlog.triplog:id/rcl_all"]')
-    _msg_box_title_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_title"]')
-    _msg_box_ok_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/rtv_ok"]')
-    _msg_box_continue_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/rtv_continue"]')
-    _msg_box_cancel_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/rtv_cancel"]')
+    }
+
+    _toolbar_loc_ios = (AppiumBy.IOS_PREDICATE,'name == "Toolbar"') # left panel, **/XCUIElementTypeToolbar[`name == "Toolbar"`]
+    _navbar_loc_ios = (AppiumBy.IOS_CLASS_CHAIN,'**/XCUIElementTypeNavigationBar') # head bar of page, use for defining which page is current page
+
+
+    _msg_box_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rcl_all')
+    _msg_box_title_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_title')
+    _msg_box_ok_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rtv_ok')
+    _msg_box_continue_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rtv_continue')
+    _msg_box_cancel_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rtv_cancel')
 
     def get_title(self):
         title_elemenet = self.find_element(self.get_locator_by_os("_msg_box_title"))
@@ -59,3 +71,19 @@ class TriplogMobileBasePage(MobileBasePage):
         """
         msgbox_element = self.find_element(self.get_locator_by_os("_msg_box_loc"))
         return msgbox_element is not None
+
+
+    def get_current_page(self):
+        if self.os=='android': #use activity
+            current_activity = self.driver.current_activity
+            logging.info("current activity: %s"%current_activity)
+            if current_activity in self.activity_page_mapping.keys():
+                return eval("%s(self.driver)"%self.activity_page_mapping[current_activity])
+
+        else: #use hiarchy
+            pass
+
+
+
+    def goto_logout(self):
+        pass
