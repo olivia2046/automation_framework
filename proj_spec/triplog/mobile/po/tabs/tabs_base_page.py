@@ -38,7 +38,13 @@ class TabsBasePage(TriplogMobileBasePage):
 
     def show_left_panel(self):
         self.find_element_and_click(self.get_locator_by_os("_left_panel_loc"))
+        return LeftPanel(self.driver)
 
     def get_title(self):
         return self.find_element(self.get_locator_by_os("_title_loc")).text
 
+
+    def logout(self):
+        left_panel = self.show_left_panel()
+        account_page = left_panel.goto_account_page()
+        account_page.sign_out()

@@ -7,9 +7,8 @@
 import time
 
 from appium.webdriver.common.appiumby import AppiumBy
-from selenium.webdriver.common.by import By
 
-from proj_spec.triplog.mobile.po.account_page import AccountPage
+from proj_spec.triplog.mobile.po.left_nav.account_page import AccountPage
 from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBasePage
 
 
@@ -42,11 +41,10 @@ class LeftPanel(TriplogMobileBasePage):
                     %menu_text) # only parent of parent element clickable
 
 
-    def collapse_left_panel(self):
-        """
 
-        :return:
-        """
+    def goto_account_page(self):
+        self.find_element_and_click(self.get_locator_by_os("_account_email_loc"))
+        return AccountPage(self.driver)
 
 
 

@@ -12,23 +12,31 @@ from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBa
 
 
 class AppLoginPage(TriplogMobileBasePage):
-    page_activity = {"Work Schedule":"com.esocialllc.triplog.module.setting.SettingTimeRuleActivity"}
+    _activity = "com.esocialllc.triplog.module.setup2.LoginActivity2"
 
     # permission
     _agree_btn_loc_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/rtv_agree"]')
 
-    _email_input_loc_android = (AppiumBy.XPATH, '//android.widget.EditText[@resource-id="com.bizlog.triplog:id/et_email"]')
+    _email_input_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/et_email')
     _email_input_loc_ios = (AppiumBy.XPATH, '//XCUIElementTypeTextField[@value="Email"]')
-    _pwd_input_loc_android = (AppiumBy.XPATH, '//android.widget.EditText[@resource-id="com.bizlog.triplog:id/et_pwd"]')
+    _pwd_input_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/et_pwd')
     _pwd_input_loc_ios = (AppiumBy.XPATH, '//XCUIElementTypeSecureTextField[@value="Password"]')
-    _login_btn_loc_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/rtv_login"]')
+    _login_btn_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rtv_login')
     _login_btn_loc_ios = (AppiumBy.XPATH, '//XCUIElementTypeStaticText[@name="Sign in"]')
 
-    _turn_on_time_loc_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_time_tracking_ok"]')
+    _turn_on_time_loc_android = (AppiumBy.ID, 'tv_time_tracking_ok')
     _save_time_mode_loc_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_set_time_mode_save"]')
 
-    _loading_data_loc_android = (AppiumBy.XPATH,'//android.view.ViewGroup[@resource-id="com.bizlog.triplog:id/rcl_all"]')
+    _loading_data_loc_android = (AppiumBy.ID,'com.bizlog.triplog:id/rcl_all')
     _loading_data_loc_ios = (AppiumBy.XPATH, '//XCUIElementTypeOther[@name="Please wait..."]')
+
+    _loading_data_title_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_title" and @text="Loading data"]')
+
+    # Sync Canceled
+    # com.bizlog.triplog:id/rtv_ok
+    # Check Login Failed
+    # com.bizlog.triplog:id/rtv_cancel
+    # Loading data
 
 
 
@@ -64,7 +72,15 @@ class AppLoginPage(TriplogMobileBasePage):
         self.find_element_and_click(self.get_locator_by_os("_login_btn_loc"))
 
         time.sleep(3)
-        self.find_element(self.get_locator_by_os("_loading_data_loc"),condition="invisibility_of_element")
+        self.find_element(self.get_locator_by_os("_loading_data_title"),condition="invisibility_of_element")
+
+        msg_box = self.find_element(self.get_locator_by_os("_msg_box_loc"))
+        if msg_box is not None:
+            title_element = self.find_element(self.get_locator_by_os("_msg_box_title"))
+            if title_element is not None:
+                title = title_element.text
+                if title in ('Sync Canceled','Check Login Failed'):
+                    return None
 
         try:
             self.find_element_and_click(self.get_locator_by_os("_turn_on_time_loc"),skip_error_handle=True)
@@ -73,30 +89,10 @@ class AppLoginPage(TriplogMobileBasePage):
             pass
 
 
-        # if self.get_default_page()=="Trips":
-        #     return TripsTabPage(self.driver)
-        # elif self.get_default_page()=="Transactions":
-        #     return TransactionsTabPage(self.driver)
-        # elif self.get_default_page()=="Reports":
-        #     return ReportsTabPage(self.driver)
-        # elif self.get_default_page()=="Submission":
-        #     return SubmissionTabPage(self.driver)
-        # # elif self.get_default_page()=="Time":
-        # #     return MobileTimePage()
-        # else:
-        #     return TripsTabPage(self.driver)
         from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
         tab_page = TabsBasePage(self.driver)
 
         return tab_page
-
-
-
-    def get_default_page(self):
-        title_loc_android = (AppiumBy.XPATH,'//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_main_title"]')
-
-        title=self.find_element(eval("title_loc_"+self.os)).text
-        return title
 
 
     def logout(self):

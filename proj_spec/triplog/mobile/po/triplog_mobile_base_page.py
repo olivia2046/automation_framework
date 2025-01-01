@@ -21,6 +21,7 @@ class TriplogMobileBasePage(MobileBasePage):
 
     _toolbar_loc_ios = (AppiumBy.IOS_PREDICATE,'name == "Toolbar"') # left panel, **/XCUIElementTypeToolbar[`name == "Toolbar"`]
     _navbar_loc_ios = (AppiumBy.IOS_CLASS_CHAIN,'**/XCUIElementTypeNavigationBar') # head bar of page, use for defining which page is current page
+    _bottom_menu_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rl_main_bottom_menu')
 
 
     _msg_box_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rcl_all')
@@ -79,11 +80,18 @@ class TriplogMobileBasePage(MobileBasePage):
             logging.info("current activity: %s"%current_activity)
             if current_activity in self.activity_page_mapping.keys():
                 return eval("%s(self.driver)"%self.activity_page_mapping[current_activity])
+            elif self.find_element(self.get_locator_by_os("_bottom_menu_loc")) is not None: # tab page
+                from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
+                return TabsBasePage(self.driver)
+            else:
+                from proj_spec.triplog.mobile.po.left_nav.left_nav_base_page import LeftNavBasePage
+                return LeftNavBasePage(self.driver)
 
         else: #use hiarchy
             pass
 
 
 
-    def goto_logout(self):
-        pass
+    def logout(self):
+        concrete_page = self.get_current_page()
+        concrete_page.logout()
