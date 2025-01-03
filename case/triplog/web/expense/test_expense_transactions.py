@@ -17,7 +17,7 @@ class TestExpenseTransactions(TestTriplogWebBase):
         super().setup_class()
         cls.transactions_page = TransactionsPage(cls.driver)
 
-    @pytest.mark.skip("debug")
+    #@pytest.mark.skip("debug")
     @pytest.mark.parametrize('kwargs', [{"amount": 12, "category": "Income"},{"amount": 20, "category": "Telephone"}])
     def test_create_transaction(self,kwargs):
 
