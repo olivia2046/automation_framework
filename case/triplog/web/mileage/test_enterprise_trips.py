@@ -8,7 +8,7 @@ from case.triplog.web.mileage.test_trips import TestTrips
 
 
 class TestEnterpriseTrips(TestTrips):
-    user_identifier = "enterprise_paid"
+    user_identifier = "enterprise"
 
 
 
