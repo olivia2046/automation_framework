@@ -17,14 +17,18 @@ class TestExpenseTransactions(TestTriplogWebBase):
         super().setup_class()
         cls.transactions_page = TransactionsPage(cls.driver)
 
-    #@pytest.mark.skip("debug")
+    @pytest.mark.skip("debug")
     @pytest.mark.parametrize('kwargs', [{"amount": 12, "category": "Income"},{"amount": 20, "category": "Telephone"}])
     def test_create_transaction(self,kwargs):
 
         self.transactions_page.create_transaction(**kwargs)
 
-
+    @pytest.mark.skip("debug")
     @pytest.mark.parametrize('kwargs', [{"row_index":0,"amount": 50, "category": "Income"}])
     def test_edit_transaction(self,kwargs):
 
         self.transactions_page.edit_transaction(**kwargs)
+
+    @pytest.mark.parametrize('row_index', [0])
+    def test_delete_one_transaction(self, row_index):
+        self.transactions_page.delete_one_transaction(row_index)

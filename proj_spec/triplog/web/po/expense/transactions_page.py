@@ -21,7 +21,7 @@ class TransactionsPage(TriplogNavigablePage):
     # use Copy button to locate Save button
     _save_transaction_btn_loc = (By.XPATH, '//input[@type="button" and @value="Copy"]/../input[1]')
     _delete_one_btn_loc = (By.XPATH, '//input[@type="button" and @value="Delete"]')
-    nth_transaction_loc = (By.XPATH, '//td[@class="mlarge"][index_placeholder]')
+    # nth_transaction_loc = (By.XPATH, '//td[@class="mlarge"][index_placeholder]')
 
     def _input_transaction_arguments(self, **kwargs):
         """
@@ -33,9 +33,10 @@ class TransactionsPage(TriplogNavigablePage):
         self.choose_category_from_combobox(kwargs['category'])
 
     def _get_nth_transaction_locator(self, row_index):
-        loc_str = self.nth_transaction_loc[1]
-        loc_str = loc_str.replace('index_placeholder',str(row_index+1))
-        return (self.nth_transaction_loc[0],loc_str)
+        # loc_str = self.nth_transaction_loc[1]
+        # loc_str = loc_str.replace('index_placeholder',str(row_index+1))
+        # return (self.nth_transaction_loc[0],loc_str)
+        return (By.XPATH, '//td[@class="mlarge"][%s]'%(row_index+1))
 
     def choose_category_from_combobox(self, category_name):
         """choose category from combobox, when creating/editing transaction

@@ -133,7 +133,7 @@ class TripsPage(TriplogNavigablePage):
 
 
     def delete_trip_from_menu(self, index=0):
-        """
+        """Delete trip from menu bar
 
         :return:
         """
