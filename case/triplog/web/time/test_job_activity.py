@@ -20,6 +20,7 @@ class TestJobActivity(TestTriplogWebBase):
 
     # @pytest.mark.skip("debug")
     @pytest.mark.parametrize('kwargs',
-                             [{"name": "Painting","hourly_rate":"15.00", "dept_office":"Contracting" }])
+                             [{"name": "Sick Days"}, {"name": "PTO"},{"name": "Holiday"},
+                              {"name":"Sales Meeting", "hourly_rate":"25.00"}, {"name":"Tech Support", "hourly_rate":"25.00"}])
     def test_add_job_activity(self, kwargs):
         self.job_activity_page.add_job_activity(**kwargs)
