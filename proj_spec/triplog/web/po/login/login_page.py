@@ -9,10 +9,10 @@ from selenium.webdriver.common.by import By
 
 import base.globalvars as glo
 
-from proj_spec.triplog.web.po.triplog_base_page import TriplogBasePage
+from proj_spec.triplog.web.po.triplog_base_page import TriplogWebBasePage
 
 
-class TriplogLoginPage(TriplogBasePage):
+class TriplogLoginPage(TriplogWebBasePage):
 
     _email_locator = (By.ID, "account_email")
     _password_locator = (By.CSS_SELECTOR, "#passwordTxt > input[type=password]")

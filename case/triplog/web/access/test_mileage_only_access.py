@@ -5,8 +5,8 @@
 # Desc:
 # **************************************
 
-from case.triplog.web.access.test_access_base import TestAccessBase
+from case.triplog.web.access.test_access_base import TestWebAccessBase
 
 
-class TestMileageOnlyAccess(TestAccessBase):
+class TestMileageOnlyWebAccess(TestWebAccessBase):
     user_identifier = "mileage_only"

@@ -10,14 +10,14 @@ import pytest
 from base.get_config import GetConfig
 from case.triplog.web.test_triplog_web_base import TestTriplogWebBase
 from proj_spec.triplog.web.po.dashboard.overview_page import OverviewPage
-from proj_spec.triplog.web.po.expense.transactions_page import TransactionPage
+from proj_spec.triplog.web.po.expense.transactions_page import TransactionsPage
 from proj_spec.triplog.web.po.maps.heat_map_page import HeatMapPage
 from proj_spec.triplog.web.po.mileage.trips_page import TripsPage
 from proj_spec.triplog.web.po.reports.mileage_reports_page import MileageReportsPage
-from proj_spec.triplog.web.po.time.time_clock_page import TimeClockPage
+from proj_spec.triplog.web.po.time.time_calendar_page import TimeClockCalendarPage
 
 
-class TestAccessBase(TestTriplogWebBase):
+class TestWebAccessBase(TestTriplogWebBase):
     user_identifier = None
     #user_identifier = "trial_end"
     #user_identifier = "single_paid"
@@ -45,7 +45,8 @@ class TestAccessBase(TestTriplogWebBase):
         #     second_level = menu_texts[1]
         #
         #     accessibility = user_row[column].item()
-    #@pytest.mark.skip("")
+
+    @pytest.mark.skip("")
     def test_overview_page_accessibility(self):
         page = OverviewPage(self.driver)
         accessibility = self.user_data['Dashboard->Overview']
@@ -56,7 +57,7 @@ class TestAccessBase(TestTriplogWebBase):
         else:
             assert page.is_layer_popup_visible(expected=True)
 
-
+    @pytest.mark.skip("")
     def test_mileage_report_page_accessibility(self):
         page = MileageReportsPage(self.driver)
         accessibility = self.user_data['Reports->Mileage Reports']
@@ -67,7 +68,7 @@ class TestAccessBase(TestTriplogWebBase):
         else:
             assert page.is_layer_popup_visible(expected=True)
 
-
+    @pytest.mark.skip("")
     def test_heat_map_page_accessibility(self):
         page = HeatMapPage(self.driver)
         accessibility = self.user_data['Maps->Heat Map']
@@ -78,7 +79,7 @@ class TestAccessBase(TestTriplogWebBase):
         else:
             assert page.is_layer_popup_visible(expected=True)
 
-    #@pytest.mark.skip("")
+    @pytest.mark.skip("")
     def test_trips_page_accessibility(self):
         page = TripsPage(self.driver,accessible=False)
         #accessibility = self.user_row['Mileage->Trips'].item()
@@ -90,9 +91,9 @@ class TestAccessBase(TestTriplogWebBase):
         else:
             assert page.is_layer_popup_visible(expected=True)
 
-    #@pytest.mark.skip("")
+    @pytest.mark.skip("")
     def test_transactions_page_accessibility(self):
-        page = TransactionPage(self.driver)
+        page = TransactionsPage(self.driver)
         accessibility = self.user_data['Expense->Transactions']
 
         if accessibility.lower() == 'y':
@@ -102,9 +103,9 @@ class TestAccessBase(TestTriplogWebBase):
             assert page.is_layer_popup_visible(expected=True)
 
 
-    #@pytest.mark.skip("")
+    @pytest.mark.skip("")
     def test_time_clock_page_accessibility(self):
-        page = TimeClockPage(self.driver)
+        page = TimeClockCalendarPage(self.driver)
         accessibility = self.user_data['Time->Time Clock Calendar']
 
         if accessibility.lower() == 'y':
@@ -116,12 +117,27 @@ class TestAccessBase(TestTriplogWebBase):
             # 强制由具体子类决定判断准则
             assert False
 
+    @pytest.mark.parametrize('path', ['Integrations->ADP','Integrations->Paychex','Integrations->Paylocity',
+                            'Integrations->UKG Pro','Integrations->UKG Ready','Integrations->SAP Concur',
+                                                  'Integrations->QuickBooks Online', 'Integrations->Xero', 'Integrations->Sage Intacct'])
+    def test_integrations_item_accessibility(self, path):
+        from proj_spec.triplog.web.po.integrations.integrations_page import IntegrationsPage
+        accessibility = self.user_data[path]
+        integration_item = path.split("->")[-1]
+        page = IntegrationsPage(self.driver)
+        if accessibility.lower()=='y':
+            assert page.is_integration_item_accessible(integration_item)
+        else:
+            assert not page.is_integration_item_accessible(integration_item)
+
+    @pytest.mark.skip("debug: 需要实例化具体页面类并赋值url")
     @pytest.mark.parametrize('menu_path', ['Time->Time Clock Calendar'])
     def test_url_access(self,menu_path):
         """
 
         :return:
         """
+        from proj_spec.triplog.web.po.triplog_navigable_page import TriplogNavigablePage
         page = TriplogNavigablePage(self.driver)
         accessibility = self.user_data[menu_path]
         expected_title = menu_path.split('->')[-1]
@@ -134,3 +150,15 @@ class TestAccessBase(TestTriplogWebBase):
             # assert page.is_layer_popup_visible(expected=True) or page.jumped_to_billing()
             # 强制由具体子类决定判断准则
             assert False
+
+    @pytest.mark.skip("debug")
+    @pytest.mark.parametrize('menu_path',
+                             ['Dashboard->Overview','Reports->Mileage Reports','Maps->Heat Map','Mileage->Trips',
+                              'Expense->Transactions','Time->Time Clock Calendar'])
+    def test_navigation_access(self, menu_path):
+
+        from proj_spec.triplog.web.po.triplog_navigable_page import TriplogNavigablePage
+        page = TriplogNavigablePage(self.driver)
+        menus = menu_path.split("->")
+        page.navigation_bar.navigate(menus[0], menus[1])
+        assert page.get_title()==menus[1]

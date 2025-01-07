@@ -4,10 +4,10 @@
 # @Author : Olivia
 # Desc: test the access of team paid user
 # **************************************
-from case.triplog.web.access.test_access_base import TestAccessBase
+from case.triplog.web.access.test_access_base import TestWebAccessBase
 
 
-class TestTrialEndAccess(TestAccessBase):
+class TestTrialEndWebAccess(TestWebAccessBase):
     user_identifier = "trial_end"
 
 

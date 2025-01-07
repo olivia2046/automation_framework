@@ -6,10 +6,10 @@
 # **************************************
 from selenium.webdriver.common.by import By
 
-from proj_spec.triplog.web.po.triplog_base_page import TriplogBasePage
+from proj_spec.triplog.web.po.triplog_base_page import TriplogWebBasePage
 
 
-class TrialEndPage(TriplogBasePage):
+class TrialEndPage(TriplogWebBasePage):
     _subscribe_btn_loc = (By.XPATH, "//div[@id='layui-layer1']//button[@class='blue_button']")
 
 

@@ -8,11 +8,11 @@ import logging
 
 from selenium.webdriver.common.by import By
 
-from proj_spec.triplog.web.po.triplog_base_page import TriplogBasePage
+from proj_spec.triplog.web.po.triplog_base_page import TriplogWebBasePage
 from proj_spec.triplog.web.po.triplog_navigation_bar import TriplogNavigationBar
 
 
-class TriplogNavigablePage(TriplogBasePage):
+class TriplogNavigablePage(TriplogWebBasePage):
     """
     page that has the navigation sidebar
     """
@@ -23,7 +23,8 @@ class TriplogNavigablePage(TriplogBasePage):
         #super().__init__(driver)
         self.driver = driver
         self.navigation_bar = TriplogNavigationBar(driver)
-        self.driver.get(self.url)
+        if self.url is not None:
+            self.driver.get(self.url)
 
 
     def is_layer_popup_visible(self, expected=False):

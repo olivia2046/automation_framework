@@ -26,3 +26,4 @@ class SchedulePage(TriplogNavigablePage):
         user_loc = (By.XPATH, '//span[text()="%s"]'%kwargs['user'])
         self.find_element_and_click(user_loc)
         save_draft_btn.click()
+

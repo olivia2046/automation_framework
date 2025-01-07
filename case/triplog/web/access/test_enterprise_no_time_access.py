@@ -5,15 +5,15 @@
 # Desc: test the access of enterprise user without time product
 # Todo: skip other test methods, focus only on time part
 # **************************************
-from case.triplog.web.access.test_access_base import TestAccessBase
+from case.triplog.web.access.test_access_base import TestWebAccessBase
 
 
-class TestEnterpriseNoTimeAccess(TestAccessBase):
+class TestEnterpriseNoTimeWebAccess(TestWebAccessBase):
     user_identifier = "enterprise_no_time"
 
     def test_time_clock_page_accessibility(self):
-        from proj_spec.triplog.web.po.time.time_clock_page import TimeClockPage
-        page = TimeClockPage(self.driver)
+        from proj_spec.triplog.web.po.time.time_calendar_page import TimeClockCalendarPage
+        page = TimeClockCalendarPage(self.driver)
         accessibility = self.user_data['Time->Time Clock Calendar']
 
         if accessibility.lower() == 'y':

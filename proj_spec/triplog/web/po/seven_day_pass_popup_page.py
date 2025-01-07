@@ -4,9 +4,9 @@
 # @Author : Olivia
 # Desc:
 # **************************************
-from triplog_base_page import TriplogBasePage
+from triplog_base_page import TriplogWebBasePage
 
-class SevenDayPassPopupPage(TriplogBasePage):
+class SevenDayPassPopupPage(TriplogWebBasePage):
 
 
 
