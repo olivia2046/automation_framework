@@ -17,5 +17,5 @@ class TestLogin(TestTriplogWebBase):
         # email, password = GetData.get_user_credential(self.user_identifier)
         # overview_page = login_page.login(email,password)
 
-        assert self.overview_page.get_title()=='Overview'
+        assert self.default_page.get_title()=='Overview'
 

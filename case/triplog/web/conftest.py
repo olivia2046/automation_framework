@@ -44,7 +44,7 @@ def driver_init(request,get_login_info):
     if request.cls.user_identifier is not None:
         #email, password = GetData.get_user_credential(request.cls.user_identifier)
         email, password = get_login_info
-        request.cls.overview_page = login_page.login(email, password)
+        request.cls.default_page = login_page.login(email, password)
     yield
     driver.quit()
 
