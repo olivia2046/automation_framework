@@ -117,6 +117,7 @@ class TestWebAccessBase(TestTriplogWebBase):
             # 强制由具体子类决定判断准则
             assert False
 
+    @pytest.mark.skip("debug")
     @pytest.mark.parametrize('path', ['Integrations->ADP','Integrations->Paychex','Integrations->Paylocity',
                             'Integrations->UKG Pro','Integrations->UKG Ready','Integrations->SAP Concur',
                                                   'Integrations->QuickBooks Online', 'Integrations->Xero', 'Integrations->Sage Intacct'])
@@ -129,6 +130,22 @@ class TestWebAccessBase(TestTriplogWebBase):
             assert page.is_integration_item_accessible(integration_item)
         else:
             assert not page.is_integration_item_accessible(integration_item)
+
+
+    @pytest.mark.parametrize('setting_path', ['Settings->Account Settings','Settings->Components','Settings->Notifications',
+                                              'Settings->Activities','Settings->Mileage Rates','Settings->Mileage Policies',
+                                              'Settings->Time Policies','Settings->Tags & Notes','Settings->Custom Tags',
+                                              'Settings->Custom Fields','Settings->Advanced Settings'])
+    def test_settings_accessibility(self, setting_path):
+        accessibility = self.user_data[setting_path]
+        from proj_spec.triplog.web.po.manage.settings.settings_page import SettingsListPage
+        page = SettingsListPage(self.driver)
+        detail_setting = setting_path.split('->')[-1]
+        if accessibility.lower()=='y':
+            assert page.is_detail_setting_accessible(detail_setting)
+        else:
+            assert not page.is_detail_setting_accessible(detail_setting)
+
 
     @pytest.mark.skip("debug: 需要实例化具体页面类并赋值url")
     @pytest.mark.parametrize('menu_path', ['Time->Time Clock Calendar'])
