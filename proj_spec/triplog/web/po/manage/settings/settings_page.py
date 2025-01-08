@@ -23,4 +23,5 @@ class SettingsListPage(TriplogNavigablePage):
 
     def is_detail_setting_accessible(self, setting_name):
         detail_page = self.access_detail_setting(setting_name)
-        return not detail_page.get_title()==""
+        #return not detail_page.get_title()==""
+        return not detail_page.is_upgrade_visible()
