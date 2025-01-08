@@ -7,7 +7,6 @@
 import pandas as pd
 import pytest
 
-from base.get_config import GetConfig
 from case.triplog.web.test_triplog_web_base import TestTriplogWebBase
 from proj_spec.triplog.web.po.dashboard.overview_page import OverviewPage
 from proj_spec.triplog.web.po.expense.transactions_page import TransactionsPage
@@ -25,8 +24,8 @@ class TestWebAccessBase(TestTriplogWebBase):
 
     @classmethod
     def setup_class(cls):
-        user_file = GetConfig.get_user_file_path()
-        df = pd.read_csv(user_file,index_col='loc')
+        access_matrix_file = "../../accessbility-matrix.csv"
+        df = pd.read_csv(access_matrix_file,index_col='loc')
         df = df.fillna('')
         #cls.user_row = df.loc[df['loc'] == cls.user_identifier] # cls.user_identifier will be replaced by value in concrete class
         cls.user_data = df[cls.user_identifier]

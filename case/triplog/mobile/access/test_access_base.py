@@ -8,7 +8,6 @@ import logging
 
 import pandas as pd
 import pytest
-from base.get_config import GetConfig
 from case.triplog.mobile.test_triplog_mobile_base import TestTriplogMobileBase
 
 
@@ -21,8 +20,8 @@ class TestMobileAccessBase(TestTriplogMobileBase):
 
     @classmethod
     def setup_class(cls):
-        user_file = GetConfig.get_user_file_path()
-        df = pd.read_csv(user_file,index_col='loc')
+        access_matrix_file = "../../accessbility-matrix.csv"
+        df = pd.read_csv(access_matrix_file,index_col='loc')
         df = df.fillna('')
         #cls.user_row = df.loc[df['loc'] == cls.user_identifier] # cls.user_identifier will be replaced by value in concrete class
         cls.user_data = df[cls.user_identifier]
