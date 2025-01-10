@@ -19,4 +19,4 @@
 
 def pytest_collection_modifyitems(config, items):
     # skip parent test class
-    items[:] = [item for item in items if "TestAccessBase" not in item.nodeid]
+    items[:] = [item for item in items if "TestWebAccessBase" not in item.nodeid]

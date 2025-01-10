@@ -9,11 +9,7 @@ import pytest
 
 from case.triplog.web.test_triplog_web_base import TestTriplogWebBase
 from proj_spec.triplog.web.po.dashboard.overview_page import OverviewPage
-from proj_spec.triplog.web.po.expense.transactions_page import TransactionsPage
-from proj_spec.triplog.web.po.maps.heat_map_page import HeatMapPage
-from proj_spec.triplog.web.po.mileage.trips_page import TripsPage
-from proj_spec.triplog.web.po.reports.mileage_reports_page import MileageReportsPage
-from proj_spec.triplog.web.po.time.time_calendar_page import TimeClockCalendarPage
+
 
 
 class TestWebAccessBase(TestTriplogWebBase):
@@ -58,6 +54,7 @@ class TestWebAccessBase(TestTriplogWebBase):
 
     @pytest.mark.skip("")
     def test_mileage_report_page_accessibility(self):
+        from proj_spec.triplog.web.po.reports.mileage_reports_page import MileageReportsPage
         page = MileageReportsPage(self.driver)
         accessibility = self.user_data['Reports->Mileage Reports']
 
@@ -69,6 +66,7 @@ class TestWebAccessBase(TestTriplogWebBase):
 
     @pytest.mark.skip("")
     def test_heat_map_page_accessibility(self):
+        from proj_spec.triplog.web.po.maps.heat_map_page import HeatMapPage
         page = HeatMapPage(self.driver)
         accessibility = self.user_data['Maps->Heat Map']
 
@@ -80,6 +78,7 @@ class TestWebAccessBase(TestTriplogWebBase):
 
     @pytest.mark.skip("")
     def test_trips_page_accessibility(self):
+        from proj_spec.triplog.web.po.mileage.trips_page import TripsPage
         page = TripsPage(self.driver,accessible=False)
         #accessibility = self.user_row['Mileage->Trips'].item()
         accessibility = self.user_data['Mileage->Trips']
@@ -92,6 +91,7 @@ class TestWebAccessBase(TestTriplogWebBase):
 
     @pytest.mark.skip("")
     def test_transactions_page_accessibility(self):
+        from proj_spec.triplog.web.po.expense.transactions_page import TransactionsPage
         page = TransactionsPage(self.driver)
         accessibility = self.user_data['Expense->Transactions']
 
@@ -102,8 +102,22 @@ class TestWebAccessBase(TestTriplogWebBase):
             assert page.is_layer_popup_visible(expected=True)
 
 
+
+    def test_spending_limits_page_accessibility(self):
+        from proj_spec.triplog.web.po.expense.spending_limits_page import SpendingLimitsPage
+        page = SpendingLimitsPage(self.driver)
+        accessibility = self.user_data['Expense->Spending Limits']
+
+        if accessibility.lower() == 'y':
+            assert not page.is_layer_popup_visible()
+            assert page.get_title() == 'Spending Limits'
+        else:
+            assert page.is_layer_popup_visible(expected=True)
+
+
     @pytest.mark.skip("")
     def test_time_clock_page_accessibility(self):
+        from proj_spec.triplog.web.po.time.time_calendar_page import TimeClockCalendarPage
         page = TimeClockCalendarPage(self.driver)
         accessibility = self.user_data['Time->Time Clock Calendar']
 
@@ -130,7 +144,7 @@ class TestWebAccessBase(TestTriplogWebBase):
         else:
             assert not page.is_integration_item_accessible(integration_item)
 
-
+    @pytest.mark.skip("debug")
     @pytest.mark.parametrize('setting_path', ['Settings->Account Settings','Settings->Components','Settings->Notifications',
                                               'Settings->Activities','Settings->Mileage Rates','Settings->Mileage Policies',
                                               'Settings->Time Policies','Settings->Tags & Notes','Settings->Custom Tags',

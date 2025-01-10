@@ -17,7 +17,10 @@ def get_login_info(request):
     user_file = GetConfig.get_user_file_path()
     df = pd.read_csv(user_file,index_col='loc')
     df = df.fillna('')
-    user_data = df[request.cls.user_identifier]
-    #email, password = user_data[['email'],['password']]
-    email, password = tuple(user_data[['email', 'password']])
-    return email,password
+    if request.cls.user_identifier in df.columns:
+        user_data = df[request.cls.user_identifier]
+        #email, password = user_data[['email'],['password']]
+        email, password = tuple(user_data[['email', 'password']])
+        return email,password
+    else:
+        return None

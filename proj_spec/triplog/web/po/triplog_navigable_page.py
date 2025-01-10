@@ -53,4 +53,8 @@ class TriplogNavigablePage(TriplogWebBasePage):
 
 
     def get_title(self):
-        return self.find_element(self._title_loc).text
+        title_element =  self.find_element(self._title_loc)
+        if title_element is not None:
+            return title_element.text
+        else:
+            return ""

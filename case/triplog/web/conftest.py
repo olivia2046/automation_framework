@@ -49,3 +49,8 @@ def driver_init(request,get_login_info):
     driver.quit()
 
 
+def pytest_collection_modifyitems(config, items):
+    # skip parent test class
+    items[:] = [item for item in items if "Base" not in item.nodeid]
+
+
