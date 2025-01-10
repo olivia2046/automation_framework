@@ -10,7 +10,7 @@ from case.triplog.web.test_triplog_web_base import TestTriplogWebBase
 from proj_spec.triplog.web.po.expense.transactions_page import TransactionsPage
 
 
-class TestExpenseTransactions(TestTriplogWebBase):
+class TestTransactionsBase(TestTriplogWebBase):
     user_identifier = None
     @classmethod
     def setup_class(cls):
@@ -32,3 +32,4 @@ class TestExpenseTransactions(TestTriplogWebBase):
     @pytest.mark.parametrize('row_index', [0])
     def test_delete_one_transaction(self, row_index):
         self.transactions_page.delete_one_transaction(row_index)
+

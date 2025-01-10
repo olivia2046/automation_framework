@@ -9,7 +9,7 @@ from case.triplog.web.test_triplog_web_base import TestTriplogWebBase
 
 
 
-class TestTimeClockList(TestTriplogWebBase):
+class TestTimeClockListBase(TestTriplogWebBase):
     user_identifier = None
 
     @classmethod

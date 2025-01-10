@@ -4,8 +4,8 @@
 Created on: 2025/1/5 10:35
 desc: 
 '''
-from case.triplog.web.time.test_time_clock_calendar_base import TestTimeClockCalendar
+from case.triplog.web.time.test_time_clock_calendar_base import TestTimeClockCalendarBase
 
 
-class TestUSTimeClockCalendar(TestTimeClockCalendar):
+class TestUSTimeClockCalendar(TestTimeClockCalendarBase):
     user_identifier = "enterprise"

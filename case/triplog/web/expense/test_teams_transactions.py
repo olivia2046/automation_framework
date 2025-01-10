@@ -4,8 +4,8 @@
 # @Author : Olivia
 # Desc:
 # **************************************
-from case.triplog.web.expense.test_expense_transactions import TestExpenseTransactions
+from case.triplog.web.expense.test_transactions_base import TestTransactionsBase
 
 
-class TestTeamsTransactions(TestExpenseTransactions):
+class TestTeamsTransactions(TestTransactionsBase):
     user_identifier = "teams"
