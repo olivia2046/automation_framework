@@ -4,10 +4,10 @@
 # @Author : Olivia
 # Desc:
 # **************************************
-from case.triplog.web.mileage.test_trips import TestTrips
+from case.triplog.web.mileage.test_trips_base import TestTripsBase
 
 
-class TestEnterpriseTrips(TestTrips):
+class TestEnterpriseTrips(TestTripsBase):
     user_identifier = "enterprise"
 
 

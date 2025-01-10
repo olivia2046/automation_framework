@@ -20,6 +20,8 @@ class TripsPage(TriplogNavigablePage):
     _confirm_delete_multiple_loc = (By.XPATH, "//div[@id='delete_multiple_dialog']//input[@type='submit' and "
                                               "@class='red_border_button' and @value='Delete']")
 
+    _count_container_loc = (By.XPATH, '(//div[@class="small"])[1]') # containing count of trips
+
 
     _from_location_loc = (By.CSS_SELECTOR, "#fromLocation\.id")
     _to_location_loc = (By.CSS_SELECTOR, "#toLocation\.id")
@@ -30,7 +32,7 @@ class TripsPage(TriplogNavigablePage):
     _ytd_mileage_loc = (By.XPATH, "//span[@class='ui-dialog-title' and text()='Year to Date Mileage Required']")
     _ytd_save_btn_loc = (By.XPATH,"//div[@id='year_to_date_dialog']//input[@type='submit' and @value='Save']")
     #_title_locator = (By.CSS_SELECTOR, "span.n_menu-selected-menuname")
-    _trip_row_loc = (By.XPATH, "//div[contains(@id,'trip_row_')]")
+    _trip_row_loc = (By.XPATH, "(//tr[contains(@id,'trip_row_')])[1]") #first trip
 
     #_trips_loc = (By.XPATH, "//tr[contains(@id,'trip_row_')]")
     _trips_xpath = "//tr[contains(@id,'trip_row_')]"
@@ -146,4 +148,22 @@ class TripsPage(TriplogNavigablePage):
 
         self.find_element_and_click(self._confirm_delete_multiple_loc)
 
+
+    def get_number_of_trips_filtered(self):
+        """
+
+        :return:
+        """
+        self.driver.get(self.url) # page doesn't get refreshed after operations, so need to manually refresh to get latest count
+        try:
+            select_element = self.find_element(self._count_container_loc)
+            if select_element is not None:
+                text = select_element.text
+                count = int(text.split('\n/')[-1].strip().replace("nbsp;",""))
+                return count
+            else:
+                return -1
+        except Exception as e:
+            logging.error("error getting count of filtered trips: %s"%e)
+            return -1
 

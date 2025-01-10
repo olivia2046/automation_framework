@@ -5,12 +5,12 @@
 # Desc: test trips functions using team account(and country of Canada)
 # **************************************
 
-from case.triplog.web.mileage.test_trips import TestTrips
+from case.triplog.web.mileage.test_trips_base import TestTripsBase
 
 
 
-class TestTeamsTrips(TestTrips):
-    user_identifier="team_paid" # Canada
+class TestTeamsTrips(TestTripsBase):
+    user_identifier="teams" # Canada
 
 
 

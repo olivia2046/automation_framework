@@ -11,7 +11,7 @@ from proj_spec.triplog.web.po.mileage.trips_page import TripsPage
 
 
 @pytest.mark.abstract
-class TestTrips(TestTriplogWebBase):
+class TestTripsBase(TestTriplogWebBase):
     #__test__ = False
     user_identifier = None
 
@@ -34,8 +34,10 @@ class TestTrips(TestTriplogWebBase):
         :param query_distance:
         :return:
         """
+        c_before = self.trips_page.get_number_of_trips_filtered()
         self.trips_page.add_trip(from_location, to_location, query_distance)
-        assert 1 == 1
+        c_after = self.trips_page.get_number_of_trips_filtered()
+        assert c_after==c_before+1,"trip not added successfully"
 
     #@pytest.mark.skip("")
     @pytest.mark.parametrize('kwargs', [
@@ -58,7 +60,11 @@ class TestTrips(TestTriplogWebBase):
 
         :return:
         """
+        c_before = self.trips_page.get_number_of_trips_filtered()
         self.trips_page.delete_trip_from_menu(0)
+        c_after = self.trips_page.get_number_of_trips_filtered()
+        assert c_after==c_before-1,"trip not deleted successfully"
+
 
 
 
