@@ -9,7 +9,7 @@ import pytest
 from case.mobile.test_mobile_base import TestMobileBase
 
 
-@pytest.mark.usefixtures("driver_init")
+@pytest.mark.usefixtures("class_setup")
 class TestTriplogMobileBase(TestMobileBase):
     @classmethod
     def setup_class(cls):

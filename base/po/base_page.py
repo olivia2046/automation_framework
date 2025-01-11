@@ -45,10 +45,7 @@ class BasePage:
             #return WebDriverWait(self.driver, timeout).until(EC.visibility_of_element_located(locator))
             return WebDriverWait(self.driver, timeout).until(eval("EC." + condition)(locator))
         except Exception as e:
-            if not skip_error_handle:
-                pass
-            else:
-                raise e
+            return None
 
 
     def find_elements(self, locator):
