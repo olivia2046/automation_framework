@@ -27,21 +27,21 @@ class TriplogNavigablePage(TriplogWebBasePage):
             self.driver.get(self.url)
 
 
-    def is_layer_popup_visible(self, expected=False):
+    def is_layer_popup_visible(self):
         """check whether there're trial end/7 day pass pop up
 
         :param expected: if user should have access to page, expected=False, otherwise expected=True
         :return:
         """
-        try:
-            if expected:
-                self.find_element(self._layer_popup_loc)
-            else:
-                self.find_element(self._layer_popup_loc,skip_error_handle=True)
+
+        popup = self.find_element(self._layer_popup_loc)
+        if popup is not None:
+            logging.info("popup layer not found")
             return True
-        except Exception as e:
-            logging.info("pop up not found")
+        else:
+            logging.info("popup layer found")
             return False
+
 
 
     def jumped_to_billing(self):

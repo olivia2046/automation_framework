@@ -53,7 +53,7 @@ class TestWebAccessBase(TestTriplogWebBase):
             assert page.is_layer_popup_visible(expected=True)
 
     @pytest.mark.skip("")
-    def test_mileage_report_page_accessibility(self):
+    def test_mileage_report_page_url_accessibility(self):
         from proj_spec.triplog.web.po.reports.mileage_reports_page import MileageReportsPage
         page = MileageReportsPage(self.driver)
         accessibility = self.user_data['Reports->Mileage Reports']
@@ -63,6 +63,9 @@ class TestWebAccessBase(TestTriplogWebBase):
             assert page.get_title()=='Mileage Reports'
         else:
             assert page.is_layer_popup_visible(expected=True)
+
+
+
 
     @pytest.mark.skip("")
     def test_heat_map_page_accessibility(self):
@@ -77,7 +80,7 @@ class TestWebAccessBase(TestTriplogWebBase):
             assert page.is_layer_popup_visible(expected=True)
 
     @pytest.mark.skip("")
-    def test_trips_page_accessibility(self):
+    def test_trips_page_url_accessibility(self):
         from proj_spec.triplog.web.po.mileage.trips_page import TripsPage
         page = TripsPage(self.driver,accessible=False)
         #accessibility = self.user_row['Mileage->Trips'].item()
@@ -88,6 +91,24 @@ class TestWebAccessBase(TestTriplogWebBase):
             assert page.get_title() == 'Trips'
         else:
             assert page.is_layer_popup_visible(expected=True)
+
+
+    def test_trip_page_navigatability(self):
+        from proj_spec.triplog.web.po.mileage.trips_page import TripsPage
+        #page = TripsPage(self.driver, method="navigation")
+        accessibility = self.user_data['Mileage->Trips']
+
+        page = self.default_page.navigation_bar.navigate("Mileage", "Trips")
+        if accessibility.lower()=='y':
+            assert page is not None
+            assert not page.is_layer_popup_visible()
+            assert page.get_title() == 'Trips'
+        else:
+            assert page is None
+
+
+
+
 
     @pytest.mark.skip("")
     def test_transactions_page_accessibility(self):
