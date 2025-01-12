@@ -79,18 +79,19 @@ class AppLoginPage(TriplogMobileBasePage):
             title_element = self.find_element(self.get_locator_by_os("_msg_box_title"))
             if title_element is not None:
                 title = title_element.text
-                if title in ('Sync Canceled','Check Login Failed'):
+                if title in ('Sync Canceled','Check Login Failed','Network Issue'):
                     return None
 
         try:
-            self.find_element_and_click(self.get_locator_by_os("_turn_on_time_loc"),skip_error_handle=True)
-            self.find_element_and_click(self.get_locator_by_os("_save_time_mode_loc"), skip_error_handle=True)
+            self.find_element_and_click(self.get_locator_by_os("_turn_on_time_loc"))
+            self.find_element_and_click(self.get_locator_by_os("_save_time_mode_loc"))
         except Exception as e:
             pass
 
 
         from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
         tab_page = TabsBasePage(self.driver)
+        # todo: assertion
 
         return tab_page
 

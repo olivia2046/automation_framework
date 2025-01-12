@@ -20,6 +20,7 @@ class TestMobileAccessBase(TestTriplogMobileBase):
 
     @classmethod
     def setup_class(cls):
+        logging.info("Test access of %s"%cls.user_identifier)
         access_matrix_file = "../../accessbility-matrix.csv"
         df = pd.read_csv(access_matrix_file,index_col='loc')
         df = df.fillna('')
@@ -40,6 +41,7 @@ class TestMobileAccessBase(TestTriplogMobileBase):
         :return:
         """
 
+        logging.info("Testing access of Left Panel-%s"%menu_name)
         self.page.show_left_panel()
         from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
 
