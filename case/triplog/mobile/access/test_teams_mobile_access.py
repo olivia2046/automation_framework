@@ -4,7 +4,7 @@
 # @Author : Olivia
 # Desc:
 # **************************************
-from case.triplog.mobile.access.test_access_base import TestMobileAccessBase
+from case.triplog.mobile.access.test_mobile_access_base import TestMobileAccessBase
 
 
 class TestTeamMobileAccess(TestMobileAccessBase):
