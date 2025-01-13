@@ -18,6 +18,12 @@ class TabsBasePage(TriplogMobileBasePage):
     _battery_popup_loc_android = (AppiumBy.XPATH, '//android.view.ViewGroup[@resource-id="com.bizlog.triplog:id/rcl_all"]')
     _battery_popup_confirm_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/rtv_ok"]')
 
+    _track_method_popup_loc_android = (AppiumBy.ANDROID_UIAUTOMATOR, """new UiSelector().text("Choose how to track 
+ your hours")""")  # there's CRLF among the text
+    _opt_clock_inout_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rb_set_time_mode_1')
+    _opt_duration_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rb_set_time_mode_2')
+    _confirm_popup_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_set_time_mode_save')
+
     def __init__(self,driver):
         super().__init__(driver)
         self.left_panel = LeftPanel(self.driver)
@@ -41,7 +47,30 @@ class TabsBasePage(TriplogMobileBasePage):
         return LeftPanel(self.driver)
 
     def get_title(self):
-        return self.find_element(self.get_locator_by_os("_title_loc")).text
+        title_element = self.find_element(self.get_locator_by_os("_title_loc"))
+        if title_element is not None:
+            return title_element.text
+        else:
+            return ""
+
+    def is_time_track_method_popup_displayed(self):
+        """
+
+        :return:
+        """
+
+        if self.find_element(self.get_locator_by_os("_track_method_popup_loc")) is not None:
+            return True
+        else:
+            return False
+
+    def choose_time_track_method(self, method="clock_in_out"):
+        if method=="clock_in_out":
+            self.find_element_and_click(self.get_locator_by_os("_opt_clock_inout_loc"))
+        else:
+            self.find_element_and_click(self.get_locator_by_os("_opt_duration_loc"))
+
+        self.find_element_and_click(self.get_locator_by_os('_confirm_popup_loc'))
 
 
     def logout(self):

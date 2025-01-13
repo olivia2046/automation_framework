@@ -93,5 +93,6 @@ class TriplogMobileBasePage(MobileBasePage):
 
 
     def logout(self):
+        # get current concrete page and use its logout method to sign out
         concrete_page = self.get_current_page()
         concrete_page.logout()

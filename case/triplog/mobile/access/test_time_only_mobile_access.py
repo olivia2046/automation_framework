@@ -7,5 +7,5 @@ desc:
 from case.triplog.mobile.access.test_mobile_access_base import TestMobileAccessBase
 import pytest
 #@pytest.mark.skip("")
-class TestExpenseOnlyMobileAccess(TestMobileAccessBase):
+class TestTimeOnlyMobileAccess(TestMobileAccessBase):
     user_identifier = "time_only"

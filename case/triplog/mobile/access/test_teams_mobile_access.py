@@ -7,6 +7,6 @@
 from case.triplog.mobile.access.test_mobile_access_base import TestMobileAccessBase
 
 
-class TestTeamMobileAccess(TestMobileAccessBase):
+class TestTeamsMobileAccess(TestMobileAccessBase):
     user_identifier = "teams"
 

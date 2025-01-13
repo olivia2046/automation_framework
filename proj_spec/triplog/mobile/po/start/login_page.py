@@ -32,6 +32,8 @@ class AppLoginPage(TriplogMobileBasePage):
 
     _loading_data_title_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_title" and @text="Loading data"]')
 
+
+
     # Sync Canceled
     # com.bizlog.triplog:id/rtv_ok
     # Check Login Failed
@@ -42,6 +44,8 @@ class AppLoginPage(TriplogMobileBasePage):
 
     # def agree_permission(self):
     #     self.find_element_and_click(self._agree_btn_loc)
+
+
 
     def login(self, email, password):
 
@@ -82,18 +86,27 @@ class AppLoginPage(TriplogMobileBasePage):
                 if title in ('Sync Canceled','Check Login Failed','Network Issue'):
                     return None
 
+        from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
+        page = TabsBasePage(self.driver)
+
         try:
-            self.find_element_and_click(self.get_locator_by_os("_turn_on_time_loc"))
-            self.find_element_and_click(self.get_locator_by_os("_save_time_mode_loc"))
+            # todo: assertion whether add vehicle should be presented
+            if page.get_title()=="Add Vehicle":
+                from proj_spec.triplog.mobile.po.left_nav.add_vehicle_page import AddVehiclePage
+                add_vehicle_page=AddVehiclePage(self.driver)
+                add_vehicle_page.add_vehicle(model="test")
+
+            if page.is_time_track_method_popup_displayed():
+                page.choose_time_track_method("duration")
+
+
+            # self.find_element_and_click(self.get_locator_by_os("_turn_on_time_loc"))
+            # self.find_element_and_click(self.get_locator_by_os("_save_time_mode_loc"))
         except Exception as e:
             pass
 
 
-        from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
-        tab_page = TabsBasePage(self.driver)
-        # todo: assertion
-
-        return tab_page
+        return page
 
 
     def logout(self):

@@ -50,10 +50,10 @@ class TestMobileAccessBase(TestTriplogMobileBase):
         accessibility = self.user_data['Mobile Left->%s'%menu_name]
 
         if accessibility.lower()=='y':
-            assert self.page.left_panel.is_left_menu_accessible(menu_name)
+            assert self.page.left_panel.is_left_menu_accessible(menu_name),"should have access to left panel %s"%menu_name
         else:
             # todo: assertion when no access
-            assert not self.page.left_panel.is_left_menu_accessible(menu_name)
+            assert not self.page.left_panel.is_left_menu_accessible(menu_name),"should not have access to left panel %s"%menu_name
 
 
 
@@ -113,10 +113,10 @@ class TestMobileAccessBase(TestTriplogMobileBase):
         accessibility = self.user_data['Mobile Bottom->%s'%tab_name]
 
         if accessibility.lower()=='y':
-            assert page.bottom_nav.is_tab_page_accessible(tab_name)
+            assert page.bottom_nav.is_tab_page_accessible(tab_name),"should have access to bottom %s"%tab_name
         else:
             # todo: assertion when no access
-            assert not page.bottom_nav.is_tab_page_accessible(tab_name,expected=False)
+            assert not page.bottom_nav.is_tab_page_accessible(tab_name,expected=False),"should not have access to bottom %s"%tab_name
 
 
     # @pytest.mark.skip("")
