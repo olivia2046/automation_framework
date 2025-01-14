@@ -28,27 +28,27 @@ Settings->Tags & Notes,,,,Y,Y,,,,,,,Y,Y,
 Settings->Custom Tags,,,,N,N,,,,,,,N,N,
 Settings->Custom Fields,,,,N,N,,,,,,,N,N,
 Settings->Advanced Settings,,,,N,N,,,,,,,N,N,
-Mobile Bottom->Trips,,Y,,Y,Y,Y,Y,N,N,N,Y,N,,N
-Mobile Bottom->Fuel,,Y,,Y,Y,Y,Y,N,N,N,Y,N,,N
-Mobile Bottom->Submission,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,,Y
-Mobile Bottom->Reports,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,,Y
-Mobile Bottom->Transactions,,Y,,Y,Y,Y,Y,,,,N,Y,,N
-Mobile Bottom->Time,,Y,,,,Y,N,,,,N,N,,Y
-Mobile Bottom->Schedule,,Y,,,,Y,N,,,,N,N,,N
-Mobile Bottom->Time Off,,Y,,,,Y,N,,,,N,N,,N
-Mobile Left->Auto Start on,,Y,,Y,Y,Y,Y,N,N,N,Y,N,,
-Mobile Left->Work Schedule,,Y,,Y,Y,Y,Y,N,N,N,Y,N,,
-Mobile Left->Vehicles,,Y,,Y,Y,Y,Y,N,N,N,Y,N,,
-Mobile Left->Send to Concur,,N,,N,N,N,N,N,N,N,N,N,,
-Mobile Left->Locations,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,,
-Mobile Left->State Mileage,,N,,N,N,Y,Y,N,N,N,Y,N,,
-Mobile Left->Approval Management,,N,,N,N,Y,Y,N,N,N,Y,Y,,
-Mobile Left->Submission,,N,,N,N,Y,Y,N,N,N,Y,Y,,
-Mobile Left->Navigate/Route Planning,,Y,,Y,Y,Y,Y,N,N,N,Y,N,,
-Mobile Left->Frequent Trip Rules,,Y,,Y,Y,Y,Y,N,N,N,Y,N,,
-Mobile Left->Adjust Odometer,,Y,,Y,Y,Y,Y,N,N,N,Y,N,,
-Mobile Left->Mileage Rates,,Y,,Y,Y,Y,Y,N,N,N,Y,N,,
-Mobile Left->Business Activities,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,,
-Mobile Left->Last Known Parking,,Y,,Y,Y,Y,Y,N,N,N,Y,N,,
-Mobile Left->Banks & Credit Cards,N,Y,,Y,Y,,,,,,N,Y,,
-Mobile Left->Invite Accountant,,Y,,Y,Y,,,,,,N,N,,
+Mobile Bottom->Trips,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
+Mobile Bottom->Fuel,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
+Mobile Bottom->Submission,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,Y,Y
+Mobile Bottom->Reports,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,Y,Y
+Mobile Bottom->Transactions,,Y,,Y,Y,Y,Y,,,,N,Y,Y,N
+Mobile Bottom->Time,,Y,,,,Y,N,,,,N,N,N,Y
+Mobile Bottom->Schedule,,Y,,,,Y,N,,,,N,N,N,N
+Mobile Bottom->Time off,,Y,,,,Y,N,,,,N,N,N,N
+Mobile Left->Auto Start on,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
+Mobile Left->Work Schedule,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
+Mobile Left->Vehicles,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
+Mobile Left->Send to Concur,,N,,N,N,N,N,N,N,N,N,N,N,N
+Mobile Left->Locations,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,Y,Y
+Mobile Left->State Mileage,,N,,N,N,Y,Y,N,N,N,Y,N,N,N
+Mobile Left->Approval Management,,N,,N,N,Y,Y,N,N,N,Y,Y,Y,Y
+Mobile Left->Submission,,N,,N,N,Y,Y,N,N,N,Y,Y,Y,Y
+Mobile Left->Navigate/Route Planning,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
+Mobile Left->Frequent Trip Rules,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
+Mobile Left->Adjust Odometer,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
+Mobile Left->Mileage Rates,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
+Mobile Left->Business Activities,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,Y,Y
+Mobile Left->Last Known Parking,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
+Mobile Left->Banks & Credit Cards,N,Y,,Y,Y,,,,,,N,Y,Y,N
+Mobile Left->Invite Accountant,,Y,,Y,Y,,,,,,N,N,N,N

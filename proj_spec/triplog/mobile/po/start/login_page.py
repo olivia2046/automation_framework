@@ -8,6 +8,7 @@ import os
 import time
 
 from appium.webdriver.common.appiumby import AppiumBy
+import base.globalvars as glo
 from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBasePage
 
 
@@ -32,15 +33,11 @@ class AppLoginPage(TriplogMobileBasePage):
 
     _loading_data_title_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_title" and @text="Loading data"]')
 
-
-
     # Sync Canceled
     # com.bizlog.triplog:id/rtv_ok
     # Check Login Failed
     # com.bizlog.triplog:id/rtv_cancel
     # Loading data
-
-
 
     # def agree_permission(self):
     #     self.find_element_and_click(self._agree_btn_loc)
@@ -97,7 +94,8 @@ class AppLoginPage(TriplogMobileBasePage):
                 add_vehicle_page.add_vehicle(model="test")
 
             if page.is_time_track_method_popup_displayed():
-                page.choose_time_track_method("duration")
+                page.choose_time_track_method("clock_in_out")
+                #glo.set_value("time_track_method","clock_in_out")
 
 
             # self.find_element_and_click(self.get_locator_by_os("_turn_on_time_loc"))
