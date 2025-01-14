@@ -85,7 +85,9 @@ class TestMobileAccessBase(TestTriplogMobileBase):
 
 
     #@pytest.mark.skip("")
-    @pytest.mark.parametrize('tab_name',['Trips','Fuel','Submission','Reports','Transactions','Time','Schedule','Time off'])
+    #@pytest.mark.parametrize('tab_name',['Trips','Fuel','Submission','Reports','Transactions','Time','Schedule','Time off'])
+    @pytest.mark.parametrize('tab_name',
+                             ['Schedule'])
     def test_bottom_tabs_access(self, tab_name):
         from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
 

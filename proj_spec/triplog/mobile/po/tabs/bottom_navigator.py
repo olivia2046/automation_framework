@@ -7,6 +7,7 @@
 import logging
 from selenium.common.exceptions import NoSuchElementException
 from appium.webdriver.common.appiumby import AppiumBy
+import base.globalvars as glo
 
 
 
@@ -24,7 +25,10 @@ class BottomNavigator(TriplogMobileBasePage):
     def expand_more_or_less(self):
 
         element = self.find_element(self.get_locator_by_os("_more_or_less_loc"),condition="element_to_be_clickable")
+        element.screenshot("more or less.png")
+
         text = element.text
+        print("more or less text: %s"%text)
         # Todo: 登录后为展开状态显示More
         # if text=='More':
         #     # only parent element clickable
@@ -40,21 +44,42 @@ class BottomNavigator(TriplogMobileBasePage):
 
 
     def is_tab_page_accessible(self, tab_name, expected=True):
+        """
+
+        :param tab_name:
+        :param expected:
+        :return:
+        """
 
         try:
             self.expand_more_or_less() #menus may have been reordered, so need to expand first
-            if expected:
-                self.find_element_and_click(self.get_tab_locator('%s' % tab_name))
-            else:
-                if expected:
-                    self.find_element_and_click(self.get_tab_locator('%s' % tab_name),skip_error_handle=True)
+
             from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
             page = TabsBasePage(self.driver)
+            expected_title=tab_name
 
-            if tab_name== 'Time':
-                return page.get_title() == 'Time Clock'
+            # if expected:
+            #     self.find_element_and_click(self.get_tab_locator('%s' % tab_name))
+            # else:
+            #     if expected:
+            #         self.find_element_and_click(self.get_tab_locator('%s' % tab_name),skip_error_handle=True)
+            if tab_name == 'Time':
+                time_tab = self.find_element(self.get_tab_locator('%s' % tab_name), condition="element_to_be_clickable")
+                if time_tab is not None:
+                    time_tab.click()
+                else:
+                    self.find_element_and_click(self.get_tab_locator("Timesheet"))
+                if page.is_time_track_method_popup_displayed():
+                    page.choose_time_track_method("clock_in_out")
+                return page.get_title() in ("Time Clock", "Timesheet") #todo:currently when choose clock in out from Timesheet tab, page title will not get refreshed
             else:
-                return page.get_title()=='%s'%tab_name
+                self.find_element_and_click(self.get_tab_locator('%s' % tab_name))
+
+                if tab_name=="Schedule":
+                    if page.is_schedule_popup_visible():
+                        page.close_schedule_popup()
+                    expected_title="Work Schedule"
+                return page.get_title()=='%s'%expected_title
         except NoSuchElementException as nse:
             if expected:
                 logging.error(nse)

@@ -90,6 +90,11 @@ class LeftPanel(TriplogMobileBasePage):
 
 
     def is_left_menu_accessible(self,menu_name):
+        """
+        Todo: handle page loading of Approval Management. Currrent workaround: put Approval Manangement to the last case
+        :param menu_name:
+        :return:
+        """
 
 
         advanced_switch = self.find_element(self.get_locator_by_os("_adv_feature_switch"))

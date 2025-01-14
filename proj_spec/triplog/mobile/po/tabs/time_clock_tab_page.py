@@ -8,7 +8,7 @@ from appium.webdriver.common.appiumby import AppiumBy
 
 from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
 
-class TimeclockTabPage(TabsBasePage):
+class TimeClockTabPage(TabsBasePage):
 
     pass
 

@@ -5,7 +5,7 @@
 # Desc:
 # **************************************
 from appium.webdriver.common.appiumby import AppiumBy
-
+import base.globalvars as glo
 from proj_spec.triplog.mobile.po.tabs.bottom_navigator import BottomNavigator
 from proj_spec.triplog.mobile.po.tabs.left_panel import LeftPanel
 from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBasePage
@@ -23,6 +23,13 @@ class TabsBasePage(TriplogMobileBasePage):
     _opt_clock_inout_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rb_set_time_mode_1')
     _opt_duration_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rb_set_time_mode_2')
     _confirm_popup_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_set_time_mode_save')
+
+    _schedule_popup_loc_android = (AppiumBy.ANDROID_UIAUTOMATOR, """new UiSelector().text("Shift Scheduling,
+Job Dispatching")""")
+    _close_popup_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_schedule_close')
+    _remind_later_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_schedule_dismiss')
+
+
 
     def __init__(self,driver):
         super().__init__(driver)
@@ -69,9 +76,14 @@ class TabsBasePage(TriplogMobileBasePage):
             self.find_element_and_click(self.get_locator_by_os("_opt_clock_inout_loc"))
         else:
             self.find_element_and_click(self.get_locator_by_os("_opt_duration_loc"))
-
+        glo.set_value("time_track_method",method)
         self.find_element_and_click(self.get_locator_by_os('_confirm_popup_loc'))
 
+    def is_schedule_popup_visible(self):
+        return self.find_element(self.get_locator_by_os("_schedule_popup_loc")) is not None
+
+    def close_schedule_popup(self):
+        self.find_element_and_click(self.get_locator_by_os("_close_popup_loc"))
 
     def logout(self):
         left_panel = self.show_left_panel()
