@@ -29,10 +29,11 @@ class BottomNavigator(TriplogMobileBasePage):
 
         text = element.text
         print("more or less text: %s"%text)
-        # Todo: 登录后为展开状态显示More
+
         # if text=='More':
         #     # only parent element clickable
         #     self.find_element_and_click(self.get_locator_by_os("_more_or_less_parent_loc"),condition="element_to_be_clickable")
+        # 登录后为展开状态显示More
         # workaround: click the button once, and record height(0 as top of screen) of element before and after clicking
         height_before_click = self.find_element(self.get_locator_by_os("_more_or_less_loc")).rect['y']
         self.find_element_and_click(self.get_locator_by_os("_more_or_less_parent_loc"),
@@ -78,7 +79,10 @@ class BottomNavigator(TriplogMobileBasePage):
                 if tab_name=="Schedule":
                     if page.is_schedule_popup_visible():
                         page.close_schedule_popup()
+
                     expected_title="Work Schedule"
+                elif tab_name=="Time off":
+                    expected_title="Time Off"
                 return page.get_title()=='%s'%expected_title
         except NoSuchElementException as nse:
             if expected:

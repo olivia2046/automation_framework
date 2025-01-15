@@ -29,6 +29,7 @@ class TriplogMobileBasePage(MobileBasePage):
     _msg_box_ok_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rtv_ok')
     _msg_box_continue_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rtv_continue')
     _msg_box_cancel_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rtv_cancel')
+    _progress_dialog_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rcl_all') # same as message box
 
     def get_title(self):
         title_elemenet = self.find_element(self.get_locator_by_os("_msg_box_title"))
@@ -90,6 +91,15 @@ class TriplogMobileBasePage(MobileBasePage):
         else: #use hiarchy
             pass
 
+
+    def wait_for_loading_finish(self):
+        """wait for the progress dialog to finish loading
+
+        :return:
+        """
+        loading_dialog = self.find_element(self.get_locator_by_os("_progress_dialog_loc"))
+        if loading_dialog is not None:
+            self.find_element(self.get_locator_by_os("_progress_dialog_loc"), condition="invisibility_of_element")
 
 
     def logout(self):

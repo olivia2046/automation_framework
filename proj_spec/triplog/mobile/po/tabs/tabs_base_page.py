@@ -4,6 +4,8 @@
 # @Author : Olivia
 # Desc:
 # **************************************
+import time
+
 from appium.webdriver.common.appiumby import AppiumBy
 import base.globalvars as glo
 from proj_spec.triplog.mobile.po.tabs.bottom_navigator import BottomNavigator
@@ -28,6 +30,8 @@ class TabsBasePage(TriplogMobileBasePage):
 Job Dispatching")""")
     _close_popup_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_schedule_close')
     _remind_later_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_schedule_dismiss')
+
+
 
 
 
@@ -60,6 +64,7 @@ Job Dispatching")""")
         else:
             return ""
 
+
     def is_time_track_method_popup_displayed(self):
         """
 
@@ -78,12 +83,19 @@ Job Dispatching")""")
             self.find_element_and_click(self.get_locator_by_os("_opt_duration_loc"))
         glo.set_value("time_track_method",method)
         self.find_element_and_click(self.get_locator_by_os('_confirm_popup_loc'))
+        #time.sleep(5)
+        self.wait_for_loading_finish()
 
     def is_schedule_popup_visible(self):
         return self.find_element(self.get_locator_by_os("_schedule_popup_loc")) is not None
 
     def close_schedule_popup(self):
         self.find_element_and_click(self.get_locator_by_os("_close_popup_loc"))
+        # loading_dialog = self.find_element(self.get_locator_by_os("_loading_dialog_loc"))
+        # if loading_dialog is not None:
+        #     self.find_element(self.get_locator_by_os("_loading_dialog_loc"), condition="invisibility_of_element")
+        self.wait_for_loading_finish()
+
 
     def logout(self):
         left_panel = self.show_left_panel()
