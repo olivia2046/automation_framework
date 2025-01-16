@@ -21,8 +21,25 @@ class SettingsListPage(TriplogNavigablePage):
         return DetailSettingBasePage(self.driver)
 
 
+
     def is_detail_setting_accessible(self, setting_name):
+        """deprecated
+
+        :param setting_name:
+        :return:
+        """
+
         detail_page = self.access_detail_setting(setting_name)
-        #return not detail_page.get_title()==""
+        # return not detail_page.get_title()==""
         # cannot use title for assertion because titles on each detail page are displayed
         return not detail_page.is_upgrade_visible()
+
+    def has_entrance_to_detail_setting(self, setting_name):
+        """ design changed. Now if a user doesn't have access to specific detail setting page, the page menu is not displayed
+
+        :param setting_name:
+        :return:
+        """
+        setting_loc = (By.XPATH, '//label[contains(text(),"%s")]' % setting_name)
+        entrance = self.find_element(setting_loc)
+        return entrance is not None

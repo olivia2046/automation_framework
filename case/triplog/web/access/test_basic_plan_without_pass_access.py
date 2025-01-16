@@ -4,8 +4,10 @@
 # @Author : Olivia
 # Desc: test access of user as basic plan without 7 day pass activated
 # **************************************
+import pytest
 from case.triplog.web.access.test_access_base import TestWebAccessBase
 
 
+@pytest.mark.skip("not ready")
 class TestBasicPlanWithoutPassActivated(TestWebAccessBase):
-    user_identifier = "abasic@3973-2.com"
+    user_identifier = "basicplan_without_pass"

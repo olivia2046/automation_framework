@@ -4,6 +4,8 @@
 # @Author : Olivia
 # Desc: Todo: parameterize these page access tests??? no, each page should have its own specific assertion
 # **************************************
+import logging
+
 import pandas as pd
 import pytest
 
@@ -20,26 +22,13 @@ class TestWebAccessBase(TestTriplogWebBase):
 
     @classmethod
     def setup_class(cls):
+        logging.info("Testing access of %s" % cls.user_identifier)
         access_matrix_file = "../../accessbility-matrix.csv"
         df = pd.read_csv(access_matrix_file,index_col='loc')
         df = df.fillna('')
         #cls.user_row = df.loc[df['loc'] == cls.user_identifier] # cls.user_identifier will be replaced by value in concrete class
         cls.user_data = df[cls.user_identifier]
-        pass
 
-    # def test_accessibility_by_navigation(self):
-    #     """check access of each page from navigation bar
-    #
-    #     :return:
-    #     """
-
-
-        # for column in df.columns[4:]:
-        #     menu_texts = column.split('->')
-        #     first_level = menu_texts[0]
-        #     second_level = menu_texts[1]
-        #
-        #     accessibility = user_row[column].item()
 
     @pytest.mark.skip("")
     def test_overview_page_accessibility(self):
@@ -107,8 +96,15 @@ class TestWebAccessBase(TestTriplogWebBase):
             assert page is None
 
 
-    @pytest.mark.parametrize('menu_path',['Mileage->Trips'])
+    @pytest.mark.parametrize('menu_path',['Dashboard->Overview','Dashboard->Performance','Dashboard->Trends',
+                                          'Reports->Mileage Reports','Reports->Business Expenses','Reports->Time Clock','Location->Stay Time',
+                                          'Maps->Current Locations','Maps->Heat Map','Maps->Frequent Locations','Maps->Driving Safety',
+                                          'Maps->Location Stay Time', 'Maps->Time Clock',
+                                          'Mileage->Trips','Mileage->State Mileage','Mileage->Fuel','Mileage->Locations','Mileage->Vehicles',
+                                          'Expense->Transactions','Expense->Categories','Expense->Spending Limits','Expense->Tax Groups','Expense->Bank Accounts',
+                                          'Time->Time Clock Calendar','Time->Time Clock List','Time->Scheduling','Time->Job Activities'])
     def test_page_navigatability(self,menu_path):
+        logging.info("Testing page navigation of %s"%menu_path)
 
         accessibility = self.user_data[menu_path]
         first_level, second_level = menu_path.split("->")
@@ -137,6 +133,7 @@ class TestWebAccessBase(TestTriplogWebBase):
 
 
 
+    @pytest.mark.skip("use navigation")
     def test_spending_limits_page_accessibility(self):
         from proj_spec.triplog.web.po.expense.spending_limits_page import SpendingLimitsPage
         page = SpendingLimitsPage(self.driver)
@@ -164,7 +161,7 @@ class TestWebAccessBase(TestTriplogWebBase):
             # 强制由具体子类决定判断准则
             assert False
 
-    @pytest.mark.skip("debug")
+    #@pytest.mark.skip("debug")
     @pytest.mark.parametrize('path', ['Integrations->ADP','Integrations->Paychex','Integrations->Paylocity',
                             'Integrations->UKG Pro','Integrations->UKG Ready','Integrations->SAP Concur',
                                                   'Integrations->QuickBooks Online', 'Integrations->Xero', 'Integrations->Sage Intacct'])
@@ -178,20 +175,23 @@ class TestWebAccessBase(TestTriplogWebBase):
         else:
             assert not page.is_integration_item_accessible(integration_item)
 
-    @pytest.mark.skip("debug")
+    #@pytest.mark.skip("debug")
     @pytest.mark.parametrize('setting_path', ['Settings->Account Settings','Settings->Components','Settings->Notifications',
                                               'Settings->Activities','Settings->Mileage Rates','Settings->Mileage Policies',
                                               'Settings->Time Policies','Settings->Tags & Notes','Settings->Custom Tags',
                                               'Settings->Custom Fields','Settings->Advanced Settings'])
     def test_settings_accessibility(self, setting_path):
+        logging.info("Testing access of %s" % setting_path)
         accessibility = self.user_data[setting_path]
         from proj_spec.triplog.web.po.manage.settings.settings_page import SettingsListPage
         page = SettingsListPage(self.driver)
         detail_setting = setting_path.split('->')[-1]
         if accessibility.lower()=='y':
-            assert page.is_detail_setting_accessible(detail_setting)
+            #assert page.is_detail_setting_accessible(detail_setting)
+            assert page.has_entrance_to_detail_setting(detail_setting)
         else:
-            assert not page.is_detail_setting_accessible(detail_setting)
+            #assert not page.is_detail_setting_accessible(detail_setting)
+            assert not page.has_entrance_to_detail_setting(detail_setting)
 
 
     @pytest.mark.skip("debug: 需要实例化具体页面类并赋值url")
@@ -220,6 +220,7 @@ class TestWebAccessBase(TestTriplogWebBase):
                              ['Dashboard->Overview','Reports->Mileage Reports','Maps->Heat Map','Mileage->Trips',
                               'Expense->Transactions','Time->Time Clock Calendar'])
     def test_navigation_access(self, menu_path):
+        logging.info("Testing navigation of %s" % menu_path)
 
         from proj_spec.triplog.web.po.triplog_navigable_page import TriplogNavigablePage
         page = TriplogNavigablePage(self.driver)
