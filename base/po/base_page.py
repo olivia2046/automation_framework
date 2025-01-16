@@ -21,7 +21,7 @@ class BasePage:
     def __int__(self, driver: WebDriver):
         self.driver = driver
 
-    def find_element(self, locator, timeout=5, condition='visibility_of_element_located', skip_error_handle=False):
+    def find_element(self, locator, timeout=5, condition='visibility_of_element_located'):
         """find element by locator
 
         :param locator: tuple of element locator
@@ -63,7 +63,7 @@ class BasePage:
         return self.driver.find_elements(*locator)
 
 
-    def find_element_and_click(self, locator, timeout=5, condition='element_to_be_clickable',skip_error_handle=False):
+    def find_element_and_click(self, locator, timeout=5, condition='element_to_be_clickable'):
         """查找元素并点击
 
         :param locator: 元素定位元组
@@ -71,7 +71,7 @@ class BasePage:
 
         :return:
         """
-        self.find_element(locator, timeout, condition, skip_error_handle).click()
+        self.find_element(locator, timeout, condition).click()
 
     def find_element_and_input(self, locator, text, timeout=10):
         """查找元素并输入文本

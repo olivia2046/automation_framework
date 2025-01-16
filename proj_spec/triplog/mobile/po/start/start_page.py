@@ -8,9 +8,10 @@ from appium.webdriver.common.appiumby import AppiumBy
 
 from base.po.mobile_base_page import MobileBasePage
 from proj_spec.triplog.mobile.po.start.login_page import AppLoginPage
+from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBasePage
 
 
-class AppStartPage(MobileBasePage):
+class AppStartPage(TriplogMobileBasePage):
     _login_btn_loc_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/rtv_login"]')
     _login_btn_loc_ios = (AppiumBy.XPATH, '//XCUIElementTypeStaticText[@name="Log in"]')
 

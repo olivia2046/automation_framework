@@ -31,6 +31,21 @@ class TriplogMobileBasePage(MobileBasePage):
     _msg_box_cancel_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rtv_cancel')
     _progress_dialog_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rcl_all') # same as message box
 
+    # send report window when error
+    _send_report_file_loc_android = (AppiumBy.ID, 'android:id/content_preview_filename')
+
+    def find_element(self, locator, timeout=5, condition='visibility_of_element_located', skip_error_handle=False):
+        """
+
+        :param locator:
+        :param timeout:
+        :param condition:
+        :param skip_error_handle:
+        :return:
+        """
+        return super().find_element(locator,timeout,condition)
+        # todo: add error handling of report log window
+
     def get_title(self):
         title_elemenet = self.find_element(self.get_locator_by_os("_msg_box_title"))
         if title_elemenet is not None:

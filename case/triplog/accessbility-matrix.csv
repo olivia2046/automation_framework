@@ -50,5 +50,5 @@ Mobile Left->Adjust Odometer,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
 Mobile Left->Mileage Rates,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
 Mobile Left->Business Activities,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,Y,Y
 Mobile Left->Last Known Parking,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Mobile Left->Banks & Credit Cards,N,Y,,Y,Y,,,,,,N,Y,Y,N
-Mobile Left->Invite Accountant,,Y,,Y,Y,,,,,,N,N,N,N
+Mobile Left->Banks & Credit Cards,N,Y,,Y,Y,Y,Y,,,,N,Y,Y,N
+Mobile Left->Invite Accountant,,Y,,Y,Y,N,N,,,,N,N,N,N

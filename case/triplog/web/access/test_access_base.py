@@ -107,7 +107,20 @@ class TestWebAccessBase(TestTriplogWebBase):
             assert page is None
 
 
+    @pytest.mark.parametrize('menu_path',['Mileage->Trips'])
+    def test_page_navigatability(self,menu_path):
 
+        accessibility = self.user_data[menu_path]
+        first_level, second_level = menu_path.split("->")
+        expected_title = second_level
+
+        page = self.default_page.navigation_bar.navigate(first_level, second_level)
+        if accessibility.lower()=='y':
+            assert page is not None
+            assert not page.is_layer_popup_visible()
+            assert page.get_title() == expected_title
+        else:
+            assert page is None
 
 
     @pytest.mark.skip("")

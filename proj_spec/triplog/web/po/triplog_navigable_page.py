@@ -35,12 +35,12 @@ class TriplogNavigablePage(TriplogWebBasePage):
         """
 
         popup = self.find_element(self._layer_popup_loc)
-        if popup is not None:
+        if popup is None:
             logging.info("popup layer not found")
-            return True
+            return False
         else:
             logging.info("popup layer found")
-            return False
+            return True
 
 
 

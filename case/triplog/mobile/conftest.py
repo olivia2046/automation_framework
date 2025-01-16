@@ -55,8 +55,10 @@ def init_driver():
 
     yield driver
 
+    logging.info("app state:%s"%driver.query_app_state(caps['appium:appPackage']))
     # 退出 WebDriver
     driver.quit()
+    logging.info("app state:%s" % driver.query_app_state(caps['appium:appPackage']))
 
 # Fixture: 每个测试类的登录操作（class scope）
 @pytest.fixture(scope="class", autouse=True)

@@ -101,6 +101,11 @@ class TransactionsPage(TriplogNavigablePage):
         alert = self.driver.switch_to.alert
         alert.accept()
 
+    def get_number_of_total_transactions(self):
+        self.driver.get(self.url)
+        # TODO:
+
+
 
 
 
