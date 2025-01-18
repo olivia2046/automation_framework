@@ -12,11 +12,13 @@ from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBa
 
 class AccountPage(TriplogMobileBasePage):
     _sign_out_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_switch_account')
+    _sign_out_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeButton[`name == "Sign out"`]')
     # Sign Out
     # Continue: com.bizlog.triplog:id/rtv_ok
     # Cancel: com.bizlog.triplog:id/rtv_continue
     # Sync current account data: com.bizlog.triplog:id/rcl_all
     _data_backup_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_action')
+    _data_backup_loc_ios = (AppiumBy.ACCESSIBILITY_ID, 'Data Backup')
 
     def goto_data(self):
         """go to Data Backup Page

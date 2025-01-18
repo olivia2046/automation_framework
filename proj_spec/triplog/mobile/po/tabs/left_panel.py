@@ -17,11 +17,16 @@ class LeftPanel(TriplogMobileBasePage):
                           "Navigate/Route Planning":"Route Planning","Adjust Odometer":"Adjust Vehicle Odometer"}
 
     _adv_feature_switch_android = (AppiumBy.ID,'com.bizlog.triplog:id/switch_btn')
+    _adv_feature_switch_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeOther[`name == "Show advanced features"`]/XCUIElementTypeSwitch')
     _left_panel_loc_android = (AppiumBy.ID,'com.bizlog.triplog:id/nsv_drawer')
+    _left_panel_loc_ios= (AppiumBy.ACCESSIBILITY_ID, 'Toolbar')
     _account_status_loc_android= (AppiumBy.ID, 'com.bizlog.triplog:id/tv_account_status_info')
+    _account_status_loc_ios = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_account_status_info')
     _account_email_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_account_email')
-
-
+    # ios locate by accessiblity id of account's email
+    # Todo: check the locator of the right arrow
+    _chevron_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_account_status_info')
+    _chevron_loc_ios = (AppiumBy.ACCESSIBILITY_ID, 'chevron')
 
     def switch_advanced_features(self):
         #self.find_element_and_click(self.get_locator_by_os("_adv_feature_switch"))
@@ -41,52 +46,9 @@ class LeftPanel(TriplogMobileBasePage):
                     %menu_text) # only parent of parent element clickable
 
 
-
     def goto_account_page(self):
         self.find_element_and_click(self.get_locator_by_os("_account_email_loc"))
         return AccountPage(self.driver)
-
-
-
-#     def scroll_up_panel(self):
-#         """
-#         from selenium.webdriver import ActionChains
-# from selenium.webdriver.common.actions import interaction
-# from selenium.webdriver.common.actions.action_builder import ActionBuilder
-# from selenium.webdriver.common.actions.pointer_input import PointerInput
-#
-# actions = ActionChains(driver)
-# # override as 'touch' pointer action
-# actions.w3c_actions = ActionBuilder(driver, mouse=PointerInput(interaction.POINTER_TOUCH, "touch"))
-# actions.w3c_actions.pointer_action.move_to_location(start_x, start_y)
-# actions.w3c_actions.pointer_action.pointer_down()
-# actions.w3c_actions.pointer_action.pause(2)
-# actions.w3c_actions.pointer_action.move_to_location(end_x, end_y)
-# actions.w3c_actions.pointer_action.release()
-# actions.perform()
-#         :return:
-#         """
-#
-#         pass
-#         # # 定位菜单 panel
-#         # panel = driver.find_element(By.ID, "panel_id")
-#         #
-#         # # 初始化 TouchAction
-#         # action = TouchAction(driver)
-#         #
-#         # # 滑动 panel，直到目标菜单项可见
-#         # while True:
-#         #     try:
-#         #         # 尝试查找目标菜单项
-#         #         target_item = panel.find_element(By.XPATH, "//android.widget.TextView[@text='Target Menu']")
-#         #         if target_item.is_displayed():
-#         #             print("目标菜单项已可见")
-#         #             break
-#         #     except:
-#         #         pass
-#         #
-#         #     # 滑动 panel
-#         #     action.press(panel).move_to(x=0, y=-200).release().perform()
 
 
     def is_left_menu_accessible(self,menu_name):
@@ -103,7 +65,7 @@ class LeftPanel(TriplogMobileBasePage):
                 and advanced_switch.get_attribute("checked")=='false'):
             self.switch_advanced_features()
             # scroll up the left pane
-            self.swipe_up(self.get_locator_by_os("_left_panel_loc"),0.5)
+            self.swipe_up(self.get_locator_by_os("_left_panel_loc"), 0.5)
 
         try:
             if menu_name in ('Last Known Parking','Banks & Credit Cards'):
@@ -168,5 +130,5 @@ class LeftPanel(TriplogMobileBasePage):
 
 
     def goto_account_page(self):
-        self.find_element_and_click(self.get_locator_by_os("_account_status_loc"))
+        self.find_element_and_click(self.get_locator_by_os("_chevron_loc"))
         return AccountPage(self.driver)

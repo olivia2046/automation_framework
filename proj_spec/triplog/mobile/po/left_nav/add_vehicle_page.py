@@ -11,7 +11,9 @@ from proj_spec.triplog.mobile.po.left_nav.left_nav_base_page import LeftNavBaseP
 
 class AddVehiclePage(LeftNavBasePage):
     _model_input_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/txt_vehicle_model')
+    _model_input_loc_ios = (AppiumBy.XPATH, '//XCUIElementTypeStaticText[@name="Model"]/following-sibling::XCUIElementTypeTextField')
     _save_btn_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_action')
+    _save_btn_loc_ios = (AppiumBy.ACCESSIBILITY_ID, 'Save')
 
 
     def add_vehicle(self, **kwargs):

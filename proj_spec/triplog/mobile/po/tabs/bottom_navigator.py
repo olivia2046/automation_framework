@@ -16,7 +16,10 @@ from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBa
 
 class BottomNavigator(TriplogMobileBasePage):
     _more_or_less_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/ll_main_bottom_menu_more')
-    _more_or_less_parent_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/ll_main_bottom_menu_more')
+    _more_or_less_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeStaticText[`name == "More"`]')
+    _more_or_less_parent_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/ll_main_bottom_menu_more') # on android, only parent clickable
+    _more_or_less_parent_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeButton[`name == "More"`]')
+
     def get_tab_locator(self, tab_text):
         if self.os=='android':
             return (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_item_customize_btn_name" '
@@ -65,7 +68,10 @@ class BottomNavigator(TriplogMobileBasePage):
             #     if expected:
             #         self.find_element_and_click(self.get_tab_locator('%s' % tab_name),skip_error_handle=True)
             if tab_name == 'Time':
-                time_tab = self.find_element(self.get_tab_locator('%s' % tab_name), condition="element_to_be_clickable")
+                if self.os=="android":
+                    time_tab = self.find_element(self.get_tab_locator('Time'), condition="element_to_be_clickable")
+                else:
+                    time_tab = self.find_element(self.get_tab_locator('Time Clock'), condition="element_to_be_clickable")
                 if time_tab is not None:
                     time_tab.click()
                 else:

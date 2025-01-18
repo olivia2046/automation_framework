@@ -16,23 +16,29 @@ from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBa
 class TabsBasePage(TriplogMobileBasePage):
     #_bottom_trips_loc_android =(AppiumBy.XPATH,'//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_item_customize_btn_name" and @text="Trips"]')
     _left_panel_loc_android = (AppiumBy.ID,'com.bizlog.triplog:id/img_main_icon')
+    _left_panel_loc_ios = (AppiumBy.ACCESSIBILITY_ID, 'menu')
     _title_loc_android = (AppiumBy.ID,'com.bizlog.triplog:id/tv_main_title')
+    _title_loc_ios = (AppiumBy.ID, '**/XCUIElementTypeButton[`name == "menu"`]/sibling[1]')
     _battery_popup_loc_android = (AppiumBy.XPATH, '//android.view.ViewGroup[@resource-id="com.bizlog.triplog:id/rcl_all"]')
     _battery_popup_confirm_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/rtv_ok"]')
 
     _track_method_popup_loc_android = (AppiumBy.ANDROID_UIAUTOMATOR, """new UiSelector().text("Choose how to track 
- your hours")""")  # there's CRLF among the text
+ your hours")""")  # ATTENTION: there's CRLF among the text
+    _track_method_popup_loc_ios = (AppiumBy.IOS_PREDICATE, 'name contains "Choose how to track"')
     _opt_clock_inout_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rb_set_time_mode_1')
+    _opt_clock_inout_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeButton[`name == "unchecked time track"`][1]') # xpath of //XCUIElementTypeStaticText[@name="Clock in/out"]/preceding-sibling::XCUIElementTypeButton
     _opt_duration_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rb_set_time_mode_2')
+    _opt_duration_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeButton[`name == "unchecked time track"`][2]')
     _confirm_popup_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_set_time_mode_save')
+    _confirm_popup_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeStaticText[`name == "CONFIRM"`]')
+
 
     _schedule_popup_loc_android = (AppiumBy.ANDROID_UIAUTOMATOR, """new UiSelector().text("Shift Scheduling,
 Job Dispatching")""")
+    _schedule_popup_loc_ios = (AppiumBy.ACCESSIBILITY_ID, 'Shift Scheduling,')
     _close_popup_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_schedule_close')
+    _close_popup_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeButton[`name == "Close"`]')
     _remind_later_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_schedule_dismiss')
-
-
-
 
 
     def __init__(self,driver):

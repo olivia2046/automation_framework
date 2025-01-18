@@ -11,7 +11,11 @@ from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBa
 
 class LeftNavBasePage(TriplogMobileBasePage):
     _title_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_main_title')
+    # Todo: iOS title loc need an accessibility id
+    #_title_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeStaticText[`name == "Account"`]')
     _back_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/img_main_icon')
+    _back_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeButton[`name == "Back"`]')
+
     def go_back(self):
         self.find_element_and_click(self.get_locator_by_os("_back_loc"))
         return TabsBasePage
