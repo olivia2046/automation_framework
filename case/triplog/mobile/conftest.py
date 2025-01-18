@@ -55,10 +55,10 @@ def init_driver():
 
     yield driver
 
-    logging.info("app state:%s"%driver.query_app_state(caps['appium:appPackage']))
+    #logging.info("app state:%s"%driver.query_app_state(caps['appium:appPackage']))
     # 退出 WebDriver
     driver.quit()
-    logging.info("app state:%s" % driver.query_app_state(caps['appium:appPackage']))
+
 
 # Fixture: 每个测试类的登录操作（class scope）
 @pytest.fixture(scope="class", autouse=True)
@@ -114,8 +114,14 @@ def class_setup(request, init_driver, get_login_info):
         #request.cls.reset()  # 重启APP，确保下一测试类从干净的状态开始
         request.cls.driver.quit()
 
+    # from base.get_config import GetConfig
+    # caps = GetConfig.get_capabilities()
+    # logging.info("app state:%s" % request.cls.driver.query_app_state(caps['appium:appPackage'])) #only applies to android
     yield request.cls.driver  # execute test case
+
 
     # logout logic
     if hasattr(request.cls.page, "logout"):
         request.cls.page.logout()
+
+    #logging.info("app state:%s" % request.cls.driver.query_app_state(caps['appium:appPackage']))
