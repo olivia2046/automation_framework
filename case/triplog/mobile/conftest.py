@@ -37,11 +37,22 @@ from proj_spec.triplog.mobile.po.start.start_page import AppStartPage
 #     yield
 #     request.cls.driver.quit()
 
+def _init_driver():
+    from base.get_config import GetConfig
+    caps = GetConfig.get_capabilities()
+
+    if 'platformName' in caps and caps['platformName'].lower() == 'android':
+        options = UiAutomator2Options().load_capabilities(caps)
+    else:
+        options = XCUITestOptions().load_capabilities(caps)
+
+    driver = webdriver.Remote(GetConfig.get_cmd_executor(), options=options)
+    return driver
 
 # Fixture: 初始化 WebDriver（session scope）
-@pytest.fixture(scope="class")
+@pytest.fixture(scope="class", autouse=True)
 def init_driver():
-    """Session级别的fixture，用于初始化和退出WebDriver"""
+
     from base.get_config import GetConfig
     caps = GetConfig.get_capabilities()
 
@@ -75,8 +86,20 @@ def class_setup(request, init_driver, get_login_info):
 
         request.cls.driver  = init_driver  # 从 session 级别的 fixture 获取共享的 WebDriver
 
+
         # 进入登录页并登录
-        app_start_page = AppStartPage(init_driver)
+        app_start_page = AppStartPage(request.cls.driver)
+        # IOS上若已登录需手动登出
+        if request.cls.driver.capabilities['platformName']=='ios' and not app_start_page.is_login_btn_displayed():
+            from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
+            current_page = TabsBasePage(request.cls.driver)
+            current_page.handle_current_pages()
+            current_page.logout()
+
+            request.cls.driver = _init_driver()
+            app_start_page = AppStartPage(request.cls.driver)
+            init_driver=request.cls.driver
+
         login_page = app_start_page.goto_login_page()
 
         # get login information and login
@@ -103,7 +126,6 @@ def class_setup(request, init_driver, get_login_info):
                 # pytest.fail("Login fail!")
                 # return
                 raise Exception("Login failed")
-
 
 
     except Exception as e:

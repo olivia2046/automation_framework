@@ -43,10 +43,7 @@ class TestMobileAccessBase(TestTriplogMobileBase):
 
         logging.info("Testing access of Left Panel-%s"%menu_name)
         self.page.show_left_panel()
-        from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
 
-        from proj_spec.triplog.mobile.po.tabs.left_panel import LeftPanel
-        #left_nav_page = LeftPanel(self.driver)
         accessibility = self.user_data['Mobile Left->%s'%menu_name]
 
         if accessibility.lower()=='y':

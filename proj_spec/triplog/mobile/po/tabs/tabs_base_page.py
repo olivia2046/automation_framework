@@ -40,6 +40,9 @@ Job Dispatching")""")
     _close_popup_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeButton[`name == "Close"`]')
     _remind_later_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_schedule_dismiss')
 
+    # change activity tips when current page is Trips page
+    _change_activity_loc_ios = (AppiumBy.ACCESSIBILITY_ID,'Tap to change activity')
+
 
     def __init__(self,driver):
         super().__init__(driver)
@@ -57,10 +60,12 @@ Job Dispatching")""")
     #         battery_popup_confirm_btn.click()
 
 
-
-
     def show_left_panel(self):
-        self.find_element_and_click(self.get_locator_by_os("_left_panel_loc"))
+        try:
+            self.find_element_and_click(self.get_locator_by_os("_left_panel_loc"))
+        except Exception as e:
+            # left panel may already been expanded
+            pass
         return LeftPanel(self.driver)
 
     def get_title(self):
@@ -101,6 +106,17 @@ Job Dispatching")""")
         # if loading_dialog is not None:
         #     self.find_element(self.get_locator_by_os("_loading_dialog_loc"), condition="invisibility_of_element")
         self.wait_for_loading_finish()
+
+
+    def handle_trips_tips(self):
+        if self.find_element(self.get_locator_by_os("_change_activity_loc")) is not None:
+            from proj_spec.triplog.mobile.po.tabs.trips_tab_page import TripsTabPage
+            trip_page = TripsTabPage(self.driver)
+            trip_page.handle_change_activities_tips()
+
+
+    def handle_current_pages(self):
+        self.handle_trips_tips()
 
 
     def logout(self):

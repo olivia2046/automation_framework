@@ -22,25 +22,31 @@ class TriplogMobileBasePage(MobileBasePage):
     _toolbar_loc_ios = (AppiumBy.IOS_PREDICATE,'name == "Toolbar"') # left panel, **/XCUIElementTypeToolbar[`name == "Toolbar"`]
     _navbar_loc_ios = (AppiumBy.IOS_CLASS_CHAIN,'**/XCUIElementTypeNavigationBar') # head bar of page, use for defining which page is current page
     _bottom_menu_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rl_main_bottom_menu')
-    _bottom_menu_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeButton[`name == "Reorder"`]/..') #look for parent element of Recorder button
+    _bottom_menu_loc_ios = (AppiumBy.XPATH, '//XCUIElementTypeButton[@name="Reorder"]/..') #look for parent element of Recorder button
 
 
     _msg_box_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rcl_all')
     _msg_box_loc_ios = (AppiumBy.CLASS_NAME, 'XCUIElementTypeAlert')
     _msg_box_title_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_title')
     _msg_box_ok_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rtv_ok')
-    #_msg_box_ok_ios = (AppiumBy.ACCESSIBILITY_ID, 'com.bizlog.triplog:id/rtv_ok')
+    _msg_box_ok_ios = (AppiumBy.ACCESSIBILITY_ID, 'com.bizlog.triplog:id/rtv_ok')
     _msg_box_continue_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rtv_continue')
     _msg_box_cancel_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rtv_cancel')
     _msg_box_cancel_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rtv_cancel')
     _progress_dialog_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rcl_all') # same as message box
-    _progress_dialog_loc_ios = (AppiumBy.XPATH, "//XCUIElementTypeStaticText[contains(@label, 'Loading work schedule')]")
+    #_progress_dialog_loc_ios = (AppiumBy.XPATH, "//XCUIElementTypeStaticText[contains(@label, 'Loading work schedule')]")
     """toast_label = driver.find_element_by_class_name("XCUIElementTypeStaticText")
     toast_view = driver.find_element_by_class_name("XCUIElementTypeOther")
 """
 
     # send report window when error
     _send_report_file_loc_android = (AppiumBy.ID, 'android:id/content_preview_filename')
+
+    # network issue
+    _network_issue_title_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeStaticText[`name == "Network Issue"`]')
+    _report_issue_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeButton[`name == "Report"`]')
+    _close_msgbox_loc_ios = (AppiumBy.ACCESSIBILITY_ID, 'Close')
+
 
     def find_element(self, locator, timeout=5, condition='visibility_of_element_located', skip_error_handle=False):
         """

@@ -24,9 +24,11 @@ class LeftPanel(TriplogMobileBasePage):
     _account_status_loc_ios = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_account_status_info')
     _account_email_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_account_email')
     # ios locate by accessiblity id of account's email
-    # Todo: check the locator of the right arrow
-    _chevron_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_account_status_info')
+
     _chevron_loc_ios = (AppiumBy.ACCESSIBILITY_ID, 'chevron')
+    # todo: replace the loc on android
+    _account_bar_loc_androi = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_account_status_info')
+    _account_bar_loc_ios = (AppiumBy.XPATH,'//XCUIElementTypeButton[@name="chevron"]/..')
 
     def switch_advanced_features(self):
         #self.find_element_and_click(self.get_locator_by_os("_adv_feature_switch"))
@@ -130,5 +132,5 @@ class LeftPanel(TriplogMobileBasePage):
 
 
     def goto_account_page(self):
-        self.find_element_and_click(self.get_locator_by_os("_chevron_loc"))
+        self.find_element_and_click(self.get_locator_by_os("_account_bar_loc"))
         return AccountPage(self.driver)

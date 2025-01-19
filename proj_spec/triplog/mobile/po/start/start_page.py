@@ -18,3 +18,10 @@ class AppStartPage(TriplogMobileBasePage):
     def goto_login_page(self):
         self.find_element_and_click(self.get_locator_by_os("_login_btn_loc"))
         return AppLoginPage(self.driver)
+
+
+    def is_login_btn_displayed(self):
+        if self.find_element(self.get_locator_by_os("_login_btn_loc")) is not None:
+            return True
+        else:
+            return False

@@ -97,6 +97,8 @@ class AppLoginPage(TriplogMobileBasePage):
                 page.choose_time_track_method("clock_in_out")
                 #glo.set_value("time_track_method","clock_in_out")
 
+            page.handle_current_pages()
+
 
             # self.find_element_and_click(self.get_locator_by_os("_turn_on_time_loc"))
             # self.find_element_and_click(self.get_locator_by_os("_save_time_mode_loc"))
