@@ -46,6 +46,8 @@ class LeftPanel(TriplogMobileBasePage):
         if self.os=='android':
             return (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_title" and @text="%s"]/../..'
                     %menu_text) # only parent of parent element clickable
+        else:
+            return (AppiumBy.ACCESSIBILITY_ID, menu_text)
 
 
     def goto_account_page(self):
@@ -103,15 +105,18 @@ class LeftPanel(TriplogMobileBasePage):
             else:
                 from proj_spec.triplog.mobile.po.left_nav.left_nav_base_page import LeftNavBasePage
                 page = LeftNavBasePage(self.driver)
-            title = page.get_title()
             if menu_name in self.menu_title_mapping.keys():
                 expected_title = self.menu_title_mapping[menu_name]
             else:
                 expected_title = menu_name
-            # go back
+            if self.os=='android':
+                title = page.get_title()
+                accessibility =  (title=='%s'%expected_title)
+            else: # todo: ios need to add accessibility id to title element
+                accessibility = self.find_element((AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeStaticText[`name == "%s"`]'%expected_title)) is not None
             page.go_back()
 
-            return title=='%s'%expected_title
+            return accessibility
         except Exception as e:
             # collapse the left panel
             self.swipe_left(self.get_locator_by_os("_left_panel_loc"),horizontal_rate=1)
