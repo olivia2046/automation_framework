@@ -61,13 +61,16 @@ class LeftPanel(TriplogMobileBasePage):
         """
 
 
-        advanced_switch = self.find_element(self.get_locator_by_os("_adv_feature_switch"))
+
         if (menu_name in ('Navigate/Route Planning','Frequent Trip Rules','Adjust Odometer','Business Activities',
-                          'Last Known Parking','Banks & Credit Cards','Invite Accountant')
-                and advanced_switch.get_attribute("checked")=='false'):
-            self.switch_advanced_features()
-            # scroll up the left pane
-            self.swipe_up(self.get_locator_by_os("_left_panel_loc"), 0.5)
+                          'Last Known Parking','Banks & Credit Cards','Invite Accountant')):
+            advanced_switch = self.find_element(self.get_locator_by_os("_adv_feature_switch"))
+            if advanced_switch is None:
+                return False
+            elif advanced_switch.get_attribute("checked")=='false':
+                self.switch_advanced_features()
+                # scroll up the left pane
+                self.swipe_up(self.get_locator_by_os("_left_panel_loc"), 0.5)
 
         try:
             if menu_name in ('Last Known Parking','Banks & Credit Cards'):

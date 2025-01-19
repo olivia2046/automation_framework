@@ -6,14 +6,14 @@ Dashboard->Trends,,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,Y,Y
 Reports->Mileage Reports,,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,N,N
 Reports->Business Expenses,,,Y,,Y,Y,Y,Y,N,N,N,N,N,Y,N
 Reports->Time Clock,,,Y,,Y,N,Y,N,N,N,N,N,N,N,Y
-Reports->Profit & Loss,,,,,,,,Y,,,,,,,
+Reports->Profit & Loss,,,,,,,Y,Y,,,,,,,
 Reports->Location Stay Time,,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,N,N
 Maps->Current Locations,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
 Maps->Heat Map,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Maps->Frequent Locations,,,Y,,Y,Y,Y,Y?,N,N,N,Y,N,N,N
+Maps->Frequent Locations,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
 Maps->Driving Safety,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
 Maps->Location Stay Time,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Maps->Time Clock,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,Y
+Maps->Time Clock,,,Y,,Y,N,Y,N,N,N,N,Y,N,N,Y
 Mileage->Trips,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
 Mileage->State Mileage,,,N,,N,N,Y,Y,N,N,N,Y,N,N,N
 Mileage->Fuel,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N

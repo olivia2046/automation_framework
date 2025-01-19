@@ -15,6 +15,9 @@ class AppStartPage(TriplogMobileBasePage):
     _login_btn_loc_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/rtv_login"]')
     _login_btn_loc_ios = (AppiumBy.XPATH, '//XCUIElementTypeStaticText[@name="Log in"]')
 
+    _backup_complete_title_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeStaticText[`name == "Backup Completed"`]')
+
+
     def goto_login_page(self):
         self.find_element_and_click(self.get_locator_by_os("_login_btn_loc"))
         return AppLoginPage(self.driver)
@@ -25,3 +28,7 @@ class AppStartPage(TriplogMobileBasePage):
             return True
         else:
             return False
+
+
+    def get_backup_complete_title_loc(self):
+        return self.get_locator_by_os("_backup_complete_title_loc")

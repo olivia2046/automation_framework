@@ -70,6 +70,7 @@ class AccountPage(TriplogMobileBasePage):
         if popup_msgbox is not None:
             self.find_element_and_click(self.get_locator_by_os("_msg_ok_loc"))
             self.wait_for_loading_finish()
-            return AppStartPage(self.driver)
-        else:
-            return self
+        app_page = AppStartPage(self.driver)
+        if self.os=='ios':
+            self.find_element(app_page.get_backup_complete_title_loc())
+        return app_page
