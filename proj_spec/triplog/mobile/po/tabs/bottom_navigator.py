@@ -24,28 +24,32 @@ class BottomNavigator(TriplogMobileBasePage):
         if self.os=='android':
             return (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/tv_item_customize_btn_name" '
                                     'and @text="%s"]/..'%tab_text)  # only parent of parent element clickable
+        else:
+            return (AppiumBy.ACCESSIBILITY_ID, tab_text)
 
     def expand_more_or_less(self):
 
         element = self.find_element(self.get_locator_by_os("_more_or_less_loc"),condition="element_to_be_clickable")
-        element.screenshot("more or less.png")
+        #element.screenshot("more or less.png")
 
-        text = element.text
-        print("more or less text: %s"%text)
+        if element is not None:
+            text = element.text
+            print("more or less text: %s"%text)
 
-        # if text=='More':
-        #     # only parent element clickable
-        #     self.find_element_and_click(self.get_locator_by_os("_more_or_less_parent_loc"),condition="element_to_be_clickable")
-        # 登录后为展开状态显示More
-        # workaround: click the button once, and record height(0 as top of screen) of element before and after clicking
-        height_before_click = self.find_element(self.get_locator_by_os("_more_or_less_loc")).rect['y']
-        self.find_element_and_click(self.get_locator_by_os("_more_or_less_parent_loc"),
-                                    condition="element_to_be_clickable")
-        height_after_click = self.find_element(self.get_locator_by_os("_more_or_less_loc")).rect['y']
-        if height_before_click < height_after_click: # needs to expand(click again)
+            # if text=='More':
+            #     # only parent element clickable
+            #     self.find_element_and_click(self.get_locator_by_os("_more_or_less_parent_loc"),condition="element_to_be_clickable")
+            # 登录后为展开状态显示More
+            # workaround: click the button once, and record height(0 as top of screen) of element before and after clicking
+            height_before_click = self.find_element(self.get_locator_by_os("_more_or_less_loc")).rect['y']
             self.find_element_and_click(self.get_locator_by_os("_more_or_less_parent_loc"),
                                         condition="element_to_be_clickable")
-
+            height_after_click = self.find_element(self.get_locator_by_os("_more_or_less_loc")).rect['y']
+            if height_before_click < height_after_click: # needs to expand(click again)
+                self.find_element_and_click(self.get_locator_by_os("_more_or_less_parent_loc"),
+                                            condition="element_to_be_clickable")
+        else: # no More/Less switcher as there're no enough buttons
+            return
 
     def is_tab_page_accessible(self, tab_name, expected=True):
         """

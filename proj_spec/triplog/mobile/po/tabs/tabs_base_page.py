@@ -18,7 +18,7 @@ class TabsBasePage(TriplogMobileBasePage):
     _left_panel_loc_android = (AppiumBy.ID,'com.bizlog.triplog:id/img_main_icon')
     _left_panel_loc_ios = (AppiumBy.ACCESSIBILITY_ID, 'menu')
     _title_loc_android = (AppiumBy.ID,'com.bizlog.triplog:id/tv_main_title')
-    _title_loc_ios = (AppiumBy.ID, '**/XCUIElementTypeButton[`name == "menu"`]/sibling[1]')
+    _title_loc_ios = (AppiumBy.XPATH, '//XCUIElementTypeButton[@name="menu"]/following-sibling::XCUIElementTypeButton[1]')
     _battery_popup_loc_android = (AppiumBy.XPATH, '//android.view.ViewGroup[@resource-id="com.bizlog.triplog:id/rcl_all"]')
     _battery_popup_confirm_android = (AppiumBy.XPATH, '//android.widget.TextView[@resource-id="com.bizlog.triplog:id/rtv_ok"]')
 
