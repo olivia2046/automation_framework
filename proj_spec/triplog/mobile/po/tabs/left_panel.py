@@ -9,11 +9,12 @@ import time
 from appium.webdriver.common.appiumby import AppiumBy
 
 from proj_spec.triplog.mobile.po.left_nav.account_page import AccountPage
+from proj_spec.triplog.mobile.po.left_nav.auto_start_options_page import AutoStartOptionsPage
 from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBasePage
 
 
 class LeftPanel(TriplogMobileBasePage):
-    menu_title_mapping = {"Auto Start on":"Auto Start Settings","Work Schedule":"Working Hours",
+    menu_title_mapping = {"Auto Start on":"Auto Start Settings","Auto Start On":"Auto Start Settings","Work Schedule":"Working Hours",
                           "Navigate/Route Planning":"Route Planning","Adjust Odometer":"Adjust Vehicle Odometer"}
 
     _adv_feature_switch_android = (AppiumBy.ID,'com.bizlog.triplog:id/switch_btn')
@@ -27,7 +28,7 @@ class LeftPanel(TriplogMobileBasePage):
 
     _chevron_loc_ios = (AppiumBy.ACCESSIBILITY_ID, 'chevron')
     # todo: replace the loc on android
-    _account_bar_loc_androi = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_account_status_info')
+    _account_bar_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/cl_account_msg')
     _account_bar_loc_ios = (AppiumBy.XPATH,'//XCUIElementTypeButton[@name="chevron"]/..')
 
     def switch_advanced_features(self):
@@ -82,13 +83,20 @@ class LeftPanel(TriplogMobileBasePage):
                 # todo: click menu and handle pop up/long loading page
                 self.swipe_left(self.get_locator_by_os("_left_panel_loc"), horizontal_rate=1)
                 return True
+            #todo: uniform ios/android menu name?
+            if menu_name=='Auto Start on' and self.os=='ios':
+                menu_name='Auto Start On'
             menu_element = self.find_element(self.get_menu_locator("%s"%menu_name),condition="element_to_be_clickable")
             if menu_element is None:
                 return False
             else:
                 menu_element.click()
 
-
+            if menu_name in ('Auto Start on','Auto Start On'):
+                auto_start_options_page = AutoStartOptionsPage(self.driver)
+                if auto_start_options_page.is_learn_more_displayed():
+                    auto_start_options_page.confirm_learn_more()
+                    auto_start_options_page.go_back()
             if menu_name=='Work Schedule':
                 from proj_spec.triplog.mobile.po.left_nav.work_schedule_page import WorkSchedulePage
                 page = WorkSchedulePage(self.driver)
@@ -101,12 +109,14 @@ class LeftPanel(TriplogMobileBasePage):
                 from proj_spec.triplog.mobile.po.left_nav.adjust_odometer_page import AdjustOdometerPage
                 page = AdjustOdometerPage(self.driver)
                 if page.is_odometer_reading_popup():
-                    page.confirm_odometer_setting()
+                    page.set_odometer(999999)
             else:
                 from proj_spec.triplog.mobile.po.left_nav.left_nav_base_page import LeftNavBasePage
                 page = LeftNavBasePage(self.driver)
             if menu_name in self.menu_title_mapping.keys():
                 expected_title = self.menu_title_mapping[menu_name]
+            elif menu_name == "Business Activities" and self.os=='ios':
+                expected_title = 'Activities'
             else:
                 expected_title = menu_name
             if self.os=='android':

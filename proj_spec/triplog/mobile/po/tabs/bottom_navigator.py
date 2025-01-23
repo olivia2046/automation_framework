@@ -7,15 +7,14 @@
 import logging
 from selenium.common.exceptions import NoSuchElementException
 from appium.webdriver.common.appiumby import AppiumBy
-import base.globalvars as glo
-
 
 
 from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBasePage
 
 
 class BottomNavigator(TriplogMobileBasePage):
-    _more_or_less_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/ll_main_bottom_menu_more')
+    _more_or_less_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_main_bottom_more')
+    # todo: ios locator
     _more_or_less_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeStaticText[`name == "More"`]')
     _more_or_less_parent_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/ll_main_bottom_menu_more') # on android, only parent clickable
     _more_or_less_parent_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeButton[`name == "More"`]')
@@ -36,18 +35,19 @@ class BottomNavigator(TriplogMobileBasePage):
             text = element.text
             print("more or less text: %s"%text)
 
-            # if text=='More':
-            #     # only parent element clickable
-            #     self.find_element_and_click(self.get_locator_by_os("_more_or_less_parent_loc"),condition="element_to_be_clickable")
-            # 登录后为展开状态显示More
-            # workaround: click the button once, and record height(0 as top of screen) of element before and after clicking
-            height_before_click = self.find_element(self.get_locator_by_os("_more_or_less_loc")).rect['y']
-            self.find_element_and_click(self.get_locator_by_os("_more_or_less_parent_loc"),
-                                        condition="element_to_be_clickable")
-            height_after_click = self.find_element(self.get_locator_by_os("_more_or_less_loc")).rect['y']
-            if height_before_click < height_after_click: # needs to expand(click again)
-                self.find_element_and_click(self.get_locator_by_os("_more_or_less_parent_loc"),
-                                            condition="element_to_be_clickable")
+            if text=='More':
+                # only parent element clickable
+                self.find_element_and_click(self.get_locator_by_os("_more_or_less_parent_loc"),condition="element_to_be_clickable")
+            # # 登录后为展开状态显示More
+            # # workaround: click the button once, and record height(0 as top of screen) of element before and after clicking
+            # height_before_click = self.find_element(self.get_locator_by_os("_more_or_less_loc")).rect['y']
+            # height_before_click = element.rect['y']
+            # self.find_element_and_click(self.get_locator_by_os("_more_or_less_parent_loc"),
+            #                             condition="element_to_be_clickable")
+            # height_after_click = self.find_element(self.get_locator_by_os("_more_or_less_loc")).rect['y']
+            # if height_before_click < height_after_click: # needs to expand(click again)
+            #     self.find_element_and_click(self.get_locator_by_os("_more_or_less_parent_loc"),
+            #                                 condition="element_to_be_clickable")
         else: # no More/Less switcher as there're no enough buttons
             return
 
