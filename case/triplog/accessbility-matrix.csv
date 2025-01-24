@@ -1,75 +1,75 @@
-loc,basic_plan,basicplan_without_pass,premium,premium_no_time,teams,teams_no_time,enterprise,enterprise_no_time,trial_end,seven_day_pass_not_activated,seven_day_pass_end,mileage_only,expense_only,expense_only_combo,time_only
-desc,basic plan user,,paid single user,,teams user(Canada),teams user without time,enterprise user(Canada),enterprise user without time product,trial expired user,user with 7 day pass not activated,user with 7 day pass expired,mileage_only user(with state mileage),expense only user,expense only user-combo bill,time only user
-Dashboard->Overview,,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,Y,Y
-Dashboard->Performance,,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,Y,Y
-Dashboard->Trends,,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,Y,Y
-Reports->Mileage Reports,,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,N,N
-Reports->Business Expenses,,,Y,,Y,Y,Y,Y,N,N,N,N,N,Y,N
-Reports->Time Clock,,,Y,,Y,N,Y,N,N,N,N,N,N,N,Y
-Reports->Profit & Loss,,,,,,,Y,Y,,,,,,,
-Reports->Location Stay Time,,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,N,N
-Maps->Current Locations,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Maps->Heat Map,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Maps->Frequent Locations,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Maps->Driving Safety,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Maps->Location Stay Time,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Maps->Time Clock,,,Y,,Y,N,Y,N,N,N,N,Y,N,N,Y
-Mileage->Trips,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Mileage->State Mileage,,,N,,N,N,Y,Y,N,N,N,Y,N,N,N
-Mileage->Fuel,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Mileage->Locations,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Mileage->Vehicles,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Expense->Transactions,,,Y,,Y,Y,Y,Y,N,N,N,N,Y,Y,N
-Expense->Categories,,,Y,,Y,Y,Y,Y,N,N,N,N,Y,Y,N
-Expense->Spending Limits,N,,N,,N,N,Y,Y,N,N,N,N,Y,Y,N
-Expense->Tax Groups,,,N,,Y,N,Y,N,N,N,N,N,Y,Y,N
-Expense->Bank Accounts,,,Y,,Y,Y,Y,Y,N,N,N,N,Y,Y,N
-Time->Time Clock Calendar,,,Y,,Y,N,Y,N,N,N,N,N,N,N,Y
-Time->Time Clock List,,,,,Y,N,Y,N,N,N,N,N,N,N,Y
-Time->Scheduling,,,,,Y,N,Y,N,N,N,N,N,N,N,Y
-Time->Job Activities,,,,,Y,N,Y,N,N,N,N,N,N,N,Y
-Locations,N,N,N,N,N,N,N,N,N,N,N,N,N,N,Y
-Integrations->ADP,,,,,N,N,Y,Y,N,N,N,Y,Y,Y,N
-Integrations->Paychex,,,,,N,N,Y,Y,N,N,N,Y,Y,Y,N
-Integrations->Paylocity,,,,,N,N,Y,Y,N,N,N,Y,Y,Y,N
-Integrations->UKG Pro,,,,,N,N,Y,Y,N,N,N,Y,Y,Y,N
-Integrations->UKG Ready,,,,,N,N,Y,Y,N,N,N,Y,Y,Y,N
-Integrations->SAP Concur,,,,,Y,Y,Y,Y,N,N,N,Y,Y,Y,N
-Integrations->QuickBooks Online,,,,,Y,Y,Y,Y,N,N,N,Y,Y,Y,N
-Integrations->Xero,,,,,Y,Y,Y,Y,N,N,N,Y,Y,Y,N
-Integrations->Sage Intacct,,,,,N,N,Y,Y,N,N,N,Y,Y,Y,
-Settings->Account Settings,,,,,Y,Y,Y,Y,N,N,N,,Y,Y,
-Settings->Components,,,,,Y,Y,Y,Y,N,N,N,,Y,Y,
-Settings->Notifications,,,,,Y,Y,Y,Y,N,N,N,,Y,Y,
-Settings->Activities,,,,,Y,Y,Y,Y,N,N,N,,Y,Y,
-Settings->Mileage Rates,,,,,Y,Y,Y,Y,N,N,N,,N,N,
-Settings->Mileage Policies,,,,,N,N,Y,Y,N,N,N,,N,N,
-Settings->Time Policies,,,,,Y,N,Y,N,N,N,N,,N,N,
-Settings->Tags & Notes,,,,,Y,Y,Y,Y,N,N,N,,Y,Y,
-Settings->Custom Tags,,,,,N,N,Y,Y,N,N,N,,N,N,
-Settings->Custom Fields,,,,,N,N,Y,Y,N,N,N,,N,N,
-Settings->Advanced Settings,,,,,N,N,Y,Y,N,N,N,,N,N,
-Mobile Bottom->Trips,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Mobile Bottom->Fuel,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Mobile Bottom->Submission,,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,Y,Y
-Mobile Bottom->Reports,,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,Y,Y
-Mobile Bottom->Transactions,,,Y,,Y,Y,Y,Y,N,N,N,N,Y,Y,N
-Mobile Bottom->Time,,,Y,,,,Y,N,N,N,N,N,N,N,Y
-Mobile Bottom->Schedule,,,Y,,,,Y,N,N,N,N,N,N,N,N
-Mobile Bottom->Time off,,,Y,,,,Y,N,N,N,N,N,N,N,N
-Mobile Left->Auto Start on,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Mobile Left->Work Schedule,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Mobile Left->Vehicles,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Mobile Left->Send to Concur,,,N,,N,N,N,N,N,N,N,N,N,N,N
-Mobile Left->Locations,,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,Y,Y
-Mobile Left->State Mileage,,,N,,N,N,Y,Y,N,N,N,Y,N,N,N
-Mobile Left->Approval Management,,,N,,N,N,Y,Y,N,N,N,Y,Y,Y,Y
-Mobile Left->Submission,,,N,,N,N,Y,Y,N,N,N,Y,Y,Y,Y
-Mobile Left->Navigate/Route Planning,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Mobile Left->Frequent Trip Rules,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Mobile Left->Adjust Odometer,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Mobile Left->Mileage Rates,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Mobile Left->Business Activities,,,Y,,Y,Y,Y,Y,N,N,N,Y,Y,Y,Y
-Mobile Left->Last Known Parking,,,Y,,Y,Y,Y,Y,N,N,N,Y,N,N,N
-Mobile Left->Banks & Credit Cards,N,,Y,,Y,Y,Y,Y,N,N,N,N,Y,Y,N
-Mobile Left->Invite Accountant,,,Y,,Y,Y,N,N,N,N,N,N,N,N,N
+loc,basic_plan,basicplan_without_pass,premium,premium_no_time,teams,teams_no_time,enterprise,enterprise_no_time,trial_end,seven_day_pass_not_activated,seven_day_pass_end,suspended,mileage_only,expense_only,expense_only_combo,time_only
+desc,basic plan user,,paid single user,,teams user(Canada),teams user without time,enterprise user(Canada),enterprise user without time product,trial expired user,user with 7 day pass not activated,user with 7 day pass expired,suspended user,mileage_only user(with state mileage),expense only user,expense only user-combo bill,time only user
+Dashboard->Overview,,,Y,,Y,Y,Y,Y,N,N,N,,Y,Y,Y,Y
+Dashboard->Performance,,,Y,,Y,Y,Y,Y,N,N,N,,Y,Y,Y,Y
+Dashboard->Trends,,,Y,,Y,Y,Y,Y,N,N,N,,Y,Y,Y,Y
+Reports->Mileage Reports,,,Y,,Y,Y,Y,Y,N,N,N,,Y,Y,N,N
+Reports->Business Expenses,,,Y,,Y,Y,Y,Y,N,N,N,,N,N,Y,N
+Reports->Time Clock,,,Y,,Y,N,Y,N,N,N,N,,N,N,N,Y
+Reports->Profit & Loss,,,,,,,Y,Y,,,,,,,,
+Reports->Location Stay Time,,,Y,,Y,Y,Y,Y,N,N,N,,Y,Y,N,N
+Maps->Current Locations,,,Y,,Y,Y,Y,Y,N,N,N,,Y,N,N,N
+Maps->Heat Map,,,Y,,Y,Y,Y,Y,N,N,N,,Y,N,N,N
+Maps->Frequent Locations,,,Y,,Y,Y,Y,Y,N,N,N,,Y,N,N,N
+Maps->Driving Safety,,,Y,,Y,Y,Y,Y,N,N,N,,Y,N,N,N
+Maps->Location Stay Time,,,Y,,Y,Y,Y,Y,N,N,N,,Y,N,N,N
+Maps->Time Clock,,,Y,,Y,N,Y,N,N,N,N,,Y,N,N,Y
+Mileage->Trips,,,Y,,Y,Y,Y,Y,N,N,N,,Y,N,N,N
+Mileage->State Mileage,,,N,,N,N,Y,Y,N,N,N,,Y,N,N,N
+Mileage->Fuel,,,Y,,Y,Y,Y,Y,N,N,N,,Y,N,N,N
+Mileage->Locations,,,Y,,Y,Y,Y,Y,N,N,N,,Y,N,N,N
+Mileage->Vehicles,,,Y,,Y,Y,Y,Y,N,N,N,,Y,N,N,N
+Expense->Transactions,,,Y,,Y,Y,Y,Y,N,N,N,,N,Y,Y,N
+Expense->Categories,,,Y,,Y,Y,Y,Y,N,N,N,,N,Y,Y,N
+Expense->Spending Limits,N,,N,,N,N,Y,Y,N,N,N,,N,Y,Y,N
+Expense->Tax Groups,,,N,,Y,N,Y,N,N,N,N,,N,Y,Y,N
+Expense->Bank Accounts,,,Y,,Y,Y,Y,Y,N,N,N,,N,Y,Y,N
+Time->Time Clock Calendar,,,Y,,Y,N,Y,N,N,N,N,,N,N,N,Y
+Time->Time Clock List,,,,,Y,N,Y,N,N,N,N,,N,N,N,Y
+Time->Scheduling,,,,,Y,N,Y,N,N,N,N,,N,N,N,Y
+Time->Job Activities,,,,,Y,N,Y,N,N,N,N,,N,N,N,Y
+Locations,N,N,N,N,N,N,N,N,N,N,N,,N,N,N,Y
+Integrations->ADP,,,,,N,N,Y,Y,N,N,N,,Y,Y,Y,N
+Integrations->Paychex,,,,,N,N,Y,Y,N,N,N,,Y,Y,Y,N
+Integrations->Paylocity,,,,,N,N,Y,Y,N,N,N,,Y,Y,Y,N
+Integrations->UKG Pro,,,,,N,N,Y,Y,N,N,N,,Y,Y,Y,N
+Integrations->UKG Ready,,,,,N,N,Y,Y,N,N,N,,Y,Y,Y,N
+Integrations->SAP Concur,,,,,Y,Y,Y,Y,N,N,N,,Y,Y,Y,N
+Integrations->QuickBooks Online,,,,,Y,Y,Y,Y,N,N,N,,Y,Y,Y,N
+Integrations->Xero,,,,,Y,Y,Y,Y,N,N,N,,Y,Y,Y,N
+Integrations->Sage Intacct,,,,,N,N,Y,Y,N,N,N,,Y,Y,Y,
+Settings->Account Settings,,,,,Y,Y,Y,Y,N,N,N,,,Y,Y,
+Settings->Components,,,,,Y,Y,Y,Y,N,N,N,,,Y,Y,
+Settings->Notifications,,,,,Y,Y,Y,Y,N,N,N,,,Y,Y,
+Settings->Activities,,,,,Y,Y,Y,Y,N,N,N,,,Y,Y,
+Settings->Mileage Rates,,,,,Y,Y,Y,Y,N,N,N,,,N,N,
+Settings->Mileage Policies,,,,,N,N,Y,Y,N,N,N,,,N,N,
+Settings->Time Policies,,,,,Y,N,Y,N,N,N,N,,,N,N,
+Settings->Tags & Notes,,,,,Y,Y,Y,Y,N,N,N,,,Y,Y,
+Settings->Custom Tags,,,,,N,N,Y,Y,N,N,N,,,N,N,
+Settings->Custom Fields,,,,,N,N,Y,Y,N,N,N,,,N,N,
+Settings->Advanced Settings,,,,,N,N,Y,Y,N,N,N,,,N,N,
+Mobile Bottom->Trips,,Y,Y,,Y,Y,Y,Y,N,N,N,,Y,N,N,N
+Mobile Bottom->Fuel,,Y,Y,,Y,Y,Y,Y,N,N,N,,Y,N,N,N
+Mobile Bottom->Submission,,N,Y,,Y,Y,Y,Y,N,N,N,,Y,Y,Y,Y
+Mobile Bottom->Reports,,Y,Y,,Y,Y,Y,Y,N,N,N,,Y,Y,Y,Y
+Mobile Bottom->Transactions,,Y,Y,,Y,Y,Y,Y,N,N,N,,N,Y,Y,N
+Mobile Bottom->Time,,N,Y,,,,Y,N,N,N,N,,N,N,N,Y
+Mobile Bottom->Schedule,,N,Y,,,,Y,N,N,N,N,,N,N,N,N
+Mobile Bottom->Time off,,N,Y,,,,Y,N,N,N,N,,N,N,N,N
+Mobile Left->Auto Start on,,Y,Y,,Y,Y,Y,Y,N,N,N,,Y,N,N,N
+Mobile Left->Work Schedule,,Y,Y,,Y,Y,Y,Y,N,N,N,,Y,N,N,N
+Mobile Left->Vehicles,,Y,Y,,Y,Y,Y,Y,N,N,N,,Y,N,N,N
+Mobile Left->Send to Concur,,N,N,,N,N,N,N,N,N,N,,N,N,N,N
+Mobile Left->Locations,,Y,Y,,Y,Y,Y,Y,N,N,N,,Y,Y,Y,Y
+Mobile Left->State Mileage,,N,N,,N,N,Y,Y,N,N,N,,Y,N,N,N
+Mobile Left->Approval Management,,N,N,,N,N,Y,Y,N,N,N,,Y,Y,Y,Y
+Mobile Left->Submission,,N,N,,N,N,Y,Y,N,N,N,,Y,Y,Y,Y
+Mobile Left->Navigate/Route Planning,,N,Y,,Y,Y,Y,Y,N,N,N,,Y,N,N,N
+Mobile Left->Frequent Trip Rules,,N,Y,,Y,Y,Y,Y,N,N,N,,Y,N,N,N
+Mobile Left->Adjust Odometer,,Y,Y,,Y,Y,Y,Y,N,N,N,,Y,N,N,N
+Mobile Left->Mileage Rates,,N,Y,,Y,Y,Y,Y,N,N,N,,Y,N,N,N
+Mobile Left->Business Activities,,N,Y,,Y,Y,Y,Y,N,N,N,,Y,Y,Y,Y
+Mobile Left->Last Known Parking,,Y,Y,,Y,Y,Y,Y,N,N,N,,Y,N,N,N
+Mobile Left->Banks & Credit Cards,N,N,Y,,Y,Y,Y,Y,N,N,N,,N,Y,Y,N
+Mobile Left->Invite Accountant,,N,Y,,Y,Y,N,N,N,N,N,,N,N,N,N

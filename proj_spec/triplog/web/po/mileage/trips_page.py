@@ -15,7 +15,12 @@ from proj_spec.triplog.web.po.triplog_navigable_page import TriplogNavigablePage
 
 class TripsPage(TriplogNavigablePage):
     url = glo.get_value("url1") + "/trip"
+    # header menu bar
     _add_trip_locator = (By.CSS_SELECTOR,"#add_button")
+    _approval_container_loc = (By.ID, 'approve_container')
+    _submit_btn_loc = (By.XPATH, '//div[@id="approve_menu"]//a[text()="Submit"]')
+    _submission_comment_loc = (By.XPATH, '//div[@id="Submit_trips_dialog"]//textarea')
+    _confirm_submission_btn_loc = (By.XPATH, '//div[@id="Submit_trips_dialog"]//input[@value="Submit"]')
 
     _confirm_delete_multiple_loc = (By.XPATH, "//div[@id='delete_multiple_dialog']//input[@type='submit' and "
                                               "@class='red_border_button' and @value='Delete']")
@@ -72,6 +77,18 @@ class TripsPage(TriplogNavigablePage):
         except:
             pass
 
+
+    def get_loc_of_nth_trip(self, n):
+        """get the locator of nth trip, n starts from 0
+
+        :param n:
+        :return:
+        """
+        return  (By.XPATH, "(%s)[%s]" % (self._trips_xpath, n + 1))  # xpath index starts from 1
+
+
+    def get_loc_of_nth_trip_checkbox(self, n):
+        return (By.XPATH, "%s[%s]"%(self._trip_checkboxs_xpath, n+1))
 
     def choose_button(self, first_level_text, second_level_text):
         """
@@ -142,7 +159,7 @@ class TripsPage(TriplogNavigablePage):
         self.find_element_and_click(self._save_button_loc)
 
 
-    def delete_trip_from_menu(self, index=0):
+    def delete_trip(self, index=0):
         """Delete trip from menu bar
 
         :return:
@@ -174,4 +191,31 @@ class TripsPage(TriplogNavigablePage):
         except Exception as e:
             logging.error("error getting count of filtered trips: %s"%e)
             return -1
+
+
+    def check_trips(self, indexes=[0]):
+        for index in indexes:
+            locator = self.get_loc_of_nth_trip_checkbox(index)
+            if self.find_element(locator) is not None:
+                self.find_element_and_click(locator)
+            #todo: scroll vertically
+
+    def submit_trips(self, indexes=[0], comments=""):
+        """Delete trips of the index in indexes list
+
+        :param index:
+        :param comments:
+        :return:
+        """
+        #todo: filter trips of not submitted status
+        self.driver.get(self.url)
+        self.check_trips(indexes)
+        self.hover_over_element(self._approval_container_loc)
+        self.find_element_and_click(self._submit_btn_loc)
+        self.find_element_and_input(self._submission_comment_loc, comments)
+        self.find_element_and_click(self._confirm_submission_btn_loc)
+
+
+
+
 
