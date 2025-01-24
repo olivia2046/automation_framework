@@ -216,6 +216,21 @@ class TripsPage(TriplogNavigablePage):
         self.find_element_and_click(self._confirm_submission_btn_loc)
 
 
+    def approve_trips(self, indexes=[0], comments=""):
+        """
+
+        :param indexes:
+        :param comments:
+
+        :return:
+
+        """
+
+
+        pass
+
+
+
 
 
 

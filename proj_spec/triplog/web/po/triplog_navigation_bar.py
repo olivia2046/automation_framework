@@ -29,11 +29,12 @@ class TriplogNavigationBar(TriplogWebBasePage):
             if not first_level_menu_element.is_displayed():
                 self.driver.execute_script("arguments[0].scrollIntoView(true);", first_level_menu_element)
 
-
-            self.hover_over_element(first_level_menu_loc)
-            if second_level_menu!="":
+            if second_level_menu != "":
+                self.hover_over_element(first_level_menu_loc)
                 #self.find_element_and_click((By.XPATH,"//li[@class='n_submenu-item n_submenu-selected']/a[contains(text(),'%s')]"%second_level_menu))
                 self.find_element_and_click(second_level_menu_loc)
+            else:
+                self.find_element_and_click(first_level_menu_loc)
             from proj_spec.triplog.web.po.triplog_navigable_page import TriplogNavigablePage
             return TriplogNavigablePage(self.driver)
         except Exception as e:

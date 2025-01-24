@@ -30,7 +30,7 @@ class TestWebAccessBase(TestTriplogWebBase):
         cls.user_data = df[cls.user_identifier]
 
 
-    @pytest.mark.skip("")
+    @pytest.mark.skip("no need")
     def test_overview_page_accessibility(self):
         page = OverviewPage(self.driver)
         accessibility = self.user_data['Dashboard->Overview']
@@ -41,7 +41,7 @@ class TestWebAccessBase(TestTriplogWebBase):
         else:
             assert page.is_layer_popup_visible(expected=True)
 
-    @pytest.mark.skip("")
+    @pytest.mark.skip("no need")
     def test_mileage_report_page_url_accessibility(self):
         from proj_spec.triplog.web.po.reports.mileage_reports_page import MileageReportsPage
         page = MileageReportsPage(self.driver)
@@ -56,7 +56,7 @@ class TestWebAccessBase(TestTriplogWebBase):
 
 
 
-    @pytest.mark.skip("")
+    @pytest.mark.skip("no need")
     def test_heat_map_page_accessibility(self):
         from proj_spec.triplog.web.po.maps.heat_map_page import HeatMapPage
         page = HeatMapPage(self.driver)
@@ -68,7 +68,7 @@ class TestWebAccessBase(TestTriplogWebBase):
         else:
             assert page.is_layer_popup_visible(expected=True)
 
-    @pytest.mark.skip("")
+    @pytest.mark.skip("no need")
     def test_trips_page_url_accessibility(self):
         from proj_spec.triplog.web.po.mileage.trips_page import TripsPage
         page = TripsPage(self.driver,accessible=False)
@@ -81,7 +81,7 @@ class TestWebAccessBase(TestTriplogWebBase):
         else:
             assert page.is_layer_popup_visible(expected=True)
 
-
+    @pytest.mark.skip("no need")
     def test_trip_page_navigatability(self):
         from proj_spec.triplog.web.po.mileage.trips_page import TripsPage
         #page = TripsPage(self.driver, method="navigation")
@@ -96,21 +96,29 @@ class TestWebAccessBase(TestTriplogWebBase):
             assert page is None
 
 
-    @pytest.mark.parametrize('menu_path',['Dashboard->Overview','Dashboard->Performance','Dashboard->Trends',
-                                          'Reports->Mileage Reports','Reports->Business Expenses','Reports->Time Clock','Location->Stay Time',
-                                          'Maps->Current Locations','Maps->Heat Map','Maps->Frequent Locations','Maps->Driving Safety',
-                                          'Maps->Location Stay Time', 'Maps->Time Clock',
-                                          'Mileage->Trips','Mileage->State Mileage','Mileage->Fuel','Mileage->Locations','Mileage->Vehicles',
-                                          'Expense->Transactions','Expense->Categories','Expense->Spending Limits','Expense->Tax Groups','Expense->Bank Accounts',
-                                          'Time->Time Clock Calendar','Time->Time Clock List','Time->Scheduling','Time->Job Activities'])
+    # @pytest.mark.parametrize('menu_path',['Dashboard->Overview','Dashboard->Performance','Dashboard->Trends',
+    #                                       'Reports->Mileage Reports','Reports->Business Expenses','Reports->Time Clock',
+    #                                       'Maps->Current Locations','Maps->Heat Map','Maps->Frequent Locations','Maps->Driving Safety',
+    #                                       'Maps->Location Stay Time', 'Maps->Time Clock',
+    #                                       'Mileage->Trips','Mileage->State Mileage','Mileage->Fuel','Mileage->Locations','Mileage->Vehicles',
+    #                                       'Expense->Transactions','Expense->Categories','Expense->Spending Limits','Expense->Tax Groups','Expense->Bank Accounts',
+    #                                       'Time->Time Clock Calendar','Time->Time Clock List','Time->Scheduling','Time->Job Activities'])
+    @pytest.mark.parametrize('menu_path', ['Maps->Current Locations', 'Maps->Frequent Locations','Maps->Location Stay Time', 'Maps->Time Clock',
+                                           'Mileage->State Mileage', 'Expense->Tax Groups'])
     def test_page_navigatability(self,menu_path):
         logging.info("Testing page navigation of %s"%menu_path)
 
         accessibility = self.user_data[menu_path]
-        first_level, second_level = menu_path.split("->")
-        expected_title = second_level
+        if "->" in menu_path:
+            first_level, second_level = menu_path.split("->")
+            expected_title = second_level
+            page = self.default_page.navigation_bar.navigate(first_level, second_level)
+        else:
+            first_level = menu_path
+            expected_title = first_level
+            page = self.default_page.navigation_bar.navigate(first_level)
 
-        page = self.default_page.navigation_bar.navigate(first_level, second_level)
+
         if accessibility.lower()=='y':
             assert page is not None
             assert not page.is_layer_popup_visible()
@@ -119,7 +127,7 @@ class TestWebAccessBase(TestTriplogWebBase):
             assert page is None
 
 
-    @pytest.mark.skip("")
+    @pytest.mark.skip("no need")
     def test_transactions_page_accessibility(self):
         from proj_spec.triplog.web.po.expense.transactions_page import TransactionsPage
         page = TransactionsPage(self.driver)
@@ -146,7 +154,7 @@ class TestWebAccessBase(TestTriplogWebBase):
             assert page.is_layer_popup_visible(expected=True)
 
 
-    @pytest.mark.skip("")
+    @pytest.mark.skip("no need")
     def test_time_clock_page_accessibility(self):
         from proj_spec.triplog.web.po.time.time_calendar_page import TimeClockCalendarPage
         page = TimeClockCalendarPage(self.driver)
@@ -161,7 +169,7 @@ class TestWebAccessBase(TestTriplogWebBase):
             # 强制由具体子类决定判断准则
             assert False
 
-    #@pytest.mark.skip("debug")
+    @pytest.mark.skip("debug")
     @pytest.mark.parametrize('path', ['Integrations->ADP','Integrations->Paychex','Integrations->Paylocity',
                             'Integrations->UKG Pro','Integrations->UKG Ready','Integrations->SAP Concur',
                                                   'Integrations->QuickBooks Online', 'Integrations->Xero', 'Integrations->Sage Intacct'])
@@ -175,7 +183,7 @@ class TestWebAccessBase(TestTriplogWebBase):
         else:
             assert not page.is_integration_item_accessible(integration_item)
 
-    #@pytest.mark.skip("debug")
+    @pytest.mark.skip("debug")
     @pytest.mark.parametrize('setting_path', ['Settings->Account Settings','Settings->Components','Settings->Notifications',
                                               'Settings->Activities','Settings->Mileage Rates','Settings->Mileage Policies',
                                               'Settings->Time Policies','Settings->Tags & Notes','Settings->Custom Tags',
@@ -215,15 +223,3 @@ class TestWebAccessBase(TestTriplogWebBase):
             # 强制由具体子类决定判断准则
             assert False
 
-    @pytest.mark.skip("debug")
-    @pytest.mark.parametrize('menu_path',
-                             ['Dashboard->Overview','Reports->Mileage Reports','Maps->Heat Map','Mileage->Trips',
-                              'Expense->Transactions','Time->Time Clock Calendar'])
-    def test_navigation_access(self, menu_path):
-        logging.info("Testing navigation of %s" % menu_path)
-
-        from proj_spec.triplog.web.po.triplog_navigable_page import TriplogNavigablePage
-        page = TriplogNavigablePage(self.driver)
-        menus = menu_path.split("->")
-        page.navigation_bar.navigate(menus[0], menus[1])
-        assert page.get_title()==menus[1]

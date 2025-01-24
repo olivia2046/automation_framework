@@ -93,11 +93,12 @@ class LeftPanel(TriplogMobileBasePage):
                 menu_element.click()
 
             if menu_name in ('Auto Start on','Auto Start On'):
-                auto_start_options_page = AutoStartOptionsPage(self.driver)
-                if auto_start_options_page.is_learn_more_displayed():
-                    auto_start_options_page.confirm_learn_more()
-                    auto_start_options_page.go_back()
-            if menu_name=='Work Schedule':
+                page = AutoStartOptionsPage(self.driver)
+                if page.is_learn_more_displayed():
+                    auto_start_options_displayed = True
+                    page.confirm_learn_more()
+                    #auto_start_options_page.go_back()
+            elif menu_name=='Work Schedule':
                 from proj_spec.triplog.mobile.po.left_nav.work_schedule_page import WorkSchedulePage
                 page = WorkSchedulePage(self.driver)
             elif menu_name=='Approval Management':
@@ -113,7 +114,10 @@ class LeftPanel(TriplogMobileBasePage):
             else:
                 from proj_spec.triplog.mobile.po.left_nav.left_nav_base_page import LeftNavBasePage
                 page = LeftNavBasePage(self.driver)
-            if menu_name in self.menu_title_mapping.keys():
+
+            if auto_start_options_displayed:
+                expected_title = "Auto Start Options"
+            elif menu_name in self.menu_title_mapping.keys():
                 expected_title = self.menu_title_mapping[menu_name]
             elif menu_name == "Business Activities" and self.os=='ios':
                 expected_title = 'Activities'

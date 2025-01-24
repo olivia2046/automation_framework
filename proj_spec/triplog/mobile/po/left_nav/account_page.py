@@ -54,7 +54,7 @@ class AccountPage(TriplogMobileBasePage):
         else:
             loading_dialog = self.find_element(self.get_locator_by_os("_progress_dialog_loc"))
             if loading_dialog is not None:
-                self.find_element(self.get_locator_by_os("_progress_dialog_loc"), condition="invisibility_of_element")
+                self.find_element(self.get_locator_by_os("_progress_dialog_loc"), condition="invisibility_of_element",timeout=30)
 
 
 
@@ -72,5 +72,7 @@ class AccountPage(TriplogMobileBasePage):
             self.wait_for_loading_finish()
         app_page = AppStartPage(self.driver)
         if self.os=='ios':
-            self.find_element(app_page.get_backup_complete_title_loc())
+            backup_complete_title = self.find_element(app_page.get_backup_complete_title_loc())
+            if backup_complete_title is not None:
+                app_page.confirm_backup_completion()
         return app_page

@@ -3,6 +3,7 @@
 # @Time : 2024/12/17 20:25
 # @Author : Olivia
 # Desc: test access of paid users, including premium, teams and enterprise
+# todo: check test result of adjust odometer,
 # **************************************
 from case.triplog.web.access.test_access_base import TestWebAccessBase
 from case.triplog.web.test_triplog_web_base import TestTriplogWebBase

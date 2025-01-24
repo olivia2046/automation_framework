@@ -16,6 +16,7 @@ class AppStartPage(TriplogMobileBasePage):
     _login_btn_loc_ios = (AppiumBy.XPATH, '//XCUIElementTypeStaticText[@name="Log in"]')
 
     _backup_complete_title_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeStaticText[`name == "Backup Completed"`]')
+    _backup_complete_ok_loc_ios = (AppiumBy.ACCESSIBILITY_ID, 'OK')
 
 
     def goto_login_page(self):
@@ -32,3 +33,7 @@ class AppStartPage(TriplogMobileBasePage):
 
     def get_backup_complete_title_loc(self):
         return self.get_locator_by_os("_backup_complete_title_loc")
+
+
+    def confirm_backup_completion(self):
+        self.find_element_and_click(self.get_locator_by_os("_backup_complete_ok_loc"))

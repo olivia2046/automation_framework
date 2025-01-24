@@ -2,6 +2,7 @@
 '''
 @author: olivia.dou
 Created on: 2024/12/29 8:11
+# todo: android:check test result of state mileage
 desc: 
 '''
 import pytest

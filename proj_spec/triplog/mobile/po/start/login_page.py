@@ -73,7 +73,7 @@ class AppLoginPage(TriplogMobileBasePage):
         self.find_element_and_click(self.get_locator_by_os("_login_btn_loc"))
 
         time.sleep(3)
-        self.find_element(self.get_locator_by_os("_loading_data_loc"),condition="invisibility_of_element")
+        self.find_element(self.get_locator_by_os("_loading_data_loc"),condition="invisibility_of_element",timeout=30)
 
         msg_box = self.find_element(self.get_locator_by_os("_msg_box_loc"))
         if msg_box is not None:

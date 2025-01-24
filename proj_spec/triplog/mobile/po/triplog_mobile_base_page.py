@@ -128,7 +128,7 @@ class TriplogMobileBasePage(MobileBasePage):
         """
         loading_dialog = self.find_element(self.get_locator_by_os("_progress_dialog_loc"))
         if loading_dialog is not None:
-            self.find_element(self.get_locator_by_os("_progress_dialog_loc"), condition="invisibility_of_element")
+            self.find_element(self.get_locator_by_os("_progress_dialog_loc"), condition="invisibility_of_element",timeout=30)
 
 
     def logout(self):

@@ -27,14 +27,12 @@ class TestMobileAccessBase(TestTriplogMobileBase):
         #cls.user_row = df.loc[df['loc'] == cls.user_identifier] # cls.user_identifier will be replaced by value in concrete class
         cls.user_data = df[cls.user_identifier]
 
-    @pytest.mark.skip("")
-    @pytest.mark.parametrize('menu_name',['Auto Start on','Work Schedule','Vehicles','Send to Concur','Locations',
-        'State Mileage','Submission','Navigate/Route Planning','Frequent Trip Rules','Adjust Odometer',
-        'Mileage Rates','Business Activities','Last Known Parking','Banks & Credit Cards','Invite Accountant','Approval Management'])
-    # @pytest.mark.parametrize('menu_name',['Auto Start on','Vehicles','Locations','State Mileage',
-    #                         'Submission','Navigate/Route Planning','Frequent Trip Rules','Adjust Odometer','Mileage Rates',
-    #                                       'Business Activities','Banks & Credit Cards','Invite Accountant'])
-    #@pytest.mark.parametrize('menu_name',['Invite Accountant'])
+    #@pytest.mark.skip("")
+    # @pytest.mark.parametrize('menu_name',['Auto Start on','Work Schedule','Vehicles','Send to Concur','Locations',
+    #     'State Mileage','Submission','Navigate/Route Planning','Frequent Trip Rules','Adjust Odometer',
+    #     'Mileage Rates','Business Activities','Last Known Parking','Banks & Credit Cards','Invite Accountant','Approval Management'])
+    # @pytest.mark.parametrize('menu_name', ['Business Activities'])
+    @pytest.mark.parametrize('menu_name',['Auto Start on','Work Schedule','State Mileage','Approval Management'])
     def test_left_panel_menus_access(self,menu_name):
         """
 
@@ -54,37 +52,11 @@ class TestMobileAccessBase(TestTriplogMobileBase):
             assert not self.page.left_panel.is_left_menu_accessible(menu_name),"should not have access to left panel %s"%menu_name
 
 
-
-    # def test_bottom_tab_trips_access(self):
-    #     from proj_spec.triplog.mobile.po.tabs.trips_tag_page import TripsTabPage
-    #
-    #     page = TripsTabPage(self.driver)
-    #     accessibility = self.user_data['Mobile Bottom->Trips']
-    #
-    #     if accessibility.lower()=='y':
-    #         assert page.bottom_nav.is_reports_accessible()
-    #     else:
-
-    #         assert not page.bottom_nav.is_reports_accessible()
-    #
-    #
-    # def test_bottom_tab_reports_access(self):
-    #     from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionPage
-    #
-    #     page = SubmissionPage(self.driver)
-    #     accessibility = self.user_data['Mobile Bottom->Reports']
-    #
-    #     if accessibility.lower()=='y':
-    #         assert page.bottom_nav.is_reports_accessible()
-    #     else:
-
-    #         assert not page.bottom_nav.is_reports_accessible()
-
-
+    # Todo: Time on android
     #@pytest.mark.skip("")
     #@pytest.mark.parametrize('tab_name',['Trips','Fuel','Submission','Reports','Transactions','Time','Schedule','Time off'])
-    #@pytest.mark.parametrize('tab_name',['Trips', 'Fuel', 'Submission', 'Reports', 'Transactions', 'Schedule', 'Time off'])
-    @pytest.mark.parametrize('tab_name',['Schedule','Time off'])
+    @pytest.mark.parametrize('tab_name',['Trips', 'Fuel', 'Submission', 'Reports', 'Transactions', 'Schedule', 'Time off'])
+    # @pytest.mark.parametrize('tab_name',['Submission'])
     def test_bottom_tabs_access(self, tab_name):
         from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
 
@@ -99,16 +71,5 @@ class TestMobileAccessBase(TestTriplogMobileBase):
             assert not page.bottom_nav.is_tab_page_accessible(tab_name,expected=False),"should not have access to bottom %s"%tab_name
 
 
-    # @pytest.mark.skip("")
-    # def test_bottom_tab_submission_access(self):
-    #     from proj_spec.triplog.mobile.po.tabs.submission_tab_page import SubmissionPage
-    #
-    #     page = SubmissionPage(self.driver)
-    #     accessibility = self.user_data['Mobile Bottom->Submission']
-    #
-    #     if accessibility.lower()=='y':
-    #         assert page.bottom_nav.is_submission_accessible()
-    #     else:
 
-    #         assert not page.bottom_nav.is_submission_accessible()
 
