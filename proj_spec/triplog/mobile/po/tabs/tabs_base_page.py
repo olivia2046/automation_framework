@@ -8,8 +8,6 @@ import time
 
 from appium.webdriver.common.appiumby import AppiumBy
 import base.globalvars as glo
-from proj_spec.triplog.mobile.po.tabs.bottom_navigator import BottomNavigator
-from proj_spec.triplog.mobile.po.tabs.left_panel import LeftPanel
 from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBasePage
 
 
@@ -46,7 +44,9 @@ Job Dispatching")""")
 
     def __init__(self,driver):
         super().__init__(driver)
+        from proj_spec.triplog.mobile.po.tabs.left_panel import LeftPanel
         self.left_panel = LeftPanel(self.driver)
+        from proj_spec.triplog.mobile.po.tabs.bottom_navigator import BottomNavigator
         self.bottom_nav = BottomNavigator(self.driver)
 
 
@@ -66,6 +66,7 @@ Job Dispatching")""")
         except Exception as e:
             # left panel may already been expanded
             pass
+        from proj_spec.triplog.mobile.po.tabs.left_panel import LeftPanel
         return LeftPanel(self.driver)
 
     def get_title(self):

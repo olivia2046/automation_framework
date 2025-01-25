@@ -28,12 +28,14 @@ class AlertBasePage(MobileBasePage):
         title_element =  self.find_element(self.get_locator_by_os("_title_loc"))
         if title_element is not None:
             return title_element.text
+        else:
+            return ""
 
 
-    def confirm_alert(self):
+    def confirm(self):
         self.find_element_and_click(self.get_locator_by_os("_title_loc"))
 
 
-    def cancel_alert(self):
+    def cancel(self):
         self.find_element_and_click(self.get_locator_by_os("_cancel_btn_loc"))
 

@@ -8,7 +8,8 @@ import logging
 from selenium.common.exceptions import NoSuchElementException
 from appium.webdriver.common.appiumby import AppiumBy
 
-
+from proj_spec.triplog.mobile.po.tabs.schedule_tab_page import ScheduleTabPage
+from proj_spec.triplog.mobile.po.tabs.time_off_tab_page import TimeOffTabPage
 from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBasePage
 
 
@@ -87,12 +88,17 @@ class BottomNavigator(TriplogMobileBasePage):
                 self.find_element_and_click(self.get_tab_locator('%s' % tab_name))
 
                 if tab_name=="Schedule":
+                    page = ScheduleTabPage(self.driver)
                     if page.is_schedule_popup_visible():
                         page.close_schedule_popup()
+                    page.wait_for_loading_finish()
 
-                    expected_title="Work Schedule"
+                    if self.os=='android':
+                        expected_title="Work Schedule"
                 elif tab_name=="Time off":
-                    expected_title="Time Off"
+                    page = TimeOffTabPage(self.driver)
+                    if self.os=='android':
+                        expected_title="Time Off"
                 return page.get_title()=='%s'%expected_title
         except NoSuchElementException as nse:
             if expected:

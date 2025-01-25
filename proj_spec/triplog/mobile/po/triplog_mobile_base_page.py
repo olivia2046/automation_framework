@@ -128,6 +128,10 @@ class TriplogMobileBasePage(MobileBasePage):
             pass
 
 
+    # def is_loading_displayed(self):
+    #     loading_dialog = self.find_element(self.get_locator_by_os("_progress_dialog_loc"))
+    #     return loading_dialog is not None
+
     def wait_for_loading_finish(self):
         """wait for the progress dialog to finish loading
 
@@ -142,3 +146,4 @@ class TriplogMobileBasePage(MobileBasePage):
         # get current concrete page and use its logout method to sign out
         concrete_page = self.get_current_page()
         concrete_page.logout()
+

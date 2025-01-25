@@ -38,7 +38,8 @@ class LeftPanel(TriplogMobileBasePage):
         #self.find_element_and_click(self.get_locator_by_os("_adv_feature_switch"))
         switch_element = self.find_element(self.get_locator_by_os("_adv_feature_switch"), condition="element_to_be_clickable")
         #switch_element.screenshot("switch.png")
-        switch_element.click()
+        if switch_element is not None:
+            switch_element.click()
 
     def get_menu_locator(self,menu_text):
         """
@@ -59,6 +60,17 @@ class LeftPanel(TriplogMobileBasePage):
         return AccountPage(self.driver)
 
 
+    def is_advanced_switch_checked(self):
+        advanced_switch = self.find_element(self.get_locator_by_os("_adv_feature_switch"))
+        if advanced_switch is None:
+            return False
+        else:
+            # if self.os=='android':
+            #     return advanced_switch.get_attribute("checked")
+            # else:
+            #     return advanced_switch.is_selected()
+            return advanced_switch.is_selected()
+
     def is_left_menu_accessible(self,menu_name):
         """
         Todo: handle page loading of Approval Management. Currrent workaround: put Approval Manangement to the last case
@@ -72,7 +84,9 @@ class LeftPanel(TriplogMobileBasePage):
             advanced_switch = self.find_element(self.get_locator_by_os("_adv_feature_switch"))
             # if advanced_switch is None:
             #     return False
-            if advanced_switch is not None and advanced_switch.get_attribute("checked")=='false':
+
+            # todo: is_selected() on android?
+            if advanced_switch is not None and not self.is_advanced_switch_checked():
                 self.switch_advanced_features()
                 # scroll up the left pane
                 self.swipe_up(self.get_locator_by_os("_left_panel_loc"), 0.5)
@@ -109,6 +123,9 @@ class LeftPanel(TriplogMobileBasePage):
                 page = ApprovalMgmtPage(self.driver)
                 while 'loading' in page.get_title():
                     time.sleep(3)
+            elif menu_name=='Navigate/Route Planning':
+                from proj_spec.triplog.mobile.po.left_nav.route_planning_page import RoutePlanningPage
+                page = RoutePlanningPage(self.driver)
             elif menu_name == 'Adjust Odometer':
                 from proj_spec.triplog.mobile.po.left_nav.adjust_odometer_page import AdjustOdometerPage
                 page = AdjustOdometerPage(self.driver)
@@ -127,9 +144,9 @@ class LeftPanel(TriplogMobileBasePage):
             elif menu_name == "Last Know Parking":
                 alert_displayed = page.alert.is_displayed()
                 if alert_displayed and 'Enable a GPS Tracking Method' in page.alert.get_title():
-                    page.alert.confirm_alert()
+                    page.alert.confirm()
                 elif alert_displayed and 'Last Parked' in page.alert.get_title():
-                    page.alert.cancel_alert()
+                    page.alert.cancel()
                 return True
             else:
                 expected_title = menu_name
