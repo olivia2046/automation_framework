@@ -9,6 +9,7 @@ import logging
 from appium.webdriver.common.appiumby import AppiumBy
 
 from base.po.mobile_base_page import MobileBasePage
+from proj_spec.triplog.mobile.po.alert.alert_base_page import AlertBasePage
 
 
 class TriplogMobileBasePage(MobileBasePage):
@@ -23,6 +24,8 @@ class TriplogMobileBasePage(MobileBasePage):
     _navbar_loc_ios = (AppiumBy.IOS_CLASS_CHAIN,'**/XCUIElementTypeNavigationBar') # head bar of page, use for defining which page is current page
     _bottom_menu_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rl_main_bottom_menu')
     _bottom_menu_loc_ios = (AppiumBy.XPATH, '//XCUIElementTypeButton[@name="Reorder"]/..') #look for parent element of Recorder button
+
+
 
 
     _msg_box_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rcl_all')
@@ -48,17 +51,21 @@ class TriplogMobileBasePage(MobileBasePage):
     _close_msgbox_loc_ios = (AppiumBy.ACCESSIBILITY_ID, 'Close')
 
 
-    def find_element(self, locator, timeout=5, condition='visibility_of_element_located', skip_error_handle=False):
-        """
+    def __init__(self,driver):
+        super().__init__(driver)
+        self.alert = AlertBasePage(self.driver)
 
-        :param locator:
-        :param timeout:
-        :param condition:
-        :param skip_error_handle:
-        :return:
-        """
-        return super().find_element(locator,timeout,condition)
-        # todo: add error handling of report log window
+    # def find_element(self, locator, timeout=5, condition='visibility_of_element_located', skip_error_handle=False):
+    #     """
+    #
+    #     :param locator:
+    #     :param timeout:
+    #     :param condition:
+    #     :param skip_error_handle:
+    #     :return:
+    #     """
+    #     return super().find_element(locator,timeout,condition)
+    #     # todo: add error handling of report log window
 
     def get_title(self):
         title_elemenet = self.find_element(self.get_locator_by_os("_msg_box_title"))

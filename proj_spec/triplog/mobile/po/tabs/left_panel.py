@@ -8,14 +8,17 @@ import time
 
 from appium.webdriver.common.appiumby import AppiumBy
 
+from proj_spec.triplog.mobile.po.alert.last_parked_alert_page import LastParkedAlertPage
 from proj_spec.triplog.mobile.po.left_nav.account_page import AccountPage
 from proj_spec.triplog.mobile.po.left_nav.auto_start_options_page import AutoStartOptionsPage
 from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBasePage
 
 
 class LeftPanel(TriplogMobileBasePage):
-    menu_title_mapping = {"Auto Start on":"Auto Start Settings","Auto Start On":"Auto Start Settings","Work Schedule":"Working Hours",
+    menu_title_mapping_android = {"Auto Start on":"Auto Start Settings","Auto Start On":"Auto Start Settings","Work Schedule":"Working Hours",
                           "Navigate/Route Planning":"Route Planning","Adjust Odometer":"Adjust Vehicle Odometer"}
+    menu_title_mapping_ios = {"Auto Start On": "Auto Start Settings", "Navigate/Route Planning": "Route Planning",
+                                  "Adjust Odometer": "Choose Vehicle to Adjust Odometer","Business Activities":"Activities"}
 
     _adv_feature_switch_android = (AppiumBy.ID,'com.bizlog.triplog:id/switch_btn')
     _adv_feature_switch_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeOther[`name == "Show advanced features"`]/XCUIElementTypeSwitch')
@@ -64,7 +67,6 @@ class LeftPanel(TriplogMobileBasePage):
         """
 
 
-
         if (menu_name in ('Navigate/Route Planning','Frequent Trip Rules','Adjust Odometer','Business Activities',
                           'Last Known Parking','Banks & Credit Cards','Invite Accountant')):
             advanced_switch = self.find_element(self.get_locator_by_os("_adv_feature_switch"))
@@ -92,6 +94,7 @@ class LeftPanel(TriplogMobileBasePage):
             else:
                 menu_element.click()
 
+            auto_start_options_displayed = False
             if menu_name in ('Auto Start on','Auto Start On'):
                 page = AutoStartOptionsPage(self.driver)
                 if page.is_learn_more_displayed():
@@ -117,10 +120,17 @@ class LeftPanel(TriplogMobileBasePage):
 
             if auto_start_options_displayed:
                 expected_title = "Auto Start Options"
-            elif menu_name in self.menu_title_mapping.keys():
-                expected_title = self.menu_title_mapping[menu_name]
+            elif menu_name in eval("self.menu_title_mapping_"+self.os).keys():
+                expected_title = eval("self.menu_title_mapping_"+self.os)[menu_name]
             elif menu_name == "Business Activities" and self.os=='ios':
                 expected_title = 'Activities'
+            elif menu_name == "Last Know Parking":
+                alert_displayed = page.alert.is_displayed()
+                if alert_displayed and 'Enable a GPS Tracking Method' in page.alert.get_title():
+                    page.alert.confirm_alert()
+                elif alert_displayed and 'Last Parked' in page.alert.get_title():
+                    page.alert.cancel_alert()
+                return True
             else:
                 expected_title = menu_name
             if self.os=='android':
