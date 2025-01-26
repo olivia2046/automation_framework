@@ -18,6 +18,12 @@ class AutoStartOptionsPage(LeftNavBasePage):
     _back_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_action')
     _back_loc_ios = (AppiumBy.ACCESSIBILITY_ID,'Cancel')
 
+    # def __init__(self):
+    #     super().__init__()
+    #     if self.is_learn_more_displayed():
+    #         auto_start_options_displayed = True
+    #         self.confirm_learn_more()
+
 
     def confirm_learn_more(self):
         self.find_element_and_click(self.get_locator_by_os("_learn_more_ok_loc"))

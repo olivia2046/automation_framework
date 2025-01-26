@@ -67,8 +67,11 @@ def init_driver():
     yield driver
 
     #logging.info("app state:%s"%driver.query_app_state(caps['appium:appPackage']))
-    # 退出 WebDriver
-    driver.quit()
+    try:
+        # 退出 WebDriver
+        driver.quit()
+    except Exception as e:
+        logging.error(e)
 
 
 # Fixture: 每个测试类的登录操作（class scope）
@@ -109,22 +112,7 @@ def class_setup(request, init_driver, get_login_info):
             if login_result is not None:
                 request.cls.page = login_result
             else:
-                # package = init_driver.capabilities.get("appPackage")
-                # activity = init_driver.capabilities.get("appActivity")
-                #
-                # # 重新启动应用并跳转到目标Activity
-                # request.cls.driver.terminate_app(package)
-                #
-                # # init_driver.start_activity(package,activity) # deprecated
-                # # init_driver.execute_script("mobile:startActivity", {
-                # #                             "appPackage": package,
-                # #                             "appActivity": activity
-                # #                             })
-                # request.cls.driver.execute_script("mobile:startActivity", {
-                #                             "intent": "%s/%s"%(package,activity)
-                #                             })
-                # pytest.fail("Login fail!")
-                # return
+
                 raise Exception("Login failed")
 
 

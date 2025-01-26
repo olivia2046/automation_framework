@@ -117,6 +117,7 @@ Job Dispatching")""")
 
 
     def handle_current_pages(self):
+        self.confirm_msg_box() #whaever message box it is
         self.handle_trips_tips()
 
 

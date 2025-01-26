@@ -10,7 +10,6 @@ from appium.webdriver.common.appiumby import AppiumBy
 
 from proj_spec.triplog.mobile.po.alert.last_parked_alert_page import LastParkedAlertPage
 from proj_spec.triplog.mobile.po.left_nav.account_page import AccountPage
-from proj_spec.triplog.mobile.po.left_nav.auto_start_options_page import AutoStartOptionsPage
 from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBasePage
 
 
@@ -18,7 +17,7 @@ class LeftPanel(TriplogMobileBasePage):
     menu_title_mapping_android = {"Auto Start on":"Auto Start Settings","Auto Start On":"Auto Start Settings","Work Schedule":"Working Hours",
                           "Navigate/Route Planning":"Route Planning","Adjust Odometer":"Adjust Vehicle Odometer"}
     menu_title_mapping_ios = {"Auto Start On": "Auto Start Settings", "Navigate/Route Planning": "Route Planning",
-                                  "Adjust Odometer": "Choose Vehicle to Adjust Odometer","Business Activities":"Activities"}
+                                  "Adjust Vehicle Odometer": "Choose Vehicle to Adjust Odometer","Business Activities":"Activities"}
 
     _adv_feature_switch_android = (AppiumBy.ID,'com.bizlog.triplog:id/switch_btn')
     _adv_feature_switch_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeOther[`name == "Show advanced features"`]/XCUIElementTypeSwitch')
@@ -69,7 +68,7 @@ class LeftPanel(TriplogMobileBasePage):
             #     return advanced_switch.get_attribute("checked")
             # else:
             #     return advanced_switch.is_selected()
-            return advanced_switch.is_selected()
+            return advanced_switch.get_attribute("value")=='1'
 
     def is_left_menu_accessible(self,menu_name):
         """
@@ -91,17 +90,23 @@ class LeftPanel(TriplogMobileBasePage):
                 # scroll up the left pane
                 self.swipe_up(self.get_locator_by_os("_left_panel_loc"), 0.5)
 
+        # todo: if expected to have menu but actually not, need to handle exception to swipe the left panel off
         try:
             if menu_name in ('Last Known Parking','Banks & Credit Cards'):
                 # do not click
                 if self.find_element(self.get_menu_locator("%s" % menu_name)) is None:
-                    return False
+                    accessibility = False
+                else:
+                    accessibility = True
+
                 # todo: click menu and handle pop up/long loading page
                 self.swipe_left(self.get_locator_by_os("_left_panel_loc"), horizontal_rate=1)
-                return True
+                return accessibility
             #todo: uniform ios/android menu name?
             if menu_name=='Auto Start on' and self.os=='ios':
                 menu_name='Auto Start On'
+            elif menu_name=='Adjust Odometer' and self.os=='ios':
+                menu_name='Adjust Vehicle Odometer'
             menu_element = self.find_element(self.get_menu_locator("%s"%menu_name),condition="element_to_be_clickable")
             if menu_element is None:
                 return False
@@ -110,11 +115,12 @@ class LeftPanel(TriplogMobileBasePage):
 
             auto_start_options_displayed = False
             if menu_name in ('Auto Start on','Auto Start On'):
+                from proj_spec.triplog.mobile.po.left_nav.auto_start_options_page import AutoStartOptionsPage
                 page = AutoStartOptionsPage(self.driver)
                 if page.is_learn_more_displayed():
                     auto_start_options_displayed = True
                     page.confirm_learn_more()
-                    #auto_start_options_page.go_back()
+                #     #auto_start_options_page.go_back()
             elif menu_name=='Work Schedule':
                 from proj_spec.triplog.mobile.po.left_nav.work_schedule_page import WorkSchedulePage
                 page = WorkSchedulePage(self.driver)
@@ -126,11 +132,11 @@ class LeftPanel(TriplogMobileBasePage):
             elif menu_name=='Navigate/Route Planning':
                 from proj_spec.triplog.mobile.po.left_nav.route_planning_page import RoutePlanningPage
                 page = RoutePlanningPage(self.driver)
-            elif menu_name == 'Adjust Odometer':
+            elif menu_name in ('Adjust Odometer','Adjust Vehicle Odometer'):
                 from proj_spec.triplog.mobile.po.left_nav.adjust_odometer_page import AdjustOdometerPage
                 page = AdjustOdometerPage(self.driver)
-                if page.is_odometer_reading_popup():
-                    page.set_odometer(999999)
+                # if page.is_odometer_reading_popup():
+                #     page.set_odometer(999999)
             else:
                 from proj_spec.triplog.mobile.po.left_nav.left_nav_base_page import LeftNavBasePage
                 page = LeftNavBasePage(self.driver)
@@ -139,8 +145,8 @@ class LeftPanel(TriplogMobileBasePage):
                 expected_title = "Auto Start Options"
             elif menu_name in eval("self.menu_title_mapping_"+self.os).keys():
                 expected_title = eval("self.menu_title_mapping_"+self.os)[menu_name]
-            elif menu_name == "Business Activities" and self.os=='ios':
-                expected_title = 'Activities'
+            # elif menu_name == "Business Activities" and self.os=='ios':
+            #     expected_title = 'Activities'
             elif menu_name == "Last Know Parking":
                 alert_displayed = page.alert.is_displayed()
                 if alert_displayed and 'Enable a GPS Tracking Method' in page.alert.get_title():

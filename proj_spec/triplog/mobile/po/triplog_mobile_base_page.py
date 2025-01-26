@@ -32,12 +32,12 @@ class TriplogMobileBasePage(MobileBasePage):
     _msg_box_loc_ios = (AppiumBy.CLASS_NAME, 'XCUIElementTypeAlert')
     _msg_box_title_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_title')
     _msg_box_ok_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rtv_ok')
-    _msg_box_ok_ios = (AppiumBy.ACCESSIBILITY_ID, 'com.bizlog.triplog:id/rtv_ok')
+    _msg_box_ok_ios = (AppiumBy.ACCESSIBILITY_ID, 'OK')
     _msg_box_continue_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rtv_continue')
     _msg_box_cancel_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rtv_cancel')
     _msg_box_cancel_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rtv_cancel')
     _progress_dialog_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rcl_all') # same as message box
-    #_progress_dialog_loc_ios = (AppiumBy.XPATH, "//XCUIElementTypeStaticText[contains(@label, 'Loading work schedule')]")
+    _progress_dialog_loc_ios = (AppiumBy.XPATH, '//XCUIElementTypeOther[@name="SVProgressHUD"]/XCUIElementTypeOther[contains(@name,"Please wait")]')
     """toast_label = driver.find_element_by_class_name("XCUIElementTypeStaticText")
     toast_view = driver.find_element_by_class_name("XCUIElementTypeOther")
 """
@@ -81,7 +81,9 @@ class TriplogMobileBasePage(MobileBasePage):
         :return:
         """
 
-        self.find_element_and_click(self.get_locator_by_os("_msg_box_ok"))
+        msg_ok = self.find_element(self.get_locator_by_os("_msg_box_ok"), condition="element_to_be_clickable")
+        if msg_ok is not None:
+            msg_ok.click()
 
 
     def continue_msg_box(self):

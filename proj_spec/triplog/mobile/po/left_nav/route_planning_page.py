@@ -14,8 +14,8 @@ class RoutePlanningPage(LeftNavBasePage):
 
     _popup_confirm_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeButton[`name == "OK"`]')
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self,driver):
+        super().__init__(driver)
         if self.is_introduction_alert_displayed():
             self.alert.confirm()
 

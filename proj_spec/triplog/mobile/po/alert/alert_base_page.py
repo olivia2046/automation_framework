@@ -11,13 +11,13 @@ from base.po.mobile_base_page import MobileBasePage
 
 class AlertBasePage(MobileBasePage):
     _alert_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rcl_all')
-    #_alert_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeAlert')
+    #_alert_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '//XCUIElementTypeOther[@name="SVProgressHUD"])
     _alert_loc_ios = (AppiumBy.CLASS_NAME, 'XCUIElementTypeAlert')
     _ok_btn_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/rtv_ok')
     _ok_btn_loc_ios = (AppiumBy.ACCESSIBILITY_ID,'OK')
     _cancel_btn_loc_ios = (AppiumBy.ACCESSIBILITY_ID, 'Cancel')
     _title_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_title')
-    _title_loc_ios = (AppiumBy.IOS_CLASS_CHAIN, '**/XCUIElementTypeStaticText[1]')
+    _title_loc_ios = (AppiumBy.XPATH, '//XCUIElementTypeAlert//XCUIElementTypeStaticText[1]')
 
     def is_displayed(self):
         alert_box = self.find_element(self.get_locator_by_os("_alert_loc"))
@@ -33,7 +33,7 @@ class AlertBasePage(MobileBasePage):
 
 
     def confirm(self):
-        self.find_element_and_click(self.get_locator_by_os("_title_loc"))
+        self.find_element_and_click(self.get_locator_by_os("_ok_btn_loc"))
 
 
     def cancel(self):

@@ -28,11 +28,11 @@ class TestMobileAccessBase(TestTriplogMobileBase):
         cls.user_data = df[cls.user_identifier]
 
     #@pytest.mark.skip("")
-    # @pytest.mark.parametrize('menu_name',['Auto Start on','Work Schedule','Vehicles','Send to Concur','Locations',
-    #     'State Mileage','Submission','Navigate/Route Planning','Frequent Trip Rules','Adjust Odometer',
-    #     'Mileage Rates','Business Activities','Last Known Parking','Banks & Credit Cards','Invite Accountant','Approval Management'])
+    @pytest.mark.parametrize('menu_name',['Auto Start on','Work Schedule','Vehicles','Send to Concur','Locations',
+        'State Mileage','Submission','Navigate/Route Planning','Frequent Trip Rules','Adjust Odometer',
+        'Mileage Rates','Business Activities','Last Known Parking','Banks & Credit Cards','Invite Accountant','Approval Management'])
     # @pytest.mark.parametrize('menu_name', ['Business Activities'])
-    @pytest.mark.parametrize('menu_name',['Auto Start on','Work Schedule','State Mileage','Approval Management'])
+    #@pytest.mark.parametrize('menu_name',['Banks & Credit Cards'])
     def test_left_panel_menus_access(self,menu_name):
         """
 
@@ -40,8 +40,12 @@ class TestMobileAccessBase(TestTriplogMobileBase):
         """
 
         logging.info("Testing access of Left Panel-%s"%menu_name)
-        self.page.show_left_panel()
 
+        if menu_name in ['Banks & Credit Cards'] and self.driver.capabilities['platformName'] == 'ios':  # ios上根据系统的区域设置决定国家，
+            # 由于无法通过自动化切换系统设置(需要重启系统)，因此ios上不验证由国家设置决定的权限项
+            pytest.skip("Skip items on iOS that related to country")
+
+        self.page.show_left_panel()
         accessibility = self.user_data['Mobile Left->%s'%menu_name]
 
         if accessibility.lower()=='y':
@@ -54,9 +58,9 @@ class TestMobileAccessBase(TestTriplogMobileBase):
 
     # Todo: Time on android
     #@pytest.mark.skip("")
-    #@pytest.mark.parametrize('tab_name',['Trips','Fuel','Submission','Reports','Transactions','Time','Schedule','Time off'])
-    @pytest.mark.parametrize('tab_name',['Trips', 'Fuel', 'Submission', 'Reports', 'Transactions', 'Schedule', 'Time off'])
-    # @pytest.mark.parametrize('tab_name',['Submission'])
+    @pytest.mark.parametrize('tab_name',['Trips','Fuel','Submission','Reports','Transactions','Time','Schedule','Time off'])
+    #@pytest.mark.parametrize('tab_name',['Trips', 'Fuel', 'Submission', 'Reports', 'Transactions', 'Schedule', 'Time off'])
+    #@pytest.mark.parametrize('tab_name', ['Time'])
     def test_bottom_tabs_access(self, tab_name):
         from proj_spec.triplog.mobile.po.tabs.tabs_base_page import TabsBasePage
 
