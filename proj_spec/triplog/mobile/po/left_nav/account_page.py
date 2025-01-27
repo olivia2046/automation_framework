@@ -20,7 +20,7 @@ class AccountPage(TriplogMobileBasePage):
     _data_backup_loc_android = (AppiumBy.ID, 'com.bizlog.triplog:id/tv_action')
     _data_backup_loc_ios = (AppiumBy.ACCESSIBILITY_ID, 'Data Backup')
 
-    _msg_ok_loc_ios = (AppiumBy.ACCESSIBILITY_ID, 'Continue')
+    _msg_box_ok_loc_ios = (AppiumBy.ACCESSIBILITY_ID, 'Continue')
     _progress_dialog_loc_ios = (AppiumBy.XPATH, '//XCUIElementTypeOther[contains(@name,"Backing up data")]')
 
 
@@ -68,7 +68,7 @@ class AccountPage(TriplogMobileBasePage):
         self.find_element_and_click(self.get_locator_by_os("_sign_out_loc"))
         popup_msgbox = self.find_element(self.get_locator_by_os("_msg_box_loc"))
         if popup_msgbox is not None:
-            self.find_element_and_click(self.get_locator_by_os("_msg_ok_loc"))
+            self.find_element_and_click(self.get_locator_by_os("_msg_box_ok_loc"))
             self.wait_for_loading_finish()
         app_page = AppStartPage(self.driver)
         if self.os=='ios':

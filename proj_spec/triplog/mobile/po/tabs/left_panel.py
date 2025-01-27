@@ -10,6 +10,7 @@ from appium.webdriver.common.appiumby import AppiumBy
 
 from proj_spec.triplog.mobile.po.alert.last_parked_alert_page import LastParkedAlertPage
 from proj_spec.triplog.mobile.po.left_nav.account_page import AccountPage
+from proj_spec.triplog.mobile.po.left_nav.auto_start_settings_page import AutoStartSettingsPage
 from proj_spec.triplog.mobile.po.triplog_mobile_base_page import TriplogMobileBasePage
 
 
@@ -64,11 +65,15 @@ class LeftPanel(TriplogMobileBasePage):
         if advanced_switch is None:
             return False
         else:
-            # if self.os=='android':
-            #     return advanced_switch.get_attribute("checked")
-            # else:
-            #     return advanced_switch.is_selected()
-            return advanced_switch.get_attribute("value")=='1'
+            if self.os=='android':
+                """Only the following attributes are supported: [checkable, checked, {class,className}, clickable, 
+                {content-desc,contentDescription}, enabled, focusable, focused, {long-clickable,longClickable}, package, 
+                password, {resource-id,resourceId}, scrollable, selection-start, selection-end, selected, {text,name}, hint, 
+                extras, bounds, displayed, contentSize]"""
+                return advanced_switch.get_attribute("checked")=='true'
+            else:
+                return advanced_switch.get_attribute("value")=='1'
+
 
     def is_left_menu_accessible(self,menu_name):
         """
@@ -120,6 +125,8 @@ class LeftPanel(TriplogMobileBasePage):
                 if page.is_learn_more_displayed():
                     auto_start_options_displayed = True
                     page.confirm_learn_more()
+                else:
+                    page = AutoStartSettingsPage(self.driver)
                 #     #auto_start_options_page.go_back()
             elif menu_name=='Work Schedule':
                 from proj_spec.triplog.mobile.po.left_nav.work_schedule_page import WorkSchedulePage
