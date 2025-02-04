@@ -31,7 +31,7 @@ class TestTripsBase(TestTriplogPWBase):
         :param query_distance:
         :return:
         """
-        #c_before = self.trips_page.get_number_of_trips_filtered()
+        c_before = self.trips_page.get_number_of_trips_filtered()
         self.trips_page.add_trip(from_location, to_location, query_distance)
-        #c_after = self.trips_page.get_number_of_trips_filtered()
-        #assert c_after == c_before + 1, "trip not added successfully"
+        c_after = self.trips_page.get_number_of_trips_filtered()
+        assert c_after == c_before + 1, "trip not added successfully"

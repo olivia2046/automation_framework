@@ -5,20 +5,41 @@
 # Desc:
 # **************************************
 
+import logging
 from proj_spec.triplog.playwright.triplog_pw_base_page import TriplogPWBasePage
 from playwright.sync_api import Page
 import time
 import base.globalvars as glo
 
 class TripsPage(TriplogPWBasePage):
+
     def __init__(self, page: Page):
         self.page = page
-        self.page.goto(glo.get_value("url1")+"/trip")
+        self.url = glo.get_value("url1") + "/trip"
+        self.page.goto(self.url)
         self.add_trip_button = page.locator("#add_button")
         self.from_select = page.locator("#fromLocation\.id")
         self.to_select = page.locator("#toLocation\.id")
         self.query_distance_button = page.locator("input[type='button'][class='green_button'][value='Query Driving Distance']")
         self.create_button = page.locator("//input[@type='submit' and @value='Create' and not(@class='blue_button')]")
+        self.count_container = page.locator('(//div[@class="small"])[1]')
+
+
+
+    def get_number_of_trips_filtered(self):
+        """
+
+        :return:
+        """
+        self.page.goto(self.url)# page doesn't get refreshed after operations, so need to manually refresh to get latest count
+        try:
+            text = self.count_container.inner_text()
+            count = int(text.split('\n /')[-1].strip().replace("nbsp;", ""))
+            return count
+        except Exception as e:
+            logging.error("error getting count of filtered trips: %s" % e)
+            return -1
+
 
 
     def add_trip(self, from_location, to_location, query_distance=False ):
