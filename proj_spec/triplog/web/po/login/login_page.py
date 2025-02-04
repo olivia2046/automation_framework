@@ -16,7 +16,7 @@ class TriplogLoginPage(TriplogWebBasePage):
 
     _email_locator = (By.ID, "account_email")
     _password_locator = (By.CSS_SELECTOR, "#passwordTxt > input[type=password]")
-    _login_btn_locator = (By.CSS_SELECTOR,"#loginForm > div.n_login-row.n_login-row-border.n_login-btn-box > button")
+    _login_btn_locator = (By.XPATH,'//button[@type="submit" and @class="n_login-button"]')
 
     def __init__(self,driver):
         #caps = get_capabilities()
