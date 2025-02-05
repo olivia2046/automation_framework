@@ -8,6 +8,9 @@
 import base.globalvars as glo
 from playwright.sync_api import Page
 
+from proj_spec.triplog.playwright.dashboard.overview_page import OverviewPage
+
+
 class TriplogPWLoginPage:
     def __init__(self, page: Page):
         self.page = page
@@ -38,4 +41,4 @@ class TriplogPWLoginPage:
         self.password_input.fill(password)
         self.login_button.click()
 
-        return self.page
+        return OverviewPage(self.page)

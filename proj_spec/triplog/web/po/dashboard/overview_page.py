@@ -11,7 +11,7 @@ import base.globalvars as glo
 
 class OverviewPage(TriplogNavigablePage):
     url = glo.get_value("url1") + "/dashboard/overview"
-    _title_loc = (By.XPATH,"//span[@class='n_menu-selected-menuname']")
+    #_title_loc = (By.XPATH,"//span[@class='n_menu-selected-menuname']")
 
     # def __init__(self, driver):
     #     """inistialize the time clock page
@@ -24,14 +24,12 @@ class OverviewPage(TriplogNavigablePage):
     #     self.driver.get(self.url)
     
 
-    def get_title(self):
-        """
+    # def get_title(self):
+    #     """
+    #
+    #     :return:
+    #     """
+    #     title_ele = self.find_element(self._title_loc)
+    #     return title_ele.text
 
-        :return:
-        """
-        title_ele = self.find_element(self._title_loc)
-        return title_ele.text
 
-
-    def test_add_trip(self):
-        pass

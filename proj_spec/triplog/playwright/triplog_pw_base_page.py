@@ -4,6 +4,7 @@
 # @Author : Olivia
 # Desc:
 # **************************************
-
+from playwright.sync_api import Page
 class TriplogPWBasePage():
-    pass
+    def __init__(self, page: Page):
+        self.page = page

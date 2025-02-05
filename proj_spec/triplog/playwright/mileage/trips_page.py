@@ -13,8 +13,9 @@ import base.globalvars as glo
 
 class TripsPage(TriplogPWBasePage):
 
+
     def __init__(self, page: Page):
-        self.page = page
+        super().__init__(page)
         self.url = glo.get_value("url1") + "/trip"
         self.page.goto(self.url)
         self.add_trip_button = page.locator("#add_button")
@@ -28,6 +29,7 @@ class TripsPage(TriplogPWBasePage):
                                               "@class='red_border_button' and @value='Delete']")
 
 
+
     def choose_button(self, first_level_text, second_level_text):
         """
 
@@ -39,6 +41,20 @@ class TripsPage(TriplogPWBasePage):
         button_link = self.page.locator("//a[text()='%s']"%second_level_text)
 
         triangle_down.hover()
+        button_link.click()
+
+
+    def choose_approval_button(self, first_level_text, second_level_text):
+        """
+
+        :param first_level:
+        :param second_level:
+        :return:
+        """
+        approval_group = self.page.locator("//div[@class='triangle_down' and text()='%s']"%first_level_text)
+        button_link = self.page.locator("//a[text()='%s']"%second_level_text)
+
+        approval_group.hover()
         button_link.click()
 
 
@@ -99,6 +115,12 @@ class TripsPage(TriplogPWBasePage):
         return self.page.locator( "(//input[@class='selected_id'])[%s]"%(n+1))
 
 
+    def check_trips(self, indexes=[0]):
+        for index in indexes:
+            self.get_nth_trip_checkbox().click()
+
+            #todo: scroll vertically
+
     def edit_trip(self, **kwargs):
         """
 
@@ -125,6 +147,7 @@ class TripsPage(TriplogPWBasePage):
         self.save_button.click()
 
 
+
     def delete_trip(self, index=0):
         """Delete trip from menu bar
 
@@ -136,3 +159,21 @@ class TripsPage(TriplogPWBasePage):
         # self.find_element_and_click(nth_trip_checkbox_loc)
         self.choose_button("Delete","Delete Selected")
         self.confirm_delete_multiple.click()
+
+
+    def submit_trips(self, indexes=[0], comments=""):
+        """Delete trips of the index in indexes list
+
+        :param index:
+        :param comments:
+        :return:
+        """
+        #todo: filter trips of not submitted status
+        self.page.goto(self.url)
+
+        self.check_trips(indexes)
+        self.choose_button()
+        self.hover_over_element(self._approval_container_loc)
+        self.find_element_and_click(self._submit_btn_loc)
+        self.find_element_and_input(self._submission_comment_loc, comments)
+        self.find_element_and_click(self._confirm_submission_btn_loc)
