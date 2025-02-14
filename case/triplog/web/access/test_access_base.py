@@ -96,15 +96,15 @@ class TestWebAccessBase(TestTriplogWebBase):
             assert page is None
 
 
-    # @pytest.mark.parametrize('menu_path',['Dashboard->Overview','Dashboard->Performance','Dashboard->Trends',
-    #                                       'Reports->Mileage Reports','Reports->Business Expenses','Reports->Time Clock',
-    #                                       'Maps->Current Locations','Maps->Heat Map','Maps->Frequent Locations','Maps->Driving Safety',
-    #                                       'Maps->Location Stay Time', 'Maps->Time Clock',
-    #                                       'Mileage->Trips','Mileage->State Mileage','Mileage->Fuel','Mileage->Locations','Mileage->Vehicles',
-    #                                       'Expense->Transactions','Expense->Categories','Expense->Spending Limits','Expense->Tax Groups','Expense->Bank Accounts',
-    #                                       'Time->Time Clock Calendar','Time->Time Clock List','Time->Scheduling','Time->Job Activities'])
-    @pytest.mark.parametrize('menu_path', ['Maps->Current Locations', 'Maps->Frequent Locations','Maps->Location Stay Time', 'Maps->Time Clock',
-                                           'Mileage->State Mileage', 'Expense->Tax Groups'])
+    @pytest.mark.parametrize('menu_path',['Dashboard->Overview','Dashboard->Performance','Dashboard->Trends',
+                                          'Reports->Mileage Reports','Reports->Business Expenses','Reports->Time Clock',
+                                          'Maps->Current Locations','Maps->Heat Map','Maps->Frequent Locations','Maps->Driving Safety',
+                                          'Maps->Location Stay Time', 'Maps->Time Clock',
+                                          'Mileage->Trips','Mileage->State Mileage','Mileage->Fuel','Mileage->Locations','Mileage->Vehicles',
+                                          'Expense->Transactions','Expense->Categories','Expense->Spending Limits','Expense->Tax Groups','Expense->Bank Accounts',
+                                          'Time->Time Clock Calendar','Time->Time Clock List','Time->Scheduling','Time->Job Activities'])
+    # @pytest.mark.parametrize('menu_path', ['Maps->Current Locations', 'Maps->Frequent Locations','Maps->Location Stay Time', 'Maps->Time Clock',
+    #                                        'Mileage->State Mileage', 'Expense->Tax Groups'])
     def test_page_navigatability(self,menu_path):
         logging.info("Testing page navigation of %s"%menu_path)
 
