@@ -25,7 +25,7 @@ glo.set_value("config_name", sys.argv[1])
 def main():
 
     from base.get_config import get_log_level, get_run_case_folder, get_run_case_type
-    from base import HTMLTestRunner
+    # from base import HTMLTestRunner
 
     # logging.basicConfig(stream=HTMLTestRunner.stdout_redirector, level=eval("logging." + get_log_level())
     #                     # logging.basicConfig(stream=sys.stdout, level=eval("logging." + get_log_level())
@@ -36,14 +36,14 @@ def main():
                         ,format='%(levelname)s: %(asctime)s - %(message)s')
     logging.getLogger("urllib3").setLevel(logging.WARNING)
 
-    # 输出到结果报告文件的同时，在控制台打印日志
+    # print log on console as well when outputting to test report
     ch = logging.StreamHandler()
     formatter = logging.Formatter('%(name)-12s: %(levelname)-8s %(message)s')
     ch.setFormatter(formatter)
     logging.getLogger('').addHandler(ch)
 
-    from base.get_config import get_neo4j_uri, get_and_set_global_vars, get_url_dict, get_tc_rootdir
-    from util import db_util
+    from base.get_config import get_and_set_global_vars, get_url_dict, get_tc_rootdir
+    #from util import db_util
     from base.get_config import get_test_type
     # test_type = get_test_type().lower()
 
@@ -67,7 +67,7 @@ def main():
     get_and_set_global_vars()
 
     test_type = get_test_type()
-    if test_type == 'interface' or test_type == 'gui':
+    if test_type == 'api' or test_type == 'gui':
         # 获取配置文件中的url列表并依次设置对应的全局变量
         url_dict = get_url_dict()
         if url_dict != {}:
@@ -102,25 +102,28 @@ def main():
                                                        "Schema_File": paths.iloc[i]['Schema_File']}
         glo.set_value("algo_paths_map", paths_map)
 
-    general_case_class_mapping = {"db": "case.db.general_db_test.DBTest",
-                                  "interface": "case.interface.general.general_interface_test.InterfaceTest"}
+    general_case_class_mapping = {"db": "projects.general.general_db_test.DBTest",
+                                  "api": "projects.general.general_api_test.APITest"}
 
-    if test_type in ['db', 'interface']:
+    if test_type in ['db', 'api']:
         classname = general_case_class_mapping[test_type].split('.')[-1]
         classpath = general_case_class_mapping[test_type].replace("." + classname, "")
+    else:
+        classname = None
+        classpath = None
 
     run_case_types = get_run_case_type()
 
-    if run_case_types == ["Excel"]:  # 仅运行Excel驱动的general case
+    if run_case_types == ["Excel"]:  # only when Excel driver general api test
         exec("from %s import %s" % (classpath, classname))
-        run_testsuite = unittest.TestLoader().loadTestsFromTestCase(eval(classname))
-        tc_folders = os.path.abspath('../case/interface')
+        #run_testsuite = unittest.TestLoader().loadTestsFromTestCase(eval(classname))
+        tc_folders = os.path.abspath('../projects/general')
     else:
-        if run_case_types == ["Code"]:  # 仅运行独立的Python代码test case
-            run_testsuite = unittest.TestSuite()
-        else:  # 两种都运行
-            exec("from %s import %s" % (classpath, classname))
-            run_testsuite = unittest.TestLoader().loadTestsFromTestCase(eval(classname))
+        # if run_case_types == ["Code"]:  # 仅运行独立的Python代码test case
+        #     run_testsuite = unittest.TestSuite()
+        # else:  # 两种都运行
+        #     exec("from %s import %s" % (classpath, classname))
+        #     run_testsuite = unittest.TestLoader().loadTestsFromTestCase(eval(classname))
 
         run_case_folders = get_run_case_folder()
 
@@ -147,25 +150,29 @@ def main():
 
     now = time.strftime('%Y-%m-%d_%H_%M_%S', time.localtime())  # 时分秒中间不能用:连接，无效的文件名
 
+    current_work_dir = os.getcwd()
     if not os.path.exists('../testreport'):
         os.makedirs('../testreport')
     if args.report:
         report_file_path = r'../testreport/%s.html' % args.report
     else:
         report_file_path = r'../testreport/pytest_report-%s-%s.html' % (args.config_name, now)
+
     #pytest.main(['-s','-v',tc_folders_str,'--clean-alluredir Report/raw'])
     #pytest.main(['-s', '-v', tc_folders_str, "--tests-per-worker","4","--alluredir","../testreport/xml","--html=%s"%report_file_path,"--self-contained-html"])
 
     cmd_list = []
     if args.tests_per_worker:
-        cmd_list=['-s', '-v', *tc_folders,"--tests-per-worker", args.tests_per_worker , "--html=%s" % report_file_path, "--self-contained-html"]
+        cmd_list=['-s', '-v', tc_folders,"--tests-per-worker", args.tests_per_worker , "--html=%s" % report_file_path, "--self-contained-html"]
 
     else:
-        cmd_list=['-s', '-v', *tc_folders,"--html=%s" % report_file_path, "--self-contained-html"]
+        cmd_list=['-s', '-v', tc_folders,"--html=%s" % report_file_path, "--self-contained-html"]
 
     if args.reruns:
         #n_rerun = int(args.reruns)
         cmd_list.extend(["--reruns",args.reruns])
+
+    cmd_list.extend(["-c", "pytest.ini"]) # to skip outer layer conftest.py
 
     pytest.main(cmd_list)
     # time.sleep(5)

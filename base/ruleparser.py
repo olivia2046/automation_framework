@@ -26,8 +26,11 @@ class RuleParser(object):
         else:
             self.rule = rule
         self.validate(self.rule)
-        if 'Content-Type' in response.headers.keys() and 'application/json' in response.headers['Content-Type']:
-            self.json_obj = response.json()
+        # for api like https://automationexercise.com/api_list, the response actually json data but header is written as html/text
+        # so content-type is not used for decision here
+        # if 'Content-Type' in response.headers.keys() and 'application/json' in response.headers['Content-Type']:
+        #     self.json_obj = response.json()
+        self.json_obj = response.json()
         self.res_text = response.text
 
     class Functions(object):
