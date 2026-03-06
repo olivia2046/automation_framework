@@ -50,8 +50,8 @@ class APITest(unittest.TestCase):
     @ddt.data(*testdata)
     def setUp(self,casedata):
         # cannot be data-driven so just leave it, and set up actions will be implemented in test case
-        # if casedata['SetUp'] != "":
-        #     eval_from_string(casedata['SetUp'])
+        # if casedata['Set_Up'] != "":
+        #     eval_from_string(casedata['Set_Up'])
         # global test_case_data
         # test_case_data= []
         pass
@@ -71,10 +71,10 @@ class APITest(unittest.TestCase):
         from base.get_config import get_run_case_level
         # Skip the case if not in specified case level or not marked as Run
         if (casedata['Case_Level'] in get_run_case_level() or get_run_case_level()==[]) and casedata['Case_Name'] in case_list and casedata['Run'].upper()=='Y':
-            # Execute content in 'SetUp' Column
-            if 'SetUp' in casedata.keys() and casedata['SetUp']!="":
-                #eval_from_string(casedata['SetUp'], return_str=False, json_str = True)
-                for content in casedata['SetUp'].split(';'):
+            # Execute content in 'Set_Up' Column
+            if 'Set_Up' in casedata.keys() and casedata['Set_Up']!="":
+                #eval_from_string(casedata['Set_Up'], return_str=False, json_str = True)
+                for content in casedata['Set_Up'].split(';'):
                     if content!='':
                         eval_from_string(content)
 
@@ -91,30 +91,30 @@ class APITest(unittest.TestCase):
                 f.write(res.text)
             '''
 
-            expected_status_code = casedata['Expected Code']
+            expected_status_code = casedata['Expected_Code']
 
-            logging.debug(res.status_code)
+            #logging.debug(res.status_code)
 
 
             #try:
             if expected_status_code!='':#
-                self.assertEqual(str(res.status_code),expected_status_code, f"Status Code not as expected! Expected:{expected_status_code}, Actual: {res.status_code}, {res.text}\nurl:{casedata['relative_URL']}\ndata:{casedata['Request Data']}")
+                self.assertEqual(str(res.status_code),expected_status_code, f"Status Code not as expected! Expected:{expected_status_code}, Actual: {res.status_code}, {res.text}\nurl:{casedata['relative_URL']}\ndata:{casedata['Request_Data']}")
             #except:
             #    raise
 
             # res.raise_for_status()
 
-            expected_res_txt = casedata['Expected Text']
+            expected_res_txt = casedata['Expected_Text']
             if expected_res_txt!="":
-                if casedata['Compare Method']=="" or casedata['Compare Method'] is np.nan:
-                    self.fail("Need to input Compare Method！")
+                if casedata['Compare_Method']=="" or casedata['Compare_Method'] is np.nan:
+                    self.fail("Need to input Compare_Method！")
                 else:
-                    #logging.debug("casedata['Compare Method']：%s"%casedata['Compare Method'])
+                    #logging.debug("casedata['Compare_Method']：%s"%casedata['Compare_Method'])
                     #logging.debug("Expected text:%s"%expected_res_txt)
                     expected_res_txt = eval_from_string(expected_res_txt)
-                    eval("self."+ casedata['Compare Method'])(str(expected_res_txt),res.text, f"Response text not as expected! Compare Method： {casedata['Compare Method']} Expected: {expected_res_txt}, Actual: {res.text}")
+                    eval("self."+ casedata['Compare_Method'])(str(expected_res_txt),res.text, f"Response text not as expected! Compare_Method： {casedata['Compare_Method']} Expected: {expected_res_txt}, Actual: {res.text}")
 
-            json_validation = casedata['Json Result Validation']
+            json_validation = casedata['Json_Result_Validation']
 
             if json_validation!="":
                 # Validate the Json content get
@@ -152,7 +152,7 @@ class APITest(unittest.TestCase):
                             else:
                                 actual_result = res.text
 
-                            assert rparser.evaluate() is True, f"Test Fail：url {casedata['relative_URL']}\ndata {casedata['Request Data']}\nrule {element}\nactual response:\n{actual_result}"
+                            assert rparser.evaluate() is True, f"Test Fail：url {casedata['relative_URL']}\ndata {casedata['Request_Data']}\nrule {element}\nactual response:\n{actual_result}"
 
 
                 except Exception as e:
@@ -175,13 +175,13 @@ class APITest(unittest.TestCase):
             #                                         '(${post_data},${res_json})}')
             #     self.assertTrue(validation_result,'验证不通过')
 
-            if 'Set Global Variable' in casedata.keys() and casedata['Set Global Variable']!="":
-                if casedata['Set Global Variable'].startswith("text:"): #text: variable_name
-                    var_name=casedata['Set Global Variable'].replace("text:","")
+            if 'Set_Global_Variable' in casedata.keys() and casedata['Set_Global_Variable']!="":
+                if casedata['Set_Global_Variable'].startswith("text:"): #text: variable_name
+                    var_name=casedata['Set_Global_Variable'].replace("text:","")
                     glo.set_value(var_name,res.text)
                 # json: expression-index:variable_name, e.g: json:$.newsId:[0]:newsId，setting multiple variables in one request is supported(serapate by ';')
-                elif casedata['Set Global Variable'].startswith("json:"):
-                    set_glo_value_json = casedata['Set Global Variable'].rstrip(";")
+                elif casedata['Set_Global_Variable'].startswith("json:"):
+                    set_glo_value_json = casedata['Set_Global_Variable'].rstrip(";")
                     for json_item in set_glo_value_json.split(';\n'):
                         values = json_item.split(':')
                         var_name=values[-1]
@@ -195,13 +195,12 @@ class APITest(unittest.TestCase):
                     self.fail("Incorrect format in Set Global Variable")
 
 
-            # replaced by Set Global Variables
-            # if 'Post_Case_Action' in casedata.keys() and casedata['Post_Case_Action']!="":
-            #     # execute post case action
-            #     #eval_from_string(casedata['Post_Case_Action'],return_str=False,json_str=True)
-            #     eval_from_string(casedata['Post_Case_Action'])
+            if 'Tear_Down' in casedata.keys() and casedata['Tear_Down']!="":
+                # execute post case action
+                #eval_from_string(casedata['Tear_Down'],return_str=False,json_str=True)
+                eval_from_string(casedata['Tear_Down'])
         else:
-            # raise unittest.SkipTest("case set not to run") # case真正跳过，不会被统计为pass
+            # raise unittest.SkipTest("case set not to run") # case skipped and won't be calculated as pass
             pytest.skip("case set not to run")
 
     def tearDown(self):
