@@ -114,34 +114,34 @@ class APITest(unittest.TestCase):
                     expected_res_txt = eval_from_string(expected_res_txt)
                     eval("self."+ casedata['Compare Method'])(str(expected_res_txt),res.text, f"Response text not as expected! Compare Method： {casedata['Compare Method']} Expected: {expected_res_txt}, Actual: {res.text}")
 
-            expected_json = casedata['Expected Json Data']
+            json_validation = casedata['Json Result Validation']
 
-            if expected_json!="":
+            if json_validation!="":
                 # Validate the Json content get
                 try:
                     if 'Content-Type' in res.headers.keys() and 'application/json' in res.headers['Content-Type']:
                         actual_json_obj = res.json()
                     else:
                         actual_json_obj = {}
-                    if re.compile("^\${.+}$").match(expected_json) is not None: # only contains function expression with ${...}
-                        #eval_result = eval_from_string(expected_json,return_str=True,json_str=True)
-                        #expected_json = eval_from_string(expected_json, return_str=True, json_str=True)
-                        expected_json = eval_from_string(expected_json)
+                    if re.compile("^\${.+}$").match(json_validation) is not None: # only contains function expression with ${...}
+                        #eval_result = eval_from_string(json_validation,return_str=True,json_str=True)
+                        #json_validation = eval_from_string(json_validation, return_str=True, json_str=True)
+                        json_validation = eval_from_string(json_validation)
                         # since eval_result contains single quote, need to use json.dumps(eval(xxx)) to do replacement
-                        eval_result = json.loads(json.dumps(eval(expected_json)))
+                        eval_result = json.loads(json.dumps(eval(json_validation)))
                         logging.debug("expected Json string: %s"%repr(eval_result))
                         logging.debug("Json string in response:%s"%repr(actual_json_obj))
                         self.assertTrue(jsonmatch(eval_result, actual_json_obj))
 
-                    elif re.compile("^{.+}$").match(expected_json) is not None: # only contains {} json content
-                        logging.debug("expected Json string: %s" % repr(expected_json))
+                    elif re.compile("^{.+}$").match(json_validation) is not None: # only contains {} json content
+                        logging.debug("expected Json string: %s" % repr(json_validation))
                         logging.debug("Json string in response:%s" % repr(actual_json_obj))
-                        self.assertTrue(jsonmatch(json.loads(expected_json),actual_json_obj))
+                        self.assertTrue(jsonmatch(json.loads(json_validation),actual_json_obj))
 
                     else: #process as json_path
-                        expected_json=expected_json.rstrip(";")
-                        for element in expected_json.split(';\n'):
-                            if element.strip()=="": # common case is there's an extra ';' the last element in expected_json
+                        json_validation=json_validation.rstrip(";")
+                        for element in json_validation.split(';\n'):
+                            if element.strip()=="": # common case is there's an extra ';' the last element in json_validation
                                 #logging.warning("json expression is empty")
                                 continue
 
@@ -195,11 +195,11 @@ class APITest(unittest.TestCase):
                     self.fail("Incorrect format in Set Global Variable")
 
 
-
-            if 'Post_Case_Action' in casedata.keys() and casedata['Post_Case_Action']!="":
-                # execute post case action
-                #eval_from_string(casedata['Post_Case_Action'],return_str=False,json_str=True)
-                eval_from_string(casedata['Post_Case_Action'])
+            # replaced by Set Global Variables
+            # if 'Post_Case_Action' in casedata.keys() and casedata['Post_Case_Action']!="":
+            #     # execute post case action
+            #     #eval_from_string(casedata['Post_Case_Action'],return_str=False,json_str=True)
+            #     eval_from_string(casedata['Post_Case_Action'])
         else:
             # raise unittest.SkipTest("case set not to run") # case真正跳过，不会被统计为pass
             pytest.skip("case set not to run")
