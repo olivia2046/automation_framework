@@ -16,19 +16,24 @@ import json
 
 def eval_simple_expression(target_str):
     '''
-    输入目标字符串，输出匹配到的表达式模式字符串列表和需要替换成的字符串列表
-    参数： target_str:需要做表达式替换的字符串
+    input target string, output expression mode string list and string list that need to convert to
+    Params：
+        target_str: string that needs expression replacement
 
     '''
-    matched = re.match("(.*?)\(.*\)",target_str)
+    #matched = re.match("(.*?)\(.*\)",target_str)
+    matched = re.match("^([\w\.]+\.py)::([a-zA-Z_]\w*)\(\)$", target_str)
     if matched:
-        outer = matched.group(1)
-        splits = outer.split('.')
-        function_name = splits[-1]
-        module = outer.replace(function_name, '').rstrip('.')
-        exec("from %s import %s" % (module, function_name))
-        function = target_str.replace(module, '').lstrip('.')
-        #去除function字符串里的转义符\
+        # outer = matched.group(1)
+        # splits = outer.split('.')
+        # function_name = splits[-1]
+        # module = outer.replace(function_name, '').rstrip('.')
+        file_name = matched.groups()[0]
+        module_name =file_name.rsplit(".", 1)[0]
+        function_name = matched.groups()[1]
+        exec(f"from {module_name} import {function_name}")
+        function = target_str.replace(file_name, '').lstrip('::') # get the function to execute, not only function name
+        # remove the \ in function string
         if "\\" in function:
             function = function.replace("\\","")
         return eval(function)
@@ -78,15 +83,15 @@ def find_entities(content):
     return None
 
 '''
-平衡组查找
+Finding balance group
 '''
 def balanceGroup(regex,text):
-    #使用贪婪模式，尽可能多的找到内容，然后从找到的内容中筛选
+    # use greedy mode to find as many content, and filter from result
     matcher = re.compile(regex).search(text)
 
     Content = ""
     if matcher:
-        Content = matcher.group(1) # 获取${...}模式内部的字符串
+        Content = matcher.group(1) # retrieve string in ${}
         end = 0
 
         orgContent = Content
@@ -118,7 +123,7 @@ def eval_expression(expression):
 
 #def eval_from_string(target_str,return_str = True,json_str = False):
 def eval_from_string(target_str):
-    """把${}格式的函数/全局变量表达式替换为函数执行的返回值"""
+    """ convert fuctions/global variable with format ${} to return value/variable value"""
     # if json_str == True:
     #  matches = re.search(r'[\'"](\${.+?})[\'"]', target_str)
     #  while matches:
@@ -127,7 +132,7 @@ def eval_from_string(target_str):
     #if re.match(r'({.+?})',target_str):#json格式字符串
 
     try:
-        # json格式字符串
+        # json format string
         #target_dict = json.loads(json.dumps(target_str))
         if isinstance(target_str,str):
             target_dict = json.loads(json.dumps(eval(target_str)))  # 此时target_str中键名为单引号，直接用json.loads(header_str)
