@@ -13,7 +13,6 @@ import pytest
 from urllib.parse import urlparse
 import base.globalvars as glo
 
-from py.xml import html
 
 from util.clean_expired_files import delfile
 
@@ -126,19 +125,19 @@ def pytest_collection_modifyitems(session, config, items):
 
 @pytest.mark.optionalhook
 def pytest_html_results_table_header(cells):
-    cells.insert(2, html.th('Description'))
-    cells.insert(2, html.th('Test_nodeid'))
+    cells.insert(2, "<th>Description</th>")
+    cells.insert(2, "<th>Test_nodeid</th>")
     # cells.insert(1, html.th('Time', class_='sortable time', col='time'))
     cells.pop(2)
 
 @pytest.mark.optionalhook
 def pytest_html_results_table_row(report, cells):
     if hasattr(report,'description'):
-        cells.insert(2, html.td(report.description))
+        cells.insert(2, "<td>%s</td>"%report.description)
     else:
-        cells.insert(2, html.td('no description'))
-    # cells.insert(2, html.td(report.description))
-    cells.insert(2, html.td(report.nodeid))
+        cells.insert(2, "<td>no description</td>")
+    # cells.insert(2, "<td>%s</td>"%report.description)
+    cells.insert(2, "<td>%s</td>"%report.nodeid)
     # cells.insert(1, html.td(datetime.utcnow(), class_='col-time'))
     cells.pop(2)
 
@@ -151,7 +150,7 @@ def pytest_html_results_table_row(report, cells):
 @pytest.mark.hookwrapper
 def pytest_runtest_makereport(item):
     """
-    当测试失败的时候，自动截图，展示到html报告中
+    get screenshot automatically when test fail, and display in html report
     :param item:
     """
     pytest_html = item.config.pluginmanager.getplugin('html')
@@ -212,17 +211,20 @@ def pytest_configure(config):
         glo.init()
         # 设置运行环境名:{'config_name':BMV_QA}
         glo.set_value("config_name", config.option.config)
-        from base.get_config import GetConfig
-        print("当前用例运行环境配置:%s" % glo.get_value("config_name"))
+        #from base.get_config_class import GetConfig
+        print("Now running case using config:%s" % glo.get_value("config_name"))
+        from base.get_config import get_and_set_global_vars, get_url_dict
 
 
         #from base.get_config import get_and_set_global_vars, get_url_dict
         #from util import db_util
 
         # 获取并设置
-        GetConfig.get_and_set_global_vars()
+        #GetConfig.get_and_set_global_vars()
+        get_and_set_global_vars()
         # 获取ini文件中URLS的字典数据
-        url_dict = GetConfig.get_url_dict()
+        #url_dict = GetConfig.get_url_dict()
+        url_dict = get_url_dict()
         # 判断ini文件中URLs不能为空字典
         if url_dict != {}:
             for item in url_dict.items():
@@ -243,25 +245,27 @@ def pytest_configure(config):
 
 
     _get_config()
-    from base.get_config import GetConfig
+    #from base.get_config_class import GetConfig
     config_name = glo.get_value("config_name")
+    from base.get_config import get_log_level
     logger = logging.getLogger(__name__)
     # logger.setLevel(level=logging.INFO)
     abspath = os.path.split(os.path.realpath(__file__))[0]
     root_path = abspath + os.sep + 'testreport'
     dir_path = Path(root_path)
-    # 不存在就新增testreport目录
+    # create testreport foler if doesn't exist
     dir_path.mkdir(exist_ok=True, parents=True)
     handler = TimedRotatingFileHandler(root_path + os.sep + 'run.log', when='d', interval=1, backupCount=30,
                                        encoding='utf-8')
-    handler.setLevel(eval("logging." + GetConfig.get_log_level()))
+    #handler.setLevel(eval("logging." + GetConfig.get_log_level()))
+    handler.setLevel(eval("logging." + get_log_level()))
     formatter = logging.Formatter('%(asctime)s  - %(levelname)s - %(message)s')
     handler.setFormatter(formatter)
     logging.getLogger('').addHandler(handler)
 
-    # 设置特定库的log level(否则有大量debug输出)
+    # set log level of specific libs, otherwise there's too many debug outputs
     logging.getLogger("urllib3").setLevel(logging.WARNING)
-    logging.getLogger("chardet.charsetprober").setLevel(logging.WARNING)  # 客户端查询时自动输出的日志
+    logging.getLogger("chardet.charsetprober").setLevel(logging.WARNING)
     logging.getLogger("faker.factory").setLevel(logging.WARNING)
 
     now = datetime.now()
@@ -275,11 +279,11 @@ def pytest_configure(config):
     html_dir = Path("%s/html" % reports_dir)
     html_dir.mkdir(parents=True, exist_ok=True)
     # set custom options only if none are provided from command line
-    if not hasattr(config.option,"htmlpath") or config.option.htmlpath is None:  # 未指定--html
+    if not hasattr(config.option,"htmlpath") or config.option.htmlpath is None:  # no --html argument specified
         # reports_dir.mkdir(parents=True, exist_ok=True)
         # # custom report file
         environment_str = glo.get_value("device_name","") + "_" + glo.get_value("platform_name","") + "_" + glo.get_value("platform_version","")
-        if environment_str!="": #分环境执行
+        if environment_str!="__": # run case by different device environment(mobile cases)
             report_file_path = reports_dir / f"pytest_{environment_str}_{config_name}_{now.strftime('%Y%m%d %H%M%S')}.html"
         else:
             report_file_path = reports_dir / f"pytest_{config_name}_{now.strftime('%Y%m%d %H%M%S')}.html"
@@ -296,15 +300,13 @@ def pytest_configure(config):
 
 
 
-
-
 def pytest_unconfigure(config):
-    from base.get_config import GetConfig
+    #from base.get_config_class import GetConfig
 
     abspath = os.path.split(os.path.realpath(__file__))[0]
     xml_report_path = '%s/testreport/xml/' % abspath
     html_report_path = '%s/testreport/html/' % abspath
-    delfile(abspath + os.sep + '/testreport', 30)
+    delfile(abspath + os.sep + 'testreport', 30)
 
     cmd = "allure generate %s -o %s --clean" % (xml_report_path, html_report_path)
 
@@ -315,8 +317,9 @@ def pytest_unconfigure(config):
 
     report_file_path = glo.get_value("report_file_path")
     config_name = glo.get_value("config_name")
-
-    test_type = GetConfig.get_test_type()
+    from base.get_config import get_test_type
+    #test_type = GetConfig.get_test_type()
+    test_type = get_test_type()
 
     if config.option.email:
         from base.email_pytest_report import Email_Pytest_Report

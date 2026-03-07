@@ -50,9 +50,9 @@ class ExecuteStep():
     
     def execute(self,casedata):
         #logging.debug(casedata.keys())
-        if 'Specify Header' in casedata.keys() and casedata['Specify Header'].upper()=='Y':
-            if 'Header Content' in casedata.keys():
-                header_value = casedata['Header Content']
+        if 'Specify_Header' in casedata.keys() and casedata['Specify_Header'].upper()=='Y':
+            if 'Header_Content' in casedata.keys():
+                header_value = casedata['Header_Content']
             else:
                 header_value = {}
             # if header content is of {...} format then parse as json, otherwise use tag in header_file to extract as json header
@@ -69,8 +69,8 @@ class ExecuteStep():
             header = None
 
         data = []
-        if 'Request Data' in casedata.keys() and casedata['Request Data']!='':
-            request_data = casedata['Request Data'].strip()
+        if 'Request_Data' in casedata.keys() and casedata['Request_Data']!='':
+            request_data = casedata['Request_Data'].strip()
             # if post data is of {...} format then parse as json, otherwise use tag in data_file to extract as json
             #if re.findall("^{.+}$",request_data.replace("\n",""))!=[]:
             try:
@@ -142,12 +142,12 @@ class ExecuteStep():
         url = root_url + relative_url
 
 
-        if 'New Session' in casedata.keys() and casedata['New Session'].upper()=='Y':
-            #print("New Session~~~~~~~~~~~~~~~~~~~~~~~~")
-            new_session=True
-        else :
-            #print("Retain Session~~~~~~~~~~~~~~~~~~~~~~")
+        if 'New_Session' in casedata.keys() and casedata['New_Session'].upper()=='N':
+            # print("Retain Session~~~~~~~~~~~~~~~~~~~~~~")
             new_session=False
+        else :
+            # print("New Session~~~~~~~~~~~~~~~~~~~~~~~~")
+            new_session=True
 
         if '+' in data:
             data = data.replace("+","%2B")
@@ -171,17 +171,17 @@ class ExecuteStep():
             logging.debug("headers:%s"%header)
             header = None
 
-        if not 'Request Type' in casedata.keys():
-            return "Request Type Not Specified!"
+        if not 'Request_Type' in casedata.keys():
+            return "Request_Type Not Specified!"
 
-        arguments = {"method": casedata['Request Type'], "url": url, "headers": header, "verify": verify,
+        arguments = {"method": casedata['Request_Type'], "url": url, "headers": header, "verify": verify,
                      "new_session": new_session}
-        if 'Data Type' in casedata.keys() and casedata['Data Type'].lower()=='json':
-            # res = RunMethod().run_main(method=casedata['Request Type'], url=url, json=data, headers=header, verify=verify, cert = cert,
+        if 'Data_Type' in casedata.keys() and casedata['Data_Type'].lower()=='json':
+            # res = RunMethod().run_main(method=casedata['Request_Type'], url=url, json=data, headers=header, verify=verify, cert = cert,
             #                            new_session=new_session)
             arguments["json"] = data
         else:
-            # res = RunMethod().run_main(method=casedata['Request Type'], url=url, data=data, headers = header, verify = verify, cert = cert, new_session=new_session)
+            # res = RunMethod().run_main(method=casedata['Request_Type'], url=url, data=data, headers = header, verify = verify, cert = cert, new_session=new_session)
             arguments["data"] = data
 
         if cert is not None:

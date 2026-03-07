@@ -7,16 +7,16 @@ desc:
 import logging
 
 from selenium.webdriver import ActionChains
-from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import base.globalvars as glo
+from selenium.webdriver.support import expected_conditions as EC #don't remove this line as condition is evaluated dynamically
 
 
 class BasePage:
-
-    _black_list = [] # 异常弹窗黑名单，如果有多个异常弹窗会同时出现，尽量按可能出现的顺序定义。例如：[(By.ID, "XXXX"),(By.ID, "YYYY")]
+    # black list of exceptional pop ups. It there're multiple popups together, try to define them in the order they are displayed
+    # e.g. [(By.ID, "XXXX"),(By.ID, "YYYY")]
+    _black_list = []
 
     def __int__(self, driver: WebDriver):
         self.driver = driver
@@ -34,10 +34,6 @@ class BasePage:
                         element_to_be_clickable
                         invisibility_of_element
                         ...
-        :param skip_error_handle: whether needs to skip handle_exception
-                                if expected to find element, but cannot find due to hidden by elmenents in black list, then need to handle exception
-                                if expected not to find element, then no need for exception handling
-
 
         :return:
         """
@@ -73,12 +69,18 @@ class BasePage:
         """
         self.find_element(locator, timeout, condition).click()
 
-    def find_element_and_input(self, locator, text, timeout=10):
-        """查找元素并输入文本
+    def click(self, locator):
+        """Alias for find_element_and_click"""
+        # element = self.wait.until(EC.element_to_be_clickable(locator))
+        # element.click()
+        self.find_element_and_click(locator)
 
-        :param locator: 元素定位元组
-        :param text:  输入的文本
-        :param timeout: 超时时间，单位为秒
+    def find_element_and_input(self, locator, text, timeout=10):
+        """find element and input text
+
+        :param locator: tuple of element locator
+        :param text:  text input
+        :param timeout: timeout time, in seconds
 
         :return:
         """
@@ -90,7 +92,11 @@ class BasePage:
 
 
     def handle_exception(self):
-        #设置隐式等待时间为0（黑名单上元素找不到不长时间等待）
+        """set implicit wait time to 0(do not wait long time if elements on blacklist cannot be found)
+
+        :return:
+        """
+
         self.driver.implicitly_wait(0)
         for locator in self._black_list:
             elements = self.driver.find_elements(*locator)
@@ -98,7 +104,7 @@ class BasePage:
                 elements[0].click()
             else:
                 logging.info("%s not found") %str(locator)
-        # 恢复隐式等待时间
+        # restore implicit wait time
         self.driver.implicitly_wait(glo.get_value("implicit_wait", 10))
 
     def get_element_rect(self, locator, condition='visibility_of_element_located'):
