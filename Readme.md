@@ -41,7 +41,8 @@ Execute:
 ```
 
 
-# 3. Excel Case Explanation
+# 💡3. Excel API Case Explanation
+📌 Example of Excel API Test Case can be found under projects/automation_exercise/api
 ## 3.1 Sheets
 You can have multiple sheets to better organize your test cases(e.g. one sheet per module).
 It will execute test cases in sheet sequence.
@@ -65,8 +66,8 @@ It will execute test cases in sheet sequence.
 |Request_Type|	        # GET/POST/PUT/DELETE
 |Data_Type|	            # if data specified in "Request Data" column should be passed as json data, then put 'json', 
                           otherwise "Reqeust Data" will be converted to parameter like key1=value1&key2=value2 
-|Request_Data|	         
-|Expected_Code|	
+|Request_Data|	        # optional                  json format post data 
+|Expected_Code|	        # required                  expect reponse status code
 |Expected_Text|	        # if response should be plain text, put the text here
 |Compare_Method|        # method used to compare expected result with actual result, 
                           required when "Expected Text" is not empty: assertEqual/assertNotEqual/assertIn/assertNotIn
@@ -87,7 +88,6 @@ ${projects.automation_exercise.libs.demo.py::function_used_by_setup()}
 ${projects.automation_exercise.libs.demo.py::function_used_by_teardown()}
 
 
-
 |Header Content|
 When |Specify Header| is set to 'Y', header content can either be the full header like 
 {
@@ -99,31 +99,47 @@ Or, you can have a header file in projects/automation_exercise/data/headers.json
 and put the file path as in config/settings-automation_exercise_api.ini,
 and fill in 'header1' to refer to the 'header1' node in the headers file.
 
-|Set Global Variable| 
+
+💡|Json_Result_Validation|
+Rule based valiation on json response using jsonpath.
+e.g. Search for "tshort" in product list, verify that all items returned are of category 'Tshirts', then validate as:
+["=","$.products[*].category.category","Tshirts"]
+where the first item in the [] is operator, the second one is the jsonpath to extract data, the third is the value to be compared to
+🔹 use ';' to seperate multiple rules, and each rule functions together as 'and' relationship  
+🔹 supported operators:
+    '=',
+    '!=',
+    '>',
+    '>=',
+    '<',
+    '<=',
+    'and',
+    'in',
+    'not in',
+    'contains',
+    'not contains',
+    'or',
+    'not'
+🔹 You can use operator "and", "or" to link rules  
+🔹 default rule is to check on each item of list get from jsonpath expression. 
+E.g. for ["=","$.products[*].category.category","Tshirts"], $.products[*].category.category returns a list of categories, it will check whether each item in this list equals to "Tshirts"
+🔹 to check against the list itself, add "list relation" to the end of the rule, e.g.
+["length","$.brands[*]","list relation"] gets the length of list retrieved by "$.brands[*]",
+and then you can use ["=",["length","$.brands[*]","list relation"],34] to check whether the length equals to 34
+🔹 value to be compared to can contain function call, just like that used in Set_Up and Tear_Down 
+
+
+|Set Global Variable|
+Extract data from API response to set to global variable
+🔹 response is text
+For example: API response is "Tshirts" and you want to set to global variable "category",then write as:
+text:category 
+🔹 resonse it json
 For example: You need to extract a value(e.g. ) from the api response, you need to get the id value of first item in data node,
- to save to global variable "FresultId", then write as json:$.data[*].id:[0]:resultId
+ to save to global variable "resultId", then write as: 
+ json:$.data[*].id:[0]:resultId
 - json: process api response as json data
 - $.data[*].id:[0]: the jsonpath used to extract id value of first item in data node
 - resultId: name of the global variable
-  
-
-断言内容为比较jsonpath表示的列表中每一个元素，则正常添加断言表达式  
-断言内容为比较jsonpath表示的列表，则在断言表达式末尾增加一个参数"list relation"
-     
-接口返回结果为仅一个空列表的情况：  
-如果接口仅可能返回一个空列表，可在“期望响应文本”列填[]  
-如果接口可能返回一个空列表，也可能为其他结果，则空列表的情况写为：["=","$response_plain_text","[]"]
-
-表达式内包含表达式：
-["in","$.data[*].id","${proj_spec.DEMO.mudule1.function_a('param1_value,param2='${proj_spec.DEMO.module2.function_b(param1=\"text_value\")}')}"]
-
-Post_Case_Action基于响应结果设置全局变量：  
-响应结果为文本类型：  
-text:变量名  
-响应结果为json格式：  
-json:表达式:索引下标:变量名， 如json:$.newsId:[0]:newsId
-
-
-	
 ```
 
