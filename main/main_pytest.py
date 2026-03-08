@@ -35,12 +35,15 @@ def main():
     logging.basicConfig(stream=sys.stdout, level=eval("logging." + get_log_level())
                         ,format='%(levelname)s: %(asctime)s - %(message)s')
     logging.getLogger("urllib3").setLevel(logging.WARNING)
+    #logging.info("---------------conftest.py---------------------------------")
 
-    # print log on console as well when outputting to test report
-    ch = logging.StreamHandler()
-    formatter = logging.Formatter('%(name)-12s: %(levelname)-8s %(message)s')
-    ch.setFormatter(formatter)
-    logging.getLogger('').addHandler(ch)
+    # # logging.info printed as red, so remove this part
+    # # print log on console as well when outputting to test report
+    # ch = logging.StreamHandler()
+    # formatter = logging.Formatter('%(name)-12s: %(levelname)-8s %(message)s')
+    # ch.setFormatter(formatter)
+    # logging.getLogger('').addHandler(ch)
+    # logging.info("---------------conftest.py---------------------------------")
 
     from base.get_config import get_and_set_global_vars, get_url_dict, get_tc_rootdir
     #from util import db_util
@@ -74,33 +77,7 @@ def main():
             for item in url_dict.items():
                 glo.set_value(item[0], item[1])
                 glo.set_value("host" + item[0][-1], urlparse(item[1]).hostname)
-    elif test_type == 'algorithm':
-        # 读入算法地址文件
-        paths = pd.read_excel(sys.path[0] + os.sep + '..' + os.sep + glo.get_value("algo_path_file"))
 
-        # 命令行参数指定算法的host,port overwrite文件中的配置
-        if args.host:
-            if not args.algorithm:
-                sys.exit("请指定需要测试的算法(文件夹名，非实际接口名)：-a/--algorithm algorithm_folder")
-            else:
-                # paths.loc[paths.Algo_Name==args.algorithm,'Host']=args.host
-                paths.loc[paths.Test_Folder == args.algorithm, 'Host'] = args.host
-        if args.port:
-            if not args.algorithm:
-                sys.exit("请指定需要测试的算法(文件夹名，非实际接口名)：-a/--algorithm algorithm_folder")
-            else:
-                paths.loc[paths.Test_Folder == args.algorithm, 'Port'] = args.port
-
-        paths_map = {}
-        # glo.set_value("algo_paths",paths)
-        # {"match_company":{"Host":"xxx.xxx.xxx.xxx","Port":"xxxxx"},...}
-        for i in range(len(paths)):
-            paths_map[paths.iloc[i]['Test_Folder']] = {"Algo_Name": paths.iloc[i]['Algo_Name'],
-                                                       "Host": paths.iloc[i]['Host'],
-                                                       "Port": paths.iloc[i]['Port'],
-                                                       "Data_File": paths.iloc[i]['Data_File'],
-                                                       "Schema_File": paths.iloc[i]['Schema_File']}
-        glo.set_value("algo_paths_map", paths_map)
 
     general_case_class_mapping = {"db": "projects.general.general_db_test.DBTest",
                                   "api": "projects.general.general_api_test.APITest"}

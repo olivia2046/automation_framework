@@ -10,7 +10,7 @@ import os, sys, logging
 
 sys.path.append('..')
 import base.globalvars as glo
-from util.crypt_util import decryption
+#from util.crypt_util import decryption
 
 
 # cf = ConfigParser(os.environ) #使用环境变量进行插值
@@ -92,6 +92,7 @@ def get_user_file_path():
         return ""
 
 def get_email_config():
+    from util.crypt_util import decryption
     try:
         email_host = cf.get('Email', 'email_host')
         if cf.has_option('Email', 'email_port'):
@@ -226,6 +227,7 @@ def get_db_user(dbname='DB'):
 
 
 def get_db_pwd(dbname='DB'):
+    from util.crypt_util import decryption
     try:
         pwdstr = cf.get(dbname, 'password')
         return decryption(pwdstr).decode()  # 解密再把byte解码成string
@@ -272,6 +274,7 @@ def get_neo4j_username():
 
 
 def get_neo4j_pwd():
+    from util.crypt_util import decryption
     try:
         pwdstr = cf.get('NEO4J', 'password')
         return decryption(pwdstr).decode()
@@ -365,6 +368,7 @@ def get_mongodb_username():
 
 
 def get_mongodb_password():
+    from util.crypt_util import decryption
     if cf.has_section('MongoDB'):
         try:
             password = cf.get('MongoDB', 'password')
