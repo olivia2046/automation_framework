@@ -5,7 +5,7 @@
 Created on Tue Aug 21 20:55:06 2018
 
 @author: olivia
-description: 测试框架入口
+description: entrance to run test cases
 """
 #import platform
 #print(platform.python_version())
@@ -16,10 +16,10 @@ from urllib.parse import urlparse
 sys.path.append('..')
 sys.path.append('../base') # pypom
 import base.globalvars as glo
-glo.init()  # 先必须在主模块初始化（只在Main模块需要一次即可）
-# 获取项目名并设置全局变量,必须在import InterfaceTest之前导入，因InterfaceTest导入的get_config需要在import阶段就获取配置文件
-if len(sys.argv)==1: #没有指定配置名
-    sys.argv.append("Demo")
+glo.init()  # need to initialize in main module(and only once)
+# retrieve project config name and set global variables. Must be imported before imported APITest(get_config imported in APITest need to get config file)
+if len(sys.argv)==1: # no config name specified
+    sys.argv.append("automation_exercise_api")
 glo.set_value("config_name", sys.argv[1])
 
 def main():
@@ -35,6 +35,8 @@ def main():
     logging.basicConfig(stream=sys.stdout, level=eval("logging." + get_log_level())
                         ,format='%(levelname)s: %(asctime)s - %(message)s')
     logging.getLogger("urllib3").setLevel(logging.WARNING)
+    logging.getLogger("chardet.charsetprober").setLevel(logging.WARNING)
+    logging.getLogger("faker.factory").setLevel(logging.WARNING)
     #logging.info("---------------conftest.py---------------------------------")
 
     # # logging.info printed as red, so remove this part
@@ -50,7 +52,7 @@ def main():
     from base.get_config import get_test_type
     # test_type = get_test_type().lower()
 
-    # 使用argparse模块处理命令行参数
+    # use argparse to handle command line arguments
     parser = argparse.ArgumentParser()
     parser.add_argument("config_name")
     parser.add_argument("-a", "--algorithm", help="specify target algorithm name")
@@ -59,10 +61,9 @@ def main():
     parser.add_argument("-r", "--report", help="specify report name")
     parser.add_argument("-e", "--email", help="specify condition to send email:fail/any")
     parser.add_argument("--webdriver", help="specify webdriver for gui automation")
-    parser.add_argument("--enable_proxy", help="whether to enable browsermob-proxy")
+    # parser.add_argument("--enable_proxy", help="whether to enable browsermob-proxy")
     parser.add_argument("--tests_per_worker", help="pytest-parallel argument: specify number of tests per worker")
     parser.add_argument("--reruns", help="specify maximum rerun times")
-    #Todo: parser仅解析自定义参数，非自定义参数直接传递给pytestmain
     # parser.add_argument("-e", action='store_true', default=False, dest='send_email', help="switch whether to send email")
     args = parser.parse_args()
 
@@ -166,7 +167,7 @@ def main():
 
 
 
-# # 清理过期报告
+# # clean the outdated reports
 # delfile('../testreport', 30)
 
 if __name__=='__main__':

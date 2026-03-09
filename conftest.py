@@ -18,21 +18,21 @@ from util.clean_expired_files import delfile
 
 
 def pytest_addoption(parser):
-    '''增加命令行参数 --config'''
+    """ command line parameters
+    
+    :param parser: 
+    :return: 
+    """
     parser.addoption(
-        "--config",
+        "--config", # to specify test cases of which project/environement is to be executed
         action="store",
-        # default: 默认值，命令行没有指定host时，默认用该参数值
-        #default="triplog_web_qa6",
-        default="triplog_android",
-        #default="triplog_ios",
+        default="automation_exercise_web",
         help="test project name"
     )
 
     parser.addoption(
-        "--webdriver",
+        "--webdriver", # for Selenium cases: which webdriver to be used: Chrome/Firefox/Edge
         action="store",
-        # default: 默认值，命令行没有指定host时，默认用该参数值
         default="Chrome",
         help="web driver used for ui automation"
     )
