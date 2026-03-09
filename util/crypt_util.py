@@ -2,13 +2,13 @@
 '''
 | @author: olivia.dou
 | Created on: 2018/10/8 11:43
-| desc: 有关加密/解密的工具库，后期可替换更复杂的加密/解密方法
+| desc: utility lib realted to encryption/decryption, may relace with more complicated algorithms later
 '''
 
 import base64
 #from cryptography.hazmat.primitives.ciphers import algorithms
 # install pycryptodome, remove any pycrypto, crypto folders first
-from Crypto.Cipher import AES
+from Crypto.Cipher import AES #pycryptodome
 #from binascii import b2a_hex, a2b_hex
 
 def decryption(code):
