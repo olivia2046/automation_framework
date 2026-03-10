@@ -55,9 +55,9 @@ def main():
     # use argparse to handle command line arguments
     parser = argparse.ArgumentParser()
     parser.add_argument("config_name")
-    parser.add_argument("-a", "--algorithm", help="specify target algorithm name")
-    parser.add_argument("--host", help="specify target algorithm host")
-    parser.add_argument("-p", "--port", help="specify target algorithm port")
+    #parser.add_argument("-a", "--algorithm", help="specify target algorithm name")
+    #parser.add_argument("--host", help="specify target algorithm host")
+    #parser.add_argument("-p", "--port", help="specify target algorithm port")
     parser.add_argument("-r", "--report", help="specify report name")
     parser.add_argument("-e", "--email", help="specify condition to send email:fail/any")
     parser.add_argument("--webdriver", help="specify webdriver for gui automation")
@@ -65,14 +65,15 @@ def main():
     parser.add_argument("--tests_per_worker", help="pytest-parallel argument: specify number of tests per worker")
     parser.add_argument("--reruns", help="specify maximum rerun times")
     # parser.add_argument("-e", action='store_true', default=False, dest='send_email', help="switch whether to send email")
-    args = parser.parse_args()
+    #args = parser.parse_args()
+    args,unknown = parser.parse_known_args()
 
-    # 从配置文件中获取全局变量值并设置
+    # get global variables from config file and set
     get_and_set_global_vars()
 
     test_type = get_test_type()
     if test_type == 'api' or test_type == 'gui':
-        # 获取配置文件中的url列表并依次设置对应的全局变量
+        # get url list from config file and set corresponding global variables
         url_dict = get_url_dict()
         if url_dict != {}:
             for item in url_dict.items():
@@ -108,9 +109,7 @@ def main():
         if len(run_case_folders) == 0:  # 未指定运行case的level,则运行根目录下case（包括所有子目录）
             run_case_folders = ['.']
 
-        # 算法测试可在命令行制定需要测试的算法
-        # if test_type=='algorithm' and len(sys.argv)>2:
-        #     run_case_levels = [sys.argv[2]]
+
         if test_type == 'algorithm' and args.algorithm:
             run_case_folders = [args.algorithm]
 
@@ -140,17 +139,27 @@ def main():
     #pytest.main(['-s', '-v', tc_folders_str, "--tests-per-worker","4","--alluredir","../testreport/xml","--html=%s"%report_file_path,"--self-contained-html"])
 
     cmd_list = []
-    if args.tests_per_worker:
-        cmd_list=['-s', '-v', tc_folders,"--tests-per-worker", args.tests_per_worker , "--html=%s" % report_file_path, "--self-contained-html"]
+    # if args.tests_per_worker:
+    #     cmd_list=['-s', '-v', tc_folders,"--tests-per-worker", args.tests_per_worker , "--html=%s" % report_file_path, "--self-contained-html"]
+    #
+    # else:
+    #     cmd_list=['-s', '-v', tc_folders,"--html=%s" % report_file_path, "--self-contained-html"]
+    #
+    # if args.reruns:
+    #     #n_rerun = int(args.reruns)
+    #     cmd_list.extend(["--reruns",args.reruns])
 
-    else:
-        cmd_list=['-s', '-v', tc_folders,"--html=%s" % report_file_path, "--self-contained-html"]
 
-    if args.reruns:
-        #n_rerun = int(args.reruns)
-        cmd_list.extend(["--reruns",args.reruns])
+    cmd_list.extend(unknown)
+    cmd_list.append(f"--html={report_file_path}")
 
-    cmd_list.extend(["-c", "pytest.ini"]) # to skip outer layer conftest.py
+    cmd_list.append(tc_folders)
+
+    missing = list(set(['-s','-v','--self-contained-html'])-set(cmd_list))
+    if missing:
+        cmd_list.extend(missing) # add these arguments if not provided
+
+    cmd_list.extend(["-c", "pytest.ini"])  # to skip outer layer conftest.py
 
     pytest.main(cmd_list)
     # time.sleep(5)
