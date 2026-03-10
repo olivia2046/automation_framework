@@ -2,22 +2,22 @@
 # 1. Folder Structure
 ```
 automation_framework/  
-|-- base/           # core modules of framework
-|-- config/         # config files to run test, each environement of each project should have its own config file  
-|-- main/           # run test case from main_pytest.py  
-|-- projects/       # project folders
-    |-- general/    
-        |-- general_api_test.py     # Excel driven api test
-    |-- project A/    
-        |-- api/    
-        |-- lib/    # libraries to be used within project
-        |-- mobile/  
-        |-- web/
-            |-- case/
-            |-- po/
-    |-- project B
-|-- testreport      # test reports will be generated here
-|-- util            # utility
+├── base/           # core modules of framework
+├── config/         # config files to run test, each environement of each project should have its own config file  
+├── main/           # run test case from main_pytest.py  
+├── projects/       # project folders
+    ├── general/    
+        ├── general_api_test.py     # Excel driven api test
+    ├── project A/    
+        ├── api/    
+        ├── lib/    # libraries to be used within project
+        ├── mobile/  
+        ├── web/
+            ├── case/
+            ├── po/
+    ├── project B
+├── testreport      # test reports will be generated here
+├── util            # utility
   
 ```
 
@@ -26,7 +26,7 @@ automation_framework/
 
 # 2. Usage
 ```
-Set up:  
+⚙️ Set up:  
     Create a settings-XXX.ini file(XXX should not have space in it),  
     e.g. settings-automation_exercise_api.ini is for automation_exercise_api is for api test of automationexercise website  
     You can set up different files for each environment like qa,std,etc.  
