@@ -8,8 +8,10 @@ Import this module wherever configuration values are needed.
 """
 
 import os
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from dotenv import load_dotenv
+
+from base.pwpo.base_page import Timeouts, BrowserConfig
 
 # Load environment variables from .env file if present
 load_dotenv()
@@ -68,13 +70,6 @@ INVALID_USER = TestUser(
 # ---------------------------------------------------------------------------
 # Timeouts (milliseconds)
 # ---------------------------------------------------------------------------
-@dataclass
-class Timeouts:
-    """Playwright timeout settings in milliseconds."""
-    default: int = 30_000       # General action timeout
-    navigation: int = 60_000    # Page navigation timeout
-    element: int = 10_000       # Element visibility/clickability
-    animation: int = 2_000      # Wait for CSS animations
 
 
 TIMEOUTS = Timeouts()
@@ -83,15 +78,6 @@ TIMEOUTS = Timeouts()
 # ---------------------------------------------------------------------------
 # Browser Configuration
 # ---------------------------------------------------------------------------
-@dataclass
-class BrowserConfig:
-    """Playwright browser launch options."""
-    headless: bool = field(default_factory=lambda: os.getenv("HEADLESS", "true").lower() == "true")
-    slow_mo: int = field(default_factory=lambda: int(os.getenv("SLOW_MO", "0")))
-    viewport_width: int = 1920
-    viewport_height: int = 1080
-    locale: str = "en-US"
-    timezone: str = "America/Los_Angeles"
 
 # need to set slow_mo to at least 500, otherwise the test may be too quick that some page refresh hasn't finished before doing assertions
 BROWSER_CONFIG = BrowserConfig(headless=False, slow_mo=500, viewport_width=1920, viewport_height=1080)

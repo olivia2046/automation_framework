@@ -4,6 +4,9 @@
 Created on: 2026/3/8 10:53
 desc: 
 '''
+import os
+from dataclasses import dataclass, field
+
 """
 
 -----------------
@@ -387,3 +390,23 @@ class BasePage:
         """
         self.page.screenshot(path=path, full_page=full_page)
         logger.info(f"Screenshot saved: {path}")
+
+
+@dataclass
+class Timeouts:
+    """Playwright timeout settings in milliseconds."""
+    default: int = 30_000       # General action timeout
+    navigation: int = 60_000    # Page navigation timeout
+    element: int = 10_000       # Element visibility/clickability
+    animation: int = 2_000      # Wait for CSS animations
+
+
+@dataclass
+class BrowserConfig:
+    """Playwright browser launch options."""
+    headless: bool = field(default_factory=lambda: os.getenv("HEADLESS", "true").lower() == "true")
+    slow_mo: int = field(default_factory=lambda: int(os.getenv("SLOW_MO", "0")))
+    viewport_width: int = 1920
+    viewport_height: int = 1080
+    locale: str = "en-US"
+    timezone: str = "America/Los_Angeles"
