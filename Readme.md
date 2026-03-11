@@ -5,19 +5,19 @@ automation_framework/
 ├── base/           # core modules of framework
 ├── config/         # config files to run test, each environement of each project should have its own config file  
 ├── main/           # run test case from main_pytest.py  
-├── projects/       # project folders
-    ├── general/    
-        ├── general_api_test.py     # Excel driven api test
-    ├── project A/    
+└── projects/       # project folders
+    └── general/    
+        └── general_api_test.py     # Excel driven api test
+    └── project A/    
         ├── api/    
         ├── lib/    # libraries to be used within project
         ├── mobile/  
-        ├── web/
+        └── web/
             ├── case/
-            ├── po/
-    ├── project B
+            └── po/
+    └── project B
 ├── testreport      # test reports will be generated here
-├── util            # utility
+└── util            # utility
   
 ```
 
