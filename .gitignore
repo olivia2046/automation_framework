@@ -1,0 +1,11 @@
+.idea
+.vscode
+testreport/
+**/__pycache__
+logs/
+util/SCPTXFR/1_Full.txt
+.gitignore
+chrome_driver/
+*.pyc
+.venv/
+.env
