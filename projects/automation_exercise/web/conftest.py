@@ -227,7 +227,8 @@ def logged_in_page(page: Page):
     # Verify login succeeded by waiting for the navbar indicator,
     # not a URL pattern — the URL check was unreliable when CSRF
     # caused the server to return 200 (stay on login page) instead of 302.
-    login.wait_for_visible(login.nav_logged_in_as)
+    #login.wait_for_visible(login.nav_logged_in_as)
+    login.wait_for_visible(login.navbar.logged_in_as)
     yield page
 
 
