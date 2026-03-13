@@ -66,7 +66,7 @@ class ContactPage(BasePage):
     @property
     def success_alert(self) -> Locator:
         """Success alert shown after the form is submitted."""
-        return self.page.locator(".alert-success")
+        return self.page.locator(".contact-form>.alert-success")
 
     @property
     def home_button(self) -> Locator:
@@ -127,5 +127,20 @@ class ContactPage(BasePage):
         return self.success_alert.is_visible()
 
     def go_home_after_submission(self) -> None:
-        """Click the 'Home' button on the post-submission confirmation."""
+        """
+        Click the 'Home' button on the post-submission confirmation page
+        and wait until the homepage is fully loaded.
+
+        On automationexercise.com, clicking Home triggers a Google ad overlay
+        (google_vignette) before the navigation completes, changing the URL to
+        /contact_us#google_vignette. The ad must be dismissed first, then we
+        wait for the actual navigation to the homepage to complete.
+        """
         self.click(self.home_button)
+
+        # Dismiss the Google vignette ad that appears before navigation
+        self.dismiss_ad_overlay()
+
+        #self.page.pause()
+        # Wait for navigation to homepage to complete
+        self.page.wait_for_url("**/", timeout=30_000)
