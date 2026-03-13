@@ -13,6 +13,7 @@ This class handles both forms and the account info step that follows signup.
 import logging
 from playwright.sync_api import Page, Locator
 
+from pages import HomePage
 from pages.base_page_ae import BasePage
 from utils.config import URLS
 
@@ -162,28 +163,55 @@ class LoginPage(BasePage):
     # ------------------------------------------------------------------
 
     def open(self) -> "LoginPage":
-        """Navigate to the login page."""
+        """Navigate to the login page and wait for the form to be ready."""
+        from playwright_stealth import stealth_sync
+        stealth_sync(self.page)
         self.navigate_to(URLS["login"])
+        self.wait_for_visible(self.login_email_input)
         return self
 
-    def login(self, email: str, password: str) -> None:
+    def login(self, email: str, password: str) -> BasePage:
         """
         Submit the login form with the provided credentials.
+
+        Why dispatchEvent instead of Playwright's click()
+        --------------------------------------------------
+        Playwright's click() injects a _hitTargetInterceptor listener on
+        window (capture phase) for actionability checks. On this site this
+        interceptor interferes with the form's submit event chain, causing
+        the button click to have no effect.
+
+        Dispatching a native MouseEvent directly bypasses Playwright's
+        interception layer entirely — the event is indistinguishable from
+        a real user click as far as the page's JS is concerned.
 
         Args:
             email: User's email address.
             password: User's password.
         """
         logger.info(f"Logging in with: {email}")
+        self.wait_for_visible(self.login_email_input)
         self.fill(self.login_email_input, email)
         self.fill(self.login_password_input, password)
+
+        # self.click(self.login_button, force=True)
+        #with self.page.expect_navigation(wait_until="domcontentloaded", timeout=30_000):
+            # self.page.evaluate("""
+            #     document.querySelector('button[data-qa="login-button"]')
+            #         .dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true}))
+            # """)
+        #self.page.locator('form[action="/login"]').evaluate("node => node.submit()")
+            # self.login_button.hover()
         self.click(self.login_button)
+        return HomePage(self.page)
+
+
 
     def start_signup(self, name: str, email: str) -> None:
         """
-        Fill in Step 1 of the signup flow (name + email) and click Signup.
+        Fill in Step 1 of the signup flow (name + email) and submit.
 
-        After clicking, the browser navigates to the full account info form.
+        Uses dispatchEvent for the same reason as login().
 
         Args:
             name: Full name for the new account.
@@ -192,6 +220,12 @@ class LoginPage(BasePage):
         logger.info(f"Starting signup for: {email}")
         self.fill(self.signup_name_input, name)
         self.fill(self.signup_email_input, email)
+
+        # with self.page.expect_navigation(wait_until="domcontentloaded", timeout=30_000):
+        #     self.page.evaluate("""
+        #         document.querySelector('button[data-qa="signup-button"]')
+        #             .dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true}))
+        #     """)
         self.click(self.signup_button)
 
     def complete_registration(self, user_data: dict) -> None:

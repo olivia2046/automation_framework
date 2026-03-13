@@ -44,21 +44,6 @@ class HomePage(BasePage):
         return self.page.locator(".features_items .product-image-wrapper")
 
     @property
-    def subscription_email_input(self) -> Locator:
-        """Email input in the newsletter subscription widget."""
-        return self.page.locator("#susbscribe_email")
-
-    @property
-    def subscription_submit_btn(self) -> Locator:
-        """Submit button for the newsletter subscription."""
-        return self.page.locator("#subscribe")
-
-    @property
-    def subscription_success_alert(self) -> Locator:
-        """Success alert that appears after a successful subscription."""
-        return self.page.locator(".alert-success")
-
-    @property
     def category_sidebar(self) -> Locator:
         """Left-hand category panel."""
         return self.page.locator(".left-sidebar")
@@ -111,15 +96,13 @@ class HomePage(BasePage):
 
     def subscribe_to_newsletter(self, email: str) -> None:
         """
-        Submit the newsletter subscription form.
+        Submit the newsletter subscription form via the footer component.
 
         Args:
             email: Email address to subscribe with.
         """
         logger.info(f"Subscribing to newsletter with: {email}")
-        self.scroll_to_bottom()
-        self.fill(self.subscription_email_input, email)
-        self.click(self.subscription_submit_btn)
+        self.footer.subscribe(email)
 
     def is_subscription_successful(self) -> bool:
         """
@@ -128,7 +111,7 @@ class HomePage(BasePage):
         Returns:
             bool: True if the success alert is visible after submission.
         """
-        return self.subscription_success_alert.is_visible()
+        return self.footer.is_subscription_successful()
 
     def expand_category(self, category: str) -> None:
         """

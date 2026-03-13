@@ -98,8 +98,44 @@ def browser_type_launch_args(browser_type_launch_args):
         **browser_type_launch_args,
         "headless": BROWSER_CONFIG.headless,
         "slow_mo": BROWSER_CONFIG.slow_mo,
+
     }
 
+# @pytest.fixture(autouse=True)
+# def stealth_context(context):
+#     """
+#     Inject a stealth script into every page before any other script runs.
+#
+#     automationexercise.com reads navigator.webdriver to detect automated
+#     browsers and injects ad/interference scripts specifically for them.
+#     This fixture masks the webdriver flag so the site treats Playwright
+#     like a regular browser — matching the behaviour seen in manual testing.
+#
+#     The script is added via add_init_script() which runs before ANY page
+#     script, so the site's detection code never sees webdriver = true.
+#     """
+#     context.add_init_script("""
+#         // Hide the webdriver flag that identifies Playwright/Selenium
+#         Object.defineProperty(navigator, 'webdriver', {
+#             get: () => undefined,
+#         });
+#
+#         // Remove the automation-specific chrome runtime marker
+#         if (window.chrome) {
+#             window.chrome.runtime = {};
+#         }
+#
+#         // Spoof plugins array (empty in headless browsers, populated in real ones)
+#         Object.defineProperty(navigator, 'plugins', {
+#             get: () => [1, 2, 3, 4, 5],
+#         });
+#
+#         // Spoof languages (headless often returns empty)
+#         Object.defineProperty(navigator, 'languages', {
+#             get: () => ['en-US', 'en'],
+#         });
+#     """)
+#     yield
 
 # ===========================================================================
 # Page Object Fixtures (function-scoped — fresh instance per test)
@@ -188,8 +224,10 @@ def logged_in_page(page: Page):
     login = LoginPage(page)
     login.open()
     login.login(EXISTING_USER.email, EXISTING_USER.password)
-    # Wait for redirect to home after successful login
-    page.wait_for_url("**/", timeout=TIMEOUTS.navigation)
+    # Verify login succeeded by waiting for the navbar indicator,
+    # not a URL pattern — the URL check was unreliable when CSRF
+    # caused the server to return 200 (stay on login page) instead of 302.
+    login.wait_for_visible(login.nav_logged_in_as)
     yield page
 
 
