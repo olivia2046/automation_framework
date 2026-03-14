@@ -26,6 +26,9 @@ _FRAMEWORK_ROOT = os.path.abspath(os.path.join(_PROJECT_ROOT, "..", "..", ".."))
 if _FRAMEWORK_ROOT not in sys.path:
     sys.path.insert(0, _FRAMEWORK_ROOT)
 
+# register public hooks
+pytest_plugins = ["base.pytest_plugins.common_hooks"]
+
 
 import logging
 import pytest
