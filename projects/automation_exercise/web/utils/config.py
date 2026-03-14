@@ -10,7 +10,7 @@ Import this module wherever configuration values are needed.
 import os
 from dataclasses import dataclass
 from dotenv import load_dotenv
-
+import base.config as global_config
 from base.pwpo.base_page import Timeouts, BrowserConfig
 
 # Load environment variables from .env file if present
@@ -20,17 +20,11 @@ load_dotenv()
 # ---------------------------------------------------------------------------
 # URLs
 # ---------------------------------------------------------------------------
-BASE_URL = os.getenv("BASE_URL", "https://www.automationexercise.com")
+#BASE_URL = os.getenv("BASE_URL", "https://www.automationexercise.com")
 
-URLS = {
-    "home": BASE_URL,
-    "login": f"{BASE_URL}/login",
-    "products": f"{BASE_URL}/products",
-    "cart": f"{BASE_URL}/view_cart",
-    "checkout": f"{BASE_URL}/checkout",
-    "contact": f"{BASE_URL}/contact_us",
-    "signup": f"{BASE_URL}/login",
-}
+
+
+
 
 
 # ---------------------------------------------------------------------------
@@ -55,8 +49,8 @@ class TestUser:
 # Pre-registered user for login tests (must exist in the app)
 EXISTING_USER = TestUser(
     name="TestAutomation",
-    email=os.getenv("TEST_EMAIL", "test_automation_user@example.com"),
-    password=os.getenv("TEST_PASSWORD", "Test@12345"),
+    email=os.getenv("TEST_EMAIL", "test_automation@yopmail.com"),
+    password=os.getenv("TEST_PASSWORD", "Test123"),
 )
 
 # Invalid credentials for negative tests
@@ -107,3 +101,19 @@ PRODUCT_CATEGORIES = {
 }
 
 BRANDS = ["Polo", "H&M", "Madame", "Mast & Harbour", "Babyhug", "Allen Solly Junior"]
+
+
+def get_base_url() -> str:
+    return global_config.config["base_url"]
+
+def get_urls() -> dict:
+    BASE_URL = get_base_url()
+    return  {
+        "home": BASE_URL,
+        "login": f"{BASE_URL}/login",
+        "products": f"{BASE_URL}/products",
+        "cart": f"{BASE_URL}/view_cart",
+        "checkout": f"{BASE_URL}/checkout",
+        "contact": f"{BASE_URL}/contact_us",
+        "signup": f"{BASE_URL}/login",
+    }

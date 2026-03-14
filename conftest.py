@@ -13,8 +13,12 @@ import pytest
 from urllib.parse import urlparse
 import base.globalvars as glo
 
-# # add automation_framework/ to sys.path, so base/ and projects/ both can be imported as top level package
-# sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# add automation_framework/ to sys.path, so base/ and projects/ both can be imported as top level package
+#sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+# _FRAMEWORK_ROOT = os.path.dirname(os.path.abspath(__file__))
+# print(f"[conftest] inserting into sys.path: {_FRAMEWORK_ROOT}")
+# sys.path.insert(0, _FRAMEWORK_ROOT)
 
 
 from util.clean_expired_files import delfile

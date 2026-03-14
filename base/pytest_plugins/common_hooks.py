@@ -14,16 +14,23 @@ from datetime import datetime
 from pathlib import Path
 import pytest
 from urllib.parse import urlparse
+
+import yaml
+
 import base.globalvars as glo
+import base.config as global_config
 
 # add automation_framework/ to sys.path, so base/ and projects/ both can be imported as top level package
 # sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-_FRAMEWORK_ROOT = os.path.dirname(os.path.abspath(__file__))
-print(f"[conftest] inserting into sys.path: {_FRAMEWORK_ROOT}")
-sys.path.insert(0, _FRAMEWORK_ROOT)
+# _FRAMEWORK_ROOT = os.path.dirname(os.path.abspath(__file__))
+# print(f"[conftest] inserting into sys.path: {_FRAMEWORK_ROOT}")
+# sys.path.insert(0, _FRAMEWORK_ROOT)
 
 from util.clean_expired_files import delfile
+
+_HOOKS_DIR = os.path.dirname(os.path.abspath(__file__))
+_CONFIG_DIR = os.path.abspath(os.path.join(_HOOKS_DIR, "..", "..", "config"))
 
 
 def pytest_addoption(parser):
@@ -215,59 +222,76 @@ def pytest_runtest_makereport(item):
 # pytest_configure(config)允许插件和conftest文件执行初始配置。
 # 通过config.pluginmanager.register（）这个函数可以实现注册插件的功能，后续pytest这个框架在运行过程中就会调用你注册的插件
 def pytest_configure(config):
-    def _get_config():
+    # def _get_config():
+    #
+    #     glo.init()
+    #     # set config name(indicate which configuration file to look for )
+    #     glo.set_value("config_name", config.option.config)
+    #
+    #     logging.info("Now running case using config:%s" % glo.get_value("config_name"))
+    #
+    #
+    #
+    #     from base.get_config import get_and_set_global_vars, get_url_dict
+    #
+    #     # 获取并设置
+    #     # GetConfig.get_and_set_global_vars()
+    #     get_and_set_global_vars()
+    #     # 获取ini文件中URLS的字典数据
+    #     # url_dict = GetConfig.get_url_dict()
+    #     url_dict = get_url_dict()
+    #     # 判断ini文件中URLs不能为空字典
+    #     if url_dict != {}:
+    #         for item in url_dict.items():
+    #             # 设置url
+    #             glo.set_value(item[0], item[1])
+    #             # 设置hosts
+    #             glo.set_value("host" + item[0][-1], urlparse(item[1]).hostname)
+    #
+    #     glo.set_value("webdriver_arg", config.option.webdriver)
+    #     glo.set_value("device_name", config.option.devicename)
+    #     glo.set_value("platform_name", config.option.platformname)
+    #     glo.set_value("platform_version", config.option.platformversion)
+    #     glo.set_value("app_url", config.option.appurl)
 
-        glo.init()
-        # 设置运行环境名:{'config_name':BMV_QA}
-        glo.set_value("config_name", config.option.config)
-        # from base.get_config_class import GetConfig
-        print("Now running case using config:%s" % glo.get_value("config_name"))
-        from base.get_config import get_and_set_global_vars, get_url_dict
+    config_name = config.option.config
+    # get configuration from yaml file
+    # abspath = os.path.split(os.path.realpath(__file__))[0]
+    # cfgfile = abspath + '/../config/' + f"{config_name}.yaml"
+    # cfgfile = os.path.join('../config', f"{config_name}.yaml")
+    yaml_path = os.path.join(_CONFIG_DIR, f"{config_name}.yaml")
 
-        # from base.get_config import get_and_set_global_vars, get_url_dict
-        # from util import db_util
+    with open(f"{yaml_path}", "r") as file:
+        yaml_data = yaml.safe_load(file)
 
-        # 获取并设置
-        # GetConfig.get_and_set_global_vars()
-        get_and_set_global_vars()
-        # 获取ini文件中URLS的字典数据
-        # url_dict = GetConfig.get_url_dict()
-        url_dict = get_url_dict()
-        # 判断ini文件中URLs不能为空字典
-        if url_dict != {}:
-            for item in url_dict.items():
-                # 设置url
-                glo.set_value(item[0], item[1])
-                # 设置hosts
-                glo.set_value("host" + item[0][-1], urlparse(item[1]).hostname)
+    global_config.config.update(yaml_data)
+    global_config.config['config_name'] = config_name
 
-        glo.set_value("webdriver_arg", config.option.webdriver)
-        glo.set_value("device_name", config.option.devicename)
-        glo.set_value("platform_name", config.option.platformname)
-        glo.set_value("platform_version", config.option.platformversion)
-        glo.set_value("app_url", config.option.appurl)
-        # if config.option.check_std_entity=='1':
-        #     glo.set_value("check_std_entity", True)
-        # else:
-        #     glo.set_value("check_std_entity", False)
+    # get environement variable from .env file
 
-    _get_config()
+
+
+    #_get_config()
     # from base.get_config_class import GetConfig
-    config_name = glo.get_value("config_name")
-    from base.get_config import get_log_level
+    # config_name = glo.get_value("config_name")
+    #from base.get_config import get_log_level
     logger = logging.getLogger(__name__)
     # logger.setLevel(level=logging.INFO)
-    abspath = os.path.split(os.path.realpath(__file__))[0]
-    root_path = abspath + os.sep + 'testreport'
-    dir_path = Path(root_path)
+
+    #root_path = os.path.split(os.path.realpath(__file__))[0]
+    root_path = os.path.abspath(os.path.join(_HOOKS_DIR, "..",".."))
+    report_root_path = root_path + os.sep + 'testreport'
+    dir_path = Path(report_root_path)
     # create testreport foler if doesn't exist
     dir_path.mkdir(exist_ok=True, parents=True)
-    handler = TimedRotatingFileHandler(root_path + os.sep + 'run.log', when='d', interval=1, backupCount=30,
+    handler = TimedRotatingFileHandler(report_root_path + os.sep + 'run.log', when='d', interval=1, backupCount=30,
                                        encoding='utf-8')
     # handler.setLevel(eval("logging." + GetConfig.get_log_level()))
-    handler.setLevel(eval("logging." + get_log_level()))
-    formatter = logging.Formatter('%(asctime)s  - %(levelname)s - %(message)s')
-    handler.setFormatter(formatter)
+    # Todo: comment the log level and format settings to see whether those in pytest.ini takes effect
+    # handler.setLevel(eval("logging." + get_log_level()))
+    #
+    # formatter = logging.Formatter('%(asctime)s  - %(levelname)s - %(message)s')
+    # handler.setFormatter(formatter)
     logging.getLogger('').addHandler(handler)
 
     # set log level of specific libs, otherwise there's too many debug outputs
@@ -280,7 +304,7 @@ def pytest_configure(config):
     # reports_dir = Path('reports', now.strftime('%Y%m%d'))
     # from base.get_config import get_test_type
     # test_type = get_test_type()
-    reports_dir = Path("%s/testreport" % abspath)
+    reports_dir = Path("%s/testreport" % root_path)
     raw_dir = Path("%s/xml" % reports_dir)
     raw_dir.mkdir(parents=True, exist_ok=True)
     html_dir = Path("%s/html" % reports_dir)
@@ -289,9 +313,11 @@ def pytest_configure(config):
     if not hasattr(config.option, "htmlpath") or config.option.htmlpath is None:  # no --html argument specified
         # reports_dir.mkdir(parents=True, exist_ok=True)
         # # custom report file
-        environment_str = glo.get_value("device_name", "") + "_" + glo.get_value("platform_name",
-                                                                                 "") + "_" + glo.get_value(
-            "platform_version", "")
+        # environment_str = glo.get_value("device_name", "") + "_" + glo.get_value("platform_name",
+        #                                                                          "") + "_" + glo.get_value(
+        #     "platform_version", "")
+        environment_str = (global_config.config.get('device_name','') + "_" + global_config.config.get('platform_name','')
+                           + "_"+ global_config.config.get('platform_version',''))
         if environment_str != "__":  # run case by different device environment(mobile cases)
             report_file_path = reports_dir / f"pytest_{environment_str}_{config_name}_{now.strftime('%Y%m%d %H%M%S')}.html"
         else:
@@ -305,7 +331,8 @@ def pytest_configure(config):
 
     config.option.clean_alluredir = True
 
-    glo.set_value("report_file_path", config.option.htmlpath)
+    #glo.set_value("report_file_path", config.option.htmlpath)
+    global_config.config['report_file_path'] = config.option.htmlpath
 
 
 def pytest_unconfigure(config):
@@ -323,11 +350,14 @@ def pytest_unconfigure(config):
     # cmd="allure serve testreport/xml"
     # subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 
-    report_file_path = glo.get_value("report_file_path")
-    config_name = glo.get_value("config_name")
-    from base.get_config import get_test_type
-    # test_type = GetConfig.get_test_type()
-    test_type = get_test_type()
+    # report_file_path = glo.get_value("report_file_path")
+    # config_name = glo.get_value("config_name")
+    # from base.get_config import get_test_type
+    # # test_type = GetConfig.get_test_type()
+    # test_type = get_test_type()
+    report_file_path = global_config.config['report_file_path']
+    config_name = global_config.config["config_name"]
+    test_type = global_config.config['test_type']
 
     if config.option.email:
         from base.email_pytest_report import Email_Pytest_Report
