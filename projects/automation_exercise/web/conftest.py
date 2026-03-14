@@ -14,11 +14,18 @@ working directory pytest is invoked from — repo root, projects/, or here.
 import sys
 import os
 
-# Make THIS project's root (automation_exercise/) importable as a source root,
+# Make THIS project's root (automation_exercise/web) importable as a source root,
 # regardless of from which directory pytest or the IDE launches.
 _PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 if _PROJECT_ROOT not in sys.path:
     sys.path.insert(0, _PROJECT_ROOT)
+
+# add automation_framework to sys.path（base/ importable）
+# need to add explicitly here, and not dependent on loading sequence in  root conftest.py
+_FRAMEWORK_ROOT = os.path.abspath(os.path.join(_PROJECT_ROOT, "..", "..", ".."))
+if _FRAMEWORK_ROOT not in sys.path:
+    sys.path.insert(0, _FRAMEWORK_ROOT)
+
 
 import logging
 import pytest

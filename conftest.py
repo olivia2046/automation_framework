@@ -5,13 +5,16 @@ Created on: 6/23/2021 17:27
 desc: 顶层的fixture
 '''
 
-import os, subprocess, logging, unittest
+import os, subprocess, logging, sys
 from logging.handlers import TimedRotatingFileHandler
 from datetime import datetime
 from pathlib import Path
 import pytest
 from urllib.parse import urlparse
 import base.globalvars as glo
+
+# # add automation_framework/ to sys.path, so base/ and projects/ both can be imported as top level package
+# sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 
 from util.clean_expired_files import delfile
