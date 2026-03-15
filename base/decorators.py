@@ -13,11 +13,13 @@ from unittest import SkipTest
 def case_level_decorator(func,case_level):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        from base.get_config import get_run_case_level
-        if case_level in get_run_case_level() or get_run_case_level()==[]:
+        #from base.get_config import get_run_case_level
+        import  base.config as global_config
+        case_levels = global_config.config["run_case_level"]
+        if case_level in case_levels or case_levels==[]:
             return func(*args, **kwargs)
         else:
-            raise unittest.SkipTest("case level not included") # case真正跳过，不会被统计为pass
+            raise unittest.SkipTest("case level not included") # case skipped and will not be calculated as pass
     return wrapper
 
 def Smoke(func):

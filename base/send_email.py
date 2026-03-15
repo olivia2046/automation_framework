@@ -14,7 +14,8 @@ import sys,re
 from lxml import etree
 from bs4 import BeautifulSoup
 sys.path.append('..')
-from base.get_config import get_email_config
+#from base.get_config import get_email_config
+from base.config import get_email_config
 
 
 class SendEmail:

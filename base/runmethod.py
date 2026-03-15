@@ -9,7 +9,7 @@ import requests,json
 import sys,logging
 sys.path.append('..')
 import base.globalvars as glo
-from base.get_config import get_timeout
+#from base.get_config import get_timeout
 
 
 #glo._init()#先必须在主模块初始化（只在Main模块需要一次即可）    

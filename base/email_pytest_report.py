@@ -29,7 +29,8 @@ from email import encoders
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from lxml import etree
 from lxml.etree import tostring
-from base.get_config import get_email_config
+#from base.get_config import get_email_config
+from base.config import get_email_config
 
 
 class Email_Pytest_Report:

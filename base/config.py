@@ -50,3 +50,31 @@ def get_data_file():
     except Exception as e:
         logging.error("get_data_file:%s" % e)
         return ""
+
+
+def get_email_config():
+    from util.crypt_util import decryption
+    try:
+        email_host = config['Email']['email_host']
+        if 'email_port' in config['Email']:
+            email_port = config['Email']['email_port']
+        else:
+            email_port = 25
+        send_user = config['Email']['send_user']
+        password = decryption(config['Email']['password']).decode()  #
+        user_list_str = config['Email']['user_list']
+        user_list = user_list_str.split(',')
+        cc_list_str = config['Email']['cc_list']
+        cc_list = cc_list_str.split(',')
+
+        if 'manual_testers' in config['Email']:
+            manual_testers_str = config['Email']['manual_testers']
+            manual_testers = manual_testers_str.split(',')
+        else:
+            manual_testers = []
+
+        return ({'email_host': email_host, 'email_port': email_port, 'send_user': send_user,
+                 'password': password, 'user_list': user_list, 'cc_list': cc_list, 'manual_testers': manual_testers})
+    except Exception as e:
+        logging.error("get_email_config:%s" % e)
+        return {}

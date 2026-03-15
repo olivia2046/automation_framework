@@ -9,7 +9,6 @@ from jsonpath import jsonpath
 sys.path.append('..')
 from base.runmethod import RunMethod
 from util.json_util import JsonUtil
-from base.getdata import GetData
 #from base.get_config import get_header_file,get_data_file, get_verify_cert
 #@Todo:get_header_file,get_data_file,get_root_url,get_verify不需要执行每个case时调用一次，用全局变量即可
 from base.expression_evaluation import eval_from_string
