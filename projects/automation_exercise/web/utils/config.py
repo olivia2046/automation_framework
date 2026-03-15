@@ -9,20 +9,17 @@ Import this module wherever configuration values are needed.
 
 import os
 from dataclasses import dataclass
-from dotenv import load_dotenv
+
 import base.config as global_config
 from base.pwpo.base_page import Timeouts, BrowserConfig
 
-# Load environment variables from .env file if present
-load_dotenv()
+
 
 
 # ---------------------------------------------------------------------------
 # URLs
 # ---------------------------------------------------------------------------
 #BASE_URL = os.getenv("BASE_URL", "https://www.automationexercise.com")
-
-
 
 
 
@@ -45,13 +42,22 @@ class TestUser:
     zipcode: str = "90001"
     mobile: str = "5551234567"
 
+def get_existing_user():
+    # lazy load
+    # Load environment variables from .env file if present
+    from dotenv import load_dotenv
 
-# Pre-registered user for login tests (must exist in the app)
-EXISTING_USER = TestUser(
-    name="TestAutomation",
-    email=os.getenv("TEST_EMAIL", "test_automation@yopmail.com"),
-    password=os.getenv("TEST_PASSWORD", "Test123"),
-)
+    load_dotenv(global_config.get_env_filepath())
+    # from dotenv import load_dotenv, find_dotenv
+    #
+    # load_dotenv(find_dotenv())
+    # Pre-registered user for login tests (must exist in the app)
+    EXISTING_USER = TestUser(
+        name="TestAutomation",
+        email=os.getenv("AE_TEST_EMAIL"),
+        password=os.getenv("AE_TEST_PASSWORD"),
+    )
+    return EXISTING_USER
 
 # Invalid credentials for negative tests
 INVALID_USER = TestUser(

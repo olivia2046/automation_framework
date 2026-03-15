@@ -230,9 +230,10 @@ def logged_in_page(page: Page):
     Yields:
         Page: The Playwright Page object with an active user session.
     """
-    from utils.config import EXISTING_USER
+    from utils.config import get_existing_user
     login = LoginPage(page)
     login.open()
+    EXISTING_USER = get_existing_user()
     login.login(EXISTING_USER.email, EXISTING_USER.password)
     # Verify login succeeded by waiting for the navbar indicator,
     # not a URL pattern — the URL check was unreliable when CSRF

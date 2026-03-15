@@ -13,7 +13,7 @@ All tests follow the Arrange → Act → Assert (AAA) pattern.
 
 import pytest
 from pages import LoginPage, HomePage
-from utils.config import EXISTING_USER, INVALID_USER
+from utils.config import get_existing_user, INVALID_USER
 
 
 @pytest.mark.auth
@@ -66,7 +66,7 @@ class TestRegistration:
         login_page.open()
 
         # Use the pre-existing test user's email
-        login_page.start_signup("Duplicate User", EXISTING_USER.email)
+        login_page.start_signup("Duplicate User", get_existing_user().email)
 
         assert login_page.is_email_exists_error_shown(), (
             "Expected 'Email Address already exist!' error for duplicate registration"
@@ -88,6 +88,7 @@ class TestLogin:
         """
         login_page = LoginPage(page)
         login_page.open()
+        EXISTING_USER = get_existing_user()
         login_page.login(EXISTING_USER.email, EXISTING_USER.password)
 
         assert login_page.is_logged_in(), (

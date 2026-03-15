@@ -14,7 +14,7 @@ import time
 import pytest
 from playwright.sync_api import expect
 from pages import ProductsPage, CartPage, CheckoutPage, LoginPage
-from utils.config import EXISTING_USER
+from utils.config import get_existing_user
 
 
 @pytest.mark.checkout
@@ -36,6 +36,7 @@ class TestCheckoutAsLoggedInUser:
         login_page = LoginPage(page)
         login_page.open()
         #time.sleep(30)
+        EXISTING_USER = get_existing_user()
         home_page = login_page.login(EXISTING_USER.email, EXISTING_USER.password)
 
 
@@ -76,6 +77,7 @@ class TestCheckoutAsLoggedInUser:
         # Login
         login_page = LoginPage(page)
         login_page.open()
+        EXISTING_USER = get_existing_user()
         login_page.login(EXISTING_USER.email, EXISTING_USER.password)
         #page.wait_for_url("**/", timeout=30000)
         page.wait_for_selector("li:has-text('Logged in as')", timeout=30000)
@@ -111,6 +113,7 @@ class TestCheckoutAsLoggedInUser:
         # Step 1: Login
         login_page = LoginPage(page)
         login_page.open()
+        EXISTING_USER = get_existing_user()
         login_page.login(EXISTING_USER.email, EXISTING_USER.password)
         #page.wait_for_url("**/", timeout=30000)
         page.wait_for_selector("li:has-text('Logged in as')", timeout=30000)
@@ -154,7 +157,7 @@ class TestCheckoutAsLoggedInUser:
         """
         login_page = LoginPage(page)
         login_page.open()
-
+        EXISTING_USER = get_existing_user()
         login_page.login(EXISTING_USER.email, EXISTING_USER.password)
 
         #page.wait_for_url("**/", timeout=30000)

@@ -52,7 +52,21 @@ def get_data_file():
         return ""
 
 
+def get_env_filepath():
+    """ each environment may have more than one test type: api/web/mobile so --config name in command line has _api/_web/_mobile suffix
+        but each environment only have one .env file(those insensitive configuration are put in .yaml file for each test type)
+
+    """
+    config_name = config['config_name']
+    environment = config_name.rsplit("_",1)[0]
+    return abspath + os.sep + '..' + os.sep + f"config/.env.{environment}"
+
+
+
 def get_email_config():
+    """
+
+    """
     from util.crypt_util import decryption
     try:
         email_host = config['Email']['email_host']
