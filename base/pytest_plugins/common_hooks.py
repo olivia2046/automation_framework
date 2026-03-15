@@ -132,7 +132,7 @@ def pytest_collection_modifyitems(session, config, items):
         for base_name in test_base_names:
             # to_skip = [t for n, t in tests_by_name.items() if base_name in n][limit:]
             to_skip = [t for n, t in tests_by_name.items() if (base_name + '[') in n][
-                limit:]  # 对于多个testcase名有相同的substring的情况，防止被错误跳过
+                limit:]  # for cases where multiple test cases have save substring, to prevent test case skipped by mistake
             for t in to_skip:
                 t.add_marker("skip")
 
@@ -209,50 +209,20 @@ def pytest_runtest_makereport(item):
 #             glo.set_value(item[0], item[1])
 #             glo.set_value("host" + item[0][-1], urlparse(item[1]).hostname)
 
-# hooks钩子函数 调用方式:收集完所有测试项目后调用
-# 该钩子函数实现的功能有获取url地址 生成html和allure测试报告
-'''
-先执行标有tryfirst=True的钩子函数
-再执行标有trylast=True的钩子函数
-再执行标有hookwrapper=True的钩子函数
-'''
+
+"""
+First, execute hooks marked with tryfirst=True
+Second, execute hooks marked with trylast=True
+Then execute hooks marked with hookwrapper=True
+"""
 
 
 @pytest.hookimpl(tryfirst=True)  # trylast=True  hookwrapper=True
-# pytest_configure(config)允许插件和conftest文件执行初始配置。
-# 通过config.pluginmanager.register（）这个函数可以实现注册插件的功能，后续pytest这个框架在运行过程中就会调用你注册的插件
 def pytest_configure(config):
-    # def _get_config():
-    #
-    #     glo.init()
-    #     # set config name(indicate which configuration file to look for )
-    #     glo.set_value("config_name", config.option.config)
-    #
-    #     logging.info("Now running case using config:%s" % glo.get_value("config_name"))
-    #
-    #
-    #
-    #     from base.get_config import get_and_set_global_vars, get_url_dict
-    #
-    #     # 获取并设置
-    #     # GetConfig.get_and_set_global_vars()
-    #     get_and_set_global_vars()
-    #     # 获取ini文件中URLS的字典数据
-    #     # url_dict = GetConfig.get_url_dict()
-    #     url_dict = get_url_dict()
-    #     # 判断ini文件中URLs不能为空字典
-    #     if url_dict != {}:
-    #         for item in url_dict.items():
-    #             # 设置url
-    #             glo.set_value(item[0], item[1])
-    #             # 设置hosts
-    #             glo.set_value("host" + item[0][-1], urlparse(item[1]).hostname)
-    #
-    #     glo.set_value("webdriver_arg", config.option.webdriver)
-    #     glo.set_value("device_name", config.option.devicename)
-    #     glo.set_value("platform_name", config.option.platformname)
-    #     glo.set_value("platform_version", config.option.platformversion)
-    #     glo.set_value("app_url", config.option.appurl)
+    """ hook function, called when all test items are collected
+    execute initial configurations: get url and report path
+
+    """
 
     config_name = config.option.config
     # get configuration from yaml file
@@ -269,12 +239,6 @@ def pytest_configure(config):
 
     # get environement variable from .env file
 
-
-
-    #_get_config()
-    # from base.get_config_class import GetConfig
-    # config_name = glo.get_value("config_name")
-    #from base.get_config import get_log_level
     logger = logging.getLogger(__name__)
     # logger.setLevel(level=logging.INFO)
 
@@ -301,9 +265,6 @@ def pytest_configure(config):
 
     now = datetime.now()
     # create report target dir
-    # reports_dir = Path('reports', now.strftime('%Y%m%d'))
-    # from base.get_config import get_test_type
-    # test_type = get_test_type()
     reports_dir = Path("%s/testreport" % root_path)
     raw_dir = Path("%s/xml" % reports_dir)
     raw_dir.mkdir(parents=True, exist_ok=True)
@@ -312,10 +273,7 @@ def pytest_configure(config):
     # set custom options only if none are provided from command line
     if not hasattr(config.option, "htmlpath") or config.option.htmlpath is None:  # no --html argument specified
         # reports_dir.mkdir(parents=True, exist_ok=True)
-        # # custom report file
-        # environment_str = glo.get_value("device_name", "") + "_" + glo.get_value("platform_name",
-        #                                                                          "") + "_" + glo.get_value(
-        #     "platform_version", "")
+        # custom report file
         environment_str = (global_config.config.get('device_name','') + "_" + global_config.config.get('platform_name','')
                            + "_"+ global_config.config.get('platform_version',''))
         if environment_str != "__":  # run case by different device environment(mobile cases)
@@ -331,7 +289,6 @@ def pytest_configure(config):
 
     config.option.clean_alluredir = True
 
-    #glo.set_value("report_file_path", config.option.htmlpath)
     global_config.config['report_file_path'] = config.option.htmlpath
 
 
