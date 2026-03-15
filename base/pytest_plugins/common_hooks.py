@@ -43,7 +43,7 @@ def pytest_addoption(parser):
         "--config",  # to specify test cases of which project/environement is to be executed
         action="store",
         default="automation_exercise_web",
-        help="test project name"
+        help="locate the config file for testing"
     )
 
     parser.addoption(
