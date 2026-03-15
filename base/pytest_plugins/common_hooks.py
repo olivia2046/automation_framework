@@ -114,11 +114,11 @@ def pytest_collection_modifyitems(session, config, items):
         except ValueError:
             return test_name
 
-    for item in items:  # 解决测试用例名乱码问题
+    for item in items:  # resolve encoding issue for Chinese in test case name
         # item.name = item.name.encode("utf-8").decode("unicode_escape")
         # item.nodeid = item.nodeid.encode("utf-8").decode("unicode_escape")
-        # if item.cls.__bases__[0] is not unittest.case.TestCase: # unittest的用例，item.nodeid不能转码
-        if item.parent.__class__.__name__ != 'UnitTestCase':  # unittest的用例，item.nodeid不能转码
+        # if item.cls.__bases__[0] is not unittest.case.TestCase: # unittest test case, item.nodeid cannot encode
+        if item.parent.__class__.__name__ != 'UnitTestCase':  # unittest test case, item.nodeid cannot encode
             item._nodeid = item._nodeid.encode("utf-8").decode("unicode_escape")
         # else:
         #     item.name = item.name.encode("utf-8").decode("unicode_escape")
@@ -186,28 +186,13 @@ def pytest_runtest_makereport(item):
     report.extra = extra
     # report.description = str(item.function.__doc__)
     if item.function.__doc__ is not None:
-        # report.description = str(item.function.__doc__.split('\n')[0]) #docstring仅取第一行内容
+        # report.description = str(item.function.__doc__.split('\n')[0]) #docstring only pck the first line
         setattr(report, 'description', str(item.function.__doc__.split('\n')[0]))  # take the first line of docstring
     else:
         # report.description = ""
         setattr(report, 'description', 'No description provided')
 
         # report.nodeid = report.nodeid.encode("utf-8").decode("unicode_escape")
-
-
-# @pytest.fixture(scope="session", autouse=True)  # autouse=True自动执行该前置操作
-# def get_config(request):
-#     glo.init()
-#     glo.set_value("config_name",request.config.getoption("--config"))
-#     print("当前用例运行环境配置:%s"%glo.get_value("config_name"))
-#
-#     from base.get_config import get_and_set_global_vars,get_url_dict
-#     get_and_set_global_vars()
-#     url_dict = get_url_dict()
-#     if url_dict != {}:
-#         for item in url_dict.items():
-#             glo.set_value(item[0], item[1])
-#             glo.set_value("host" + item[0][-1], urlparse(item[1]).hostname)
 
 
 """
