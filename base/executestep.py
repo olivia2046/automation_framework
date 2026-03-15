@@ -10,9 +10,10 @@ sys.path.append('..')
 from base.runmethod import RunMethod
 from util.json_util import JsonUtil
 from base.getdata import GetData
-from base.get_config import get_header_file,get_data_file, get_verify_cert
+#from base.get_config import get_header_file,get_data_file, get_verify_cert
 #@Todo:get_header_file,get_data_file,get_root_url,get_verify不需要执行每个case时调用一次，用全局变量即可
 from base.expression_evaluation import eval_from_string
+import base.config as global_config
 
 
 # class DependentData:
@@ -60,7 +61,7 @@ class ExecuteStep():
             if re.findall("^{.+}$", header_value.replace("\n", "")) != []:  # todo: why match is None when contains \n
                 header = json.loads(header_value)
             else:
-                jutil = JsonUtil(get_header_file())
+                jutil = JsonUtil(global_config.get_header_file())
                 header = jutil.get_data(header_value)
                 #header_str = eval_from_string(repr(header),return_str=True,json_str=True)
                 #header = json.loads(json.dumps(eval(header_str))) #直接用json.loads(header_str)会报json.decoder.JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
@@ -86,7 +87,7 @@ class ExecuteStep():
                     data_str = repr(data)
 
                 elif request_data.startswith('data_label:'): #request_data is data label in data file
-                    jutil = JsonUtil(get_data_file())
+                    jutil = JsonUtil(global_config.get_data_file())
                     data = jutil.get_data(request_data) #json format data
                     data_str = repr(data)
 
@@ -128,7 +129,8 @@ class ExecuteStep():
         else:
             root_url = ""
         #root_url = eval_from_string(root_url, return_str=True, json_str=False)
-        root_url = eval_from_string(root_url)
+        #root_url = eval_from_string(root_url)
+        root_url = global_config.config.get(root_url)
         if 'relative_URL' in casedata.keys():
             #relative_url = eval_from_string(casedata['relative_URL'], return_str=True, json_str=False)
             relative_url = eval_from_string(casedata['relative_URL'])
@@ -165,7 +167,9 @@ class ExecuteStep():
         #     verify=True
         #     cert = sys.path[0] + '/../' + get_certfile_path()
         #cert = get_cert()
-        verify,cert = get_verify_cert()
+        #verify,cert = get_verify_cert()
+        verify = global_config.config.get("verify",False)
+        cert = global_config.config.get("cert",None)
 
         if isinstance(header,str):
             logging.debug("headers:%s"%header)

@@ -18,23 +18,27 @@ sys.path.append('../../case/interface')
 from base import ddt
 from util.jsonmatch import jsonmatch
 from base.executestep import ExecuteStep
-from base.get_config import get_testcase_file,get_run_specific_case,get_tc_rootdir
+#from base.get_config import get_testcase_file,get_run_specific_case,get_tc_rootdir
 from base.expression_evaluation import eval_from_string
 import base.globalvars as glo
 from base.ruleparser import RuleParser
 from base.decorators import retry
+import base.config as global_config
 
 
 # Read from Excel test case, to drive api test
-sheets_dict = pd.read_excel(get_testcase_file(),dtype='str',sheet_name=None)
+#sheets_dict = pd.read_excel(get_testcase_file(),dtype='str',sheet_name=None)
+sheets_dict = pd.read_excel(global_config.get_testcase_file(),dtype='str',sheet_name=None)
+
 datafrm = pd.concat([sheets_dict[key] for key in sheets_dict],axis=0)
 datafrm = datafrm.fillna('') #replace null value with empty string
 testdata = []
 datafrm.apply(lambda x:testdata.append(x.to_dict()),axis=1) #convert each row to dictionary, and make a list of all rows
 
-run_specific_case = get_run_specific_case()
+#run_specific_case = get_run_specific_case()
+run_specific_case = global_config.config.get('run_specific_case',False)
 if run_specific_case:
-    with open(get_tc_rootdir()+os.sep+'run_cases.txt') as f:
+    with open(global_config.get_tc_rootdir() + os.sep + 'run_cases.txt') as f:
         content = f.readlines()
         case_list = [line.strip('\n') for line in content]
 else:
@@ -43,9 +47,9 @@ else:
 
 @ddt.ddt
 class APITest(unittest.TestCase):
-    from base.get_config import get_retry_times, get_retry_wait_time
-    retry_times = get_retry_times()
-    retry_wait_time = get_retry_wait_time()
+    #from base.get_config import get_retry_times, get_retry_wait_time
+    retry_times = global_config.config.get("retry_times")
+    retry_wait_time = global_config.config.get("retry_wait_time")
 
     @ddt.data(*testdata)
     def setUp(self,casedata):
@@ -68,9 +72,10 @@ class APITest(unittest.TestCase):
         :return:  None
         '''
 
-        from base.get_config import get_run_case_level
+        #from base.get_config import get_run_case_level
+        run_case_level = global_config.config.get("run_case_level")
         # Skip the case if not in specified case level or not marked as Run
-        if (casedata['Case_Level'] in get_run_case_level() or get_run_case_level()==[]) and casedata['Case_Name'] in case_list and casedata['Run'].upper()=='Y':
+        if (casedata['Case_Level'] in run_case_level or run_case_level==[]) and casedata['Case_Name'] in case_list and casedata['Run'].upper()=='Y':
             # Execute content in 'Set_Up' Column
             if 'Set_Up' in casedata.keys() and casedata['Set_Up']!="":
                 #eval_from_string(casedata['Set_Up'], return_str=False, json_str = True)

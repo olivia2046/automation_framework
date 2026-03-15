@@ -1,6 +1,6 @@
-test_type: web
+test_type: "web"
 
-base_url: https://automationexercise.com
+base_url: "https://automationexercise.com"
 
 
 
