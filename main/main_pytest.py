@@ -16,8 +16,8 @@ import base.globalvars as glo
 
 sys.path.append('..')
 sys.path.append('../base')
-#import base.globalvars as glo
-#glo.init()  # need to initialize in main module(and only once)
+import base.globalvars as glo
+glo.init()  # need to initialize in main module(and only once)
 # retrieve project config name and set global variables. Must be imported before imported APITest(get_config imported in APITest need to get config file)
 # if len(sys.argv)==1: # no config name specified
 #     sys.argv.append("automation_exercise_api")
@@ -33,9 +33,7 @@ def main():
     parser.add_argument("--config",help="locate the config file for testing")
     #parser.add_argument("-r", "--report", help="specify report name")
     #parser.add_argument("-e", "--email", help="specify condition to send email:fail/any")
-    #parser.add_argument("--webdriver", help="specify webdriver for gui automation")
     # parser.add_argument("--enable_proxy", help="whether to enable browsermob-proxy")
-    #parser.add_argument("--tests_per_worker", help="pytest-parallel argument: specify number of tests per worker")
     #parser.add_argument("--reruns", help="specify maximum rerun times")
     # parser.add_argument("-e", action='store_true', default=False, dest='send_email', help="switch whether to send email")
     #args = parser.parse_args()

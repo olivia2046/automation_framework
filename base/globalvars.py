@@ -1,24 +1,24 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Aug 22 08:23:02 2018
-参考; https://www.cnblogs.com/suwings/p/6358061.html
-利用global的单独文件全局性，从而可以定义在一个文件中的全局变量，
-然后这个单个文件的全局变量可以保存多个文件的共同全局变量
-"""
-import logging
+https://www.cnblogs.com/suwings/p/6358061.html
 
-def init():#初始化
+to be used in Excel api test only. For other tests, use base.config.config for global variable settings
+"""
+
+
+def init():
     global _global_dict
     _global_dict = {}
 
 
 def set_value(key,value):
-    """ 定义一个全局变量 """
+    """ Define a global variable. """
     _global_dict[key] = value
 
 
 def get_value(key,defValue=None):
-    """ 获得一个全局变量,不存在则返回默认值 """
+    """ Retrieve a global variable; return a default value if it does not exist. """
     try:
         result = _global_dict[key]
         if result is None:
