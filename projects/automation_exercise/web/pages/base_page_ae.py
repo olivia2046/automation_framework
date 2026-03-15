@@ -27,7 +27,10 @@ from playwright.sync_api import Page, Locator
 from base.pwpo.base_page import BasePage as CoreBasePage
 from pages.components.navbar import Navbar
 from pages.components.footer import Footer
-from utils.config import TIMEOUTS, BASE_URL
+#from utils.config import TIMEOUTS, BASE_URL
+# lazy load base url
+from utils.config import TIMEOUTS, get_base_url
+
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +57,7 @@ class BasePage(CoreBasePage):
 
     def __init__(self, page: Page) -> None:
         super().__init__(page, timeout=TIMEOUTS.element)
-        self.base_url = BASE_URL
+        self.base_url = get_base_url()
 
         # Shared UI components — available in every page object
         self.navbar = Navbar(page)

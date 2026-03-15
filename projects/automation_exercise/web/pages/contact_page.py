@@ -10,7 +10,8 @@ import logging
 from playwright.sync_api import Page, Locator
 
 from pages.base_page_ae import BasePage
-from utils.config import URLS
+from utils.config import get_urls
+
 
 logger = logging.getLogger(__name__)
 
@@ -79,6 +80,7 @@ class ContactPage(BasePage):
 
     def open(self) -> "ContactPage":
         """Navigate to the contact page."""
+        URLS = get_urls()
         self.navigate_to(URLS["contact"])
         return self
 

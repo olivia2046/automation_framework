@@ -11,7 +11,8 @@ import logging
 from playwright.sync_api import Page, Locator
 
 from pages.base_page_ae import BasePage
-from utils.config import URLS
+from utils.config import get_urls
+
 
 logger = logging.getLogger(__name__)
 
@@ -84,6 +85,7 @@ class ProductsPage(BasePage):
 
     def open(self) -> "ProductsPage":
         """Navigate to the all-products page."""
+        URLS = get_urls()
         self.navigate_to(URLS["products"])
         return self
 

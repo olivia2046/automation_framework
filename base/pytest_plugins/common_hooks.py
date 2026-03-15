@@ -336,12 +336,13 @@ def pytest_configure(config):
 
 
 def pytest_unconfigure(config):
-    # from base.get_config_class import GetConfig
 
-    abspath = os.path.split(os.path.realpath(__file__))[0]
-    xml_report_path = '%s/testreport/xml/' % abspath
-    html_report_path = '%s/testreport/html/' % abspath
-    delfile(abspath + os.sep + 'testreport', 30)
+    report_file_path = global_config.config['report_file_path']
+    report_root_dir = os.path.dirname(report_file_path)
+
+    xml_report_path = f'{report_root_dir}/xml/'
+    html_report_path = f'{report_root_dir}/html/'
+    delfile(report_root_dir, 30)
 
     cmd = "allure generate %s -o %s --clean" % (xml_report_path, html_report_path)
 
@@ -355,7 +356,7 @@ def pytest_unconfigure(config):
     # from base.get_config import get_test_type
     # # test_type = GetConfig.get_test_type()
     # test_type = get_test_type()
-    report_file_path = global_config.config['report_file_path']
+
     config_name = global_config.config["config_name"]
     test_type = global_config.config['test_type']
 

@@ -15,7 +15,8 @@ from playwright.sync_api import Page, Locator
 
 from pages import HomePage
 from pages.base_page_ae import BasePage
-from utils.config import URLS
+from utils.config import get_urls
+
 
 logger = logging.getLogger(__name__)
 
@@ -166,6 +167,7 @@ class LoginPage(BasePage):
         """Navigate to the login page and wait for the form to be ready."""
         from playwright_stealth import stealth_sync
         stealth_sync(self.page)
+        URLS = get_urls()
         self.navigate_to(URLS["login"])
         self.wait_for_visible(self.login_email_input)
         return self

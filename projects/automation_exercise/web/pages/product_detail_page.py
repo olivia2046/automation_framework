@@ -121,7 +121,7 @@ class ProductDetailPage(BasePage):
         """
         logger.info(f"Setting quantity to: {qty}")
         #self.quantity_input.triple_click()
-        self.quantity_input.click()
+        self.quantity_input.clear()
         self.quantity_input.type(str(qty))
 
     def add_to_cart(self) -> None:
