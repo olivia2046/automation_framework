@@ -1,0 +1,10 @@
+##############################################################################################
+# YAML file example
+# put non-sensitive data here
+# Usage: copy and rename it as {config_name}.yaml
+#        e.g. projectA has two environments: qa and stg, each environment has api and web tests
+#             then config_name of qa web test is projectA_qa_web, and projectA_qa_api for api test
+################################################################################################
+test_type: "web"
+
+base_url: "https://example.com"

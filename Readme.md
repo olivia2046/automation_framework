@@ -4,7 +4,7 @@
 automation_framework/  
 ├── base/           # core modules of framework
 ├── config/         # config files to run test, each environement of each project should have its own config file  
-├── main/           # run test case from main_pytest.py  
+├── main/           # run Excel api test case from main_pytest.py  
 └── projects/       # project folders
     └── general/    
         └── general_api_test.py     # Excel driven api test
@@ -13,10 +13,9 @@ automation_framework/
         ├── lib/    # libraries to be used within project
         ├── mobile/  
         └── web/
-            ├── case/
-            └── po/
+            ├── tests/
+            └── pages/
     └── project B
-├── testreport      # test reports will be generated here
 └── util            # utility
   
 ```
@@ -27,15 +26,15 @@ automation_framework/
 # 2. Usage
 ```
 ⚙️ Set up:  
-    Create a settings-XXX.ini file(XXX should not have space in it),  
-    e.g. settings-automation_exercise_api.ini is for automation_exercise_api is for api test of automationexercise website  
+    Create a {config_name}.yaml file(config_name should not have space in it),  
+    e.g. automation_exercise_api.yaml is for automation_exercise_api is for api test of automationexercise website  
     You can set up different files for each environment like qa,std,etc.  
 Execute:  
     For Excel-driven api test cases:  
     (need to close the Excel file first)
     cd main  
-    python main_pytest.py XXX
-      XXX is the config file suffix
+    python main_pytest.py --config {config_name}
+      and you can append other pytest arguments
     For Code type api test cases and web/mobile tests, run them as pytest executes tests  
      
 ```

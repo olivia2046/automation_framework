@@ -9,7 +9,7 @@ from pathlib import Path
 
 def allure_pre_process(report_rootdir_path):
     """ pre-process for allure report, saving history data for trend chart
-    :param report_rootdir_path: absolute path of report rootdir
+    :param report_rootdir_path: path of report rootdir
     """
     allure_resultdir_path = f'{report_rootdir_path}/allure-results/'
     allure_reportdir_path = f'{report_rootdir_path}/allure-report/'

@@ -1,0 +1,31 @@
+test_type: "api"
+
+url1: "https://automationexercise.com"
+
+# verify and cert are used for api test in requests.
+verify : False
+# path of certification file. When proxy is not used, it can be empty even verify is set True.
+cert :
+
+file_path:
+  project_rootdir: "projects/automation_exercise"
+  tc_rootdir: "api/tests"
+  testcase_file: "testcase-automation_exercise.xlsx"
+  data_rootdir: "data"
+  header_file: "headers.json"
+  data_file:
+
+
+log_level: "DEBUG"
+run_case_level: {"Smoke","Sanity","Regression"}
+# Type of api test case to run:
+#   Excel: Excel-driver general api test case
+#   Code: Python Code written for each test case
+run_case_types: ["Excel"]
+# whether to run speicific Excel cases: true/false
+run_specific_case: False
+# run Code cases under specified folders(separate by comma)
+run_case_folder:
+retry_wait_time: 5
+retry_times: 0
+
