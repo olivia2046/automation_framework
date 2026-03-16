@@ -9,9 +9,12 @@ description: entrance to run test cases
 """
 
 import pytest,time,yaml, os,sys, logging,argparse
-from urllib.parse import urlparse
+#from urllib.parse import urlparse
 import base.config as global_config
-import base.globalvars as glo
+from base.allure_report_handler import allure_pre_process, make_allure_report
+from util.clean_expired_files import delfile
+
+#import base.globalvars as glo
 
 
 sys.path.append('..')
@@ -27,11 +30,11 @@ def main():
     glo.init()
     _CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
     _CONFIG_DIR = os.path.abspath(os.path.join(_CURRENT_DIR, "..", "config"))
-    # use argparse to handle command line arguments
+    # use argparse to handle command line arguments, executed before pytest.ini
     parser = argparse.ArgumentParser()
     #parser.add_argument("config_name")
     parser.add_argument("--config",help="locate the config file for testing")
-    #parser.add_argument("-r", "--report", help="specify report name")
+    parser.add_argument("--reportdir",help="locate the report file for testing",default='../testreport')
     #parser.add_argument("-e", "--email", help="specify condition to send email:fail/any")
     # parser.add_argument("--enable_proxy", help="whether to enable browsermob-proxy")
     #parser.add_argument("--reruns", help="specify maximum rerun times")
@@ -74,27 +77,12 @@ def main():
     # logging.getLogger('').addHandler(ch)
     # logging.info("---------------conftest.py---------------------------------")
 
-    #from base.get_config import get_and_set_global_vars, get_url_dict, get_tc_rootdir
     #from util import db_util
-    #from base.get_config import get_test_type
-    # test_type = get_test_type().lower()
-
-
 
     # get global variables from config file and set
     # get_and_set_global_vars()
 
-    #test_type = get_test_type()
-    test_type = global_config.config.get("test_type", "api")
-    # if test_type == 'api':
-    #     # get url list from config file and set corresponding global variables
-    #     url_dict = get_url_dict()
-    #     if url_dict != {}:
-    #         for item in url_dict.items():
-    #             glo.set_value(item[0], item[1])
-    #             glo.set_value("host" + item[0][-1], urlparse(item[1]).hostname)
-
-
+    test_type = global_config.config.get("test_type", "api").lower()
     general_case_class_mapping = {"api": "projects.general.general_api_test.APITest"}
 
     if test_type in ['api']: # can be extended for other specific tests
@@ -105,16 +93,16 @@ def main():
         classpath = None
 
     run_case_types = global_config.config.get("run_case_types", ["Excel,Code"])
-    current_work_dir = os.getcwd()
+
 
     if run_case_types == ["Excel"]:  # only when Excel driver general api test
         exec("from %s import %s" % (classpath, classname))
         #run_testsuite = unittest.TestLoader().loadTestsFromTestCase(eval(classname))
         tc_folders = os.path.abspath('../projects/general')
     else:
-        # if run_case_types == ["Code"]:  # 仅运行独立的Python代码test case
+        # if run_case_types == ["Code"]:  # only execute python code test case
         #     run_testsuite = unittest.TestSuite()
-        # else:  # 两种都运行
+        # else:  # excute both python code test case and excel test case
         #     exec("from %s import %s" % (classpath, classname))
         #     run_testsuite = unittest.TestLoader().loadTestsFromTestCase(eval(classname))
 
@@ -133,13 +121,15 @@ def main():
 
     now = time.strftime('%Y-%m-%d_%H_%M_%S', time.localtime())  # cannot include ':', invalid file name
 
+    current_work_dir = os.getcwd()
+    reportdir = args.reportdir
+    if not os.path.exists(reportdir):
+        os.makedirs(reportdir)
+    # # clean the outdated reports
+    delfile(reportdir, 30)
 
-    if not os.path.exists('../testreport'):
-        os.makedirs('../testreport')
-    if "report" in args:
-        report_file_path = r'../testreport/%s.html' % args.report
-    else:
-        report_file_path = r'../testreport/pytest_report-%s-%s.html' % (args.config, now)
+
+    report_file_path = f'{reportdir}/pytest_report-{args.config}-{now}.html'
 
     #pytest.main(['-s','-v',tc_folders_str,'--clean-alluredir Report/raw'])
     #pytest.main(['-s', '-v', tc_folders_str, "--tests-per-worker","4","--alluredir","../testreport/xml","--html=%s"%report_file_path,"--self-contained-html"])
@@ -160,7 +150,9 @@ def main():
     cmd_list.extend(["-c", "pytest.ini"])  # to skip outer layer conftest.py
     #cmd_list.extend(["-p", "base.pytest_plugins.common_hooks"]),  # explicitly register hooks
 
+    allure_pre_process(reportdir)
     pytest.main(cmd_list)
+    make_allure_report(reportdir)
     # time.sleep(5)
     # os.system('allure generate ../testreport/xml -o ../testreport/html --clean')
     logging.shutdown()
@@ -173,9 +165,6 @@ def main():
     #     #report_file_path=os.path.abspath(os.path.join(os.path.dirname(__file__),report_file_path))
     #     email_obj.send_test_report_email(html_body_flag=True, attachment_flag=True, report_file_path=report_file_path, subject_prefix = "%s test %s"%(test_type, args.config_name))
 
-
-# # clean the outdated reports
-# delfile('../testreport', 30)
 
 if __name__=='__main__':
     main()

@@ -19,6 +19,7 @@ import yaml
 
 import base.globalvars as glo
 import base.config as global_config
+from base.allure_report_handler import allure_pre_process, make_allure_report
 
 # add automation_framework/ to sys.path, so base/ and projects/ both can be imported as top level package
 # sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -44,6 +45,13 @@ def pytest_addoption(parser):
         action="store",
         default="automation_exercise_web",
         help="locate the config file for testing"
+    )
+
+    parser.addoption(
+        "--reportdir",
+        action="store",
+        default="testreport",
+        help="locate the test report folder"
     )
 
     parser.addoption(
@@ -85,12 +93,12 @@ def pytest_addoption(parser):
         help="app automation app url"
     )
 
-    parser.addoption(
-        "--email",
-        action="store_true",
-        default=False,
-        help="whether to send email for pytest report(not allure report generated from jenkins)"
-    )
+    # parser.addoption(
+    #     "--email",
+    #     action="store_true",
+    #     default=False,
+    #     help="whether to send email for pytest report(not allure report generated from jenkins)"
+    # )
 
 
 def pytest_collection_modifyitems(session, config, items):
@@ -229,10 +237,10 @@ def pytest_configure(config):
 
     #root_path = os.path.split(os.path.realpath(__file__))[0]
     root_path = os.path.abspath(os.path.join(_HOOKS_DIR, "..",".."))
-    report_root_path = root_path + os.sep + 'testreport'
-    dir_path = Path(report_root_path)
+    report_root_path = root_path + os.sep + config.option.reportdir
+    reports_dir = Path(report_root_path)
     # create testreport foler if doesn't exist
-    dir_path.mkdir(exist_ok=True, parents=True)
+    reports_dir.mkdir(exist_ok=True, parents=True)
     handler = TimedRotatingFileHandler(report_root_path + os.sep + 'run.log', when='d', interval=1, backupCount=30,
                                        encoding='utf-8')
     # handler.setLevel(eval("logging." + GetConfig.get_log_level()))
@@ -250,11 +258,11 @@ def pytest_configure(config):
 
     now = datetime.now()
     # create report target dir
-    reports_dir = Path("%s/testreport" % root_path)
-    raw_dir = Path("%s/xml" % reports_dir)
-    raw_dir.mkdir(parents=True, exist_ok=True)
-    html_dir = Path("%s/html" % reports_dir)
-    html_dir.mkdir(parents=True, exist_ok=True)
+    #reports_dir = Path("%s/testreport" % root_path)
+    # raw_dir = Path("%s/xml" % reports_dir)
+    # raw_dir.mkdir(parents=True, exist_ok=True)
+    # html_dir = Path("%s/html" % reports_dir)
+    # html_dir.mkdir(parents=True, exist_ok=True)
     # set custom options only if none are provided from command line
     if not hasattr(config.option, "htmlpath") or config.option.htmlpath is None:  # no --html argument specified
         # reports_dir.mkdir(parents=True, exist_ok=True)
@@ -269,26 +277,28 @@ def pytest_configure(config):
         config.option.htmlpath = report_file_path
         config.option.self_contained_html = True
 
-    if not hasattr(config.option, "allure_report_dir") or config.option.allure_report_dir is None:
-        config.option.allure_report_dir = raw_dir
+    # if not hasattr(config.option, "allure_report_dir") or config.option.allure_report_dir is None:
+    #     config.option.allure_report_dir = raw_dir
 
-    config.option.clean_alluredir = True
+    # config.option.clean_alluredir = True
 
     global_config.config['report_file_path'] = config.option.htmlpath
+    allure_pre_process(reports_dir)
 
 
 def pytest_unconfigure(config):
 
-    report_file_path = global_config.config['report_file_path']
-    report_root_dir = os.path.dirname(report_file_path)
+    html_report_file_path = global_config.config['report_file_path']
+    report_root_dir = os.path.dirname(html_report_file_path)
 
-    xml_report_path = f'{report_root_dir}/xml/'
-    html_report_path = f'{report_root_dir}/html/'
+    # allure_resultdir_path = f'{report_root_dir}/allure-result/'
+    # allure_reportdir_path = f'{report_root_dir}/allure-report/'
     delfile(report_root_dir, 30)
 
-    cmd = "allure generate %s -o %s --clean" % (xml_report_path, html_report_path)
-
-    subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+    # cmd = "allure generate %s -o %s --clean" % (allure_resultdir_path, allure_reportdir_path)
+    #
+    # subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
+    make_allure_report(report_root_dir)
 
     # cmd="allure serve testreport/xml"
     # subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
@@ -302,12 +312,12 @@ def pytest_unconfigure(config):
     config_name = global_config.config["config_name"]
     test_type = global_config.config['test_type']
 
-    if config.option.email:
-        from base.email_pytest_report import Email_Pytest_Report
-        email_obj = Email_Pytest_Report()
-        # 1. Send html formatted email body message with pytest report as an attachment
-        # Here log/pytest_report.html is a default file. To generate pytest_report.html file use following command to the test e.g. py.test --html = log/pytest_report.html
-        # report_file_path=os.path.abspath(os.path.join(os.path.dirname(__file__),report_file_path))
-        email_obj.send_test_report_email(html_body_flag=True, attachment_flag=True,
-                                         report_file_path=str(report_file_path),
-                                         subject_prefix="%s test %s" % (test_type, config_name))
+    # if config.option.email:
+    #     from base.email_pytest_report import Email_Pytest_Report
+    #     email_obj = Email_Pytest_Report()
+    #     # 1. Send html formatted email body message with pytest report as an attachment
+    #     # Here log/pytest_report.html is a default file. To generate pytest_report.html file use following command to the test e.g. py.test --html = log/pytest_report.html
+    #     # report_file_path=os.path.abspath(os.path.join(os.path.dirname(__file__),report_file_path))
+    #     email_obj.send_test_report_email(html_body_flag=True, attachment_flag=True,
+    #                                      report_file_path=str(html_report_file_path),
+    #                                      subject_prefix="%s test %s" % (test_type, config_name))
