@@ -9,4 +9,4 @@ util/SCPTXFR/1_Full.txt
 chrome_driver/
 *.pyc
 .venv/
-.env
+*.env*
