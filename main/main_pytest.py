@@ -10,6 +10,11 @@ description: entrance to run test cases
 
 import pytest,time,yaml, os,sys, logging,argparse
 #from urllib.parse import urlparse
+_MAIN_DIR = os.path.dirname(os.path.abspath(__file__))
+_FRAMEWORK_ROOT = os.path.abspath(os.path.join(_MAIN_DIR, ".."))
+if _FRAMEWORK_ROOT not in sys.path:
+    sys.path.insert(0, _FRAMEWORK_ROOT)
+
 import base.config as global_config
 from base.allure_report_handler import allure_pre_process, make_allure_report
 from util.clean_expired_files import delfile
