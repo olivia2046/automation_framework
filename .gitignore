@@ -1,6 +1,7 @@
 .idea
 .vscode
-testreport/
+*testreport/
+*reports/
 **/__pycache__
 logs/
 util/SCPTXFR/1_Full.txt
