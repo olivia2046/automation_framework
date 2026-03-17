@@ -35,7 +35,8 @@ Execute:
     cd main  
     python main_pytest.py --config {config_name}
       and you can append other pytest arguments
-    For Code type api test cases and web/mobile tests, run them as pytest executes tests  
+    For Code type api test cases and web/mobile tests:
+    run them as pytest executes tests, just add one argument:  --config {config_name}
      
 ```
 
