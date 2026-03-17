@@ -288,17 +288,20 @@ def pytest_configure(config):
 
 def pytest_unconfigure(config):
 
-    html_report_file_path = global_config.config['report_file_path']
-    report_root_dir = os.path.dirname(html_report_file_path)
+
+    # html_report_file_path = global_config.config['report_file_path']
+    # report_root_dir = os.path.dirname(html_report_file_path)
+    root_path = os.path.abspath(os.path.join(_HOOKS_DIR, "..",".."))
+    report_root_path = root_path + os.sep + config.option.reportdir
 
     # allure_resultdir_path = f'{report_root_dir}/allure-result/'
     # allure_reportdir_path = f'{report_root_dir}/allure-report/'
-    delfile(report_root_dir, 30)
+    delfile(report_root_path, 30)
 
     # cmd = "allure generate %s -o %s --clean" % (allure_resultdir_path, allure_reportdir_path)
     #
     # subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
-    make_allure_report(report_root_dir)
+    make_allure_report(report_root_path)
 
     # cmd="allure serve testreport/xml"
     # subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
@@ -309,8 +312,8 @@ def pytest_unconfigure(config):
     # # test_type = GetConfig.get_test_type()
     # test_type = get_test_type()
 
-    config_name = global_config.config["config_name"]
-    test_type = global_config.config['test_type']
+    # config_name = global_config.config["config_name"]
+    # test_type = global_config.config['test_type']
 
     # if config.option.email:
     #     from base.email_pytest_report import Email_Pytest_Report
