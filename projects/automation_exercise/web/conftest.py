@@ -32,7 +32,7 @@ pytest_plugins = ["base.pytest_plugins.common_hooks"]
 
 import logging
 import pytest
-from playwright.sync_api import Page, Browser, BrowserContext
+from playwright.sync_api import Page
 
 from pages import (
     HomePage,
@@ -43,7 +43,7 @@ from pages import (
     CheckoutPage,
     ContactPage,
 )
-from utils.config import get_browser_config, TIMEOUTS, SCREENSHOT_ON_FAILURE, SCREENSHOTS_DIR, get_browser_config
+from utils.config import TIMEOUTS, SCREENSHOT_ON_FAILURE, SCREENSHOTS_DIR, get_browser_config
 from utils.helpers import take_screenshot, generate_registration_data, generate_card_data
 
 logger = logging.getLogger(__name__)
