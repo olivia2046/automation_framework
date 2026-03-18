@@ -285,7 +285,7 @@ class TestHomepageProducts:
           3. Enter a valid email and submit.
           4. Verify the success alert appears.
         """
-        from utils.helpers import generate_unique_email
+        from shared_utils.helpers import generate_unique_email
         home_page.open()
         home_page.subscribe_to_newsletter(generate_unique_email())
 

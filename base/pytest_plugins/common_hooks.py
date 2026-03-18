@@ -14,12 +14,12 @@ from datetime import datetime
 from pathlib import Path
 import pytest
 from urllib.parse import urlparse
-
 import yaml
 
 import base.globalvars as glo
 import base.config as global_config
 from base.allure_report_handler import allure_pre_process, make_allure_report
+from base.pwpo.base_page import BasePage as CoreBasePage
 
 # add automation_framework/ to sys.path, so base/ and projects/ both can be imported as top level package
 # sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -29,6 +29,7 @@ from base.allure_report_handler import allure_pre_process, make_allure_report
 # sys.path.insert(0, _FRAMEWORK_ROOT)
 
 from shared_utils.clean_expired_files import remove_old_files
+#from base.pwpo.base_page import BasePage
 
 _HOOKS_DIR = os.path.dirname(os.path.abspath(__file__))
 _CONFIG_DIR = os.path.abspath(os.path.join(_HOOKS_DIR, "..", "..", "config"))
@@ -172,12 +173,26 @@ def pytest_html_results_table_row(report, cells):
 #     report.description = str(item.function.__doc__)
 
 @pytest.mark.hookwrapper
-def pytest_runtest_makereport(item):
+def pytest_runtest_makereport(item,call):
     """
-    get screenshot automatically when test fail, and display in html report
+    Hook that runs after each test phase (setup / call / teardown).
+    Attaches a failure screenshot to the HTML report when a test fails,
+    if SCREENSHOT_ON_FAILURE is enabled in config.
+    and display in html report
     :param item:
     """
-    pytest_html = item.config.pluginmanager.getplugin('html')
+
+    if call.when == "call" and call.excinfo is not None:
+        scr_on_failure = os.getenv("SCREENSHOT_ON_FAILURE", "true").lower() == "true"
+        if scr_on_failure:
+            page = item.funcargs.get("page") # it's playwright test since only playwright has the 'page' fixture
+            if page:
+                test_name = item.nodeid.replace("/", "_").replace("::", "_")
+                path = CoreBasePage(page).take_screenshot(f"FAILED_{test_name}")
+                logging.info(f"Failure screenshot saved: {path}")
+            # todo: for selenium and appium tests
+
+    #pytest_html = item.config.pluginmanager.getplugin('html')
     outcome = yield
     report = outcome.get_result()
     extra = getattr(report, 'extra', [])
@@ -285,8 +300,9 @@ def pytest_configure(config):
     global_config.config['report_file_path'] = config.option.htmlpath
     allure_pre_process(reports_dir)
     # Ensure the screenshots output directory exists before tests run.
-    screenshot_dir = os.path.join(report_root_path, "reports", "screenshots")
+    screenshot_dir = os.path.join(report_root_path, "screenshots")
     os.makedirs(screenshot_dir, exist_ok=True)
+    global_config.config['screenshot_dir'] = screenshot_dir
 
 
 def pytest_unconfigure(config):

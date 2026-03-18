@@ -4,7 +4,10 @@
 Created on: 2026/3/8 10:53
 desc: 
 '''
+import os
 from dataclasses import dataclass
+from datetime import datetime
+from base import config as global_config
 
 """
 
@@ -38,7 +41,7 @@ _DEFAULT_TIMEOUT = 30_000
 _DEFAULT_NAV_TIMEOUT = 60_000
 
 
-class BasePage:
+class BasePage(Page):
     """
     Generic base class for all Page Objects across any project.
 
@@ -379,16 +382,31 @@ class BasePage:
     # Screenshot
     # ------------------------------------------------------------------
 
-    def take_screenshot(self, path: str, full_page: bool = True) -> None:
+    def take_screenshot(self, name: str, full_page: bool = True) -> None:
         """
-        Capture a screenshot of the current page state.
+        Capture a screenshot and save it to the screenshots directory
 
         Args:
-            path:      File path (including filename) to save the screenshot.
+            name:      Descriptive name for the screenshot file.
             full_page: When True, captures the entire scrollable page (default).
         """
-        self.page.screenshot(path=path, full_page=full_page)
-        logger.info(f"Screenshot saved: {path}")
+
+        screenshot_dir = global_config.config['screenshot_dir']
+        os.makedirs(screenshot_dir, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        safe_name = re.sub(r"[^\w\-_]", "_", name)
+        filepath = os.path.join(screenshot_dir, f"{safe_name}_{timestamp}.png")
+
+        # self.page.screenshot(path=filepath, full_page=full_page)
+        # logger.info(f"Screenshot saved: {filepath}")
+
+        try:
+            self.page.screenshot(path=filepath, full_page=True)
+            logging.info(f"Screenshot saved: {filepath}")
+        except Exception as e:
+            logging.warning(f"Failed to take screenshot '{name}': {e}")
+
+        return filepath
 
 
 @dataclass
@@ -398,5 +416,3 @@ class Timeouts:
     navigation: int = 60_000    # Page navigation timeout
     element: int = 10_000       # Element visibility/clickability
     animation: int = 2_000      # Wait for CSS animations
-
-

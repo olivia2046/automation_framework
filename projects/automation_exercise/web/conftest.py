@@ -43,10 +43,11 @@ from pages import (
     CheckoutPage,
     ContactPage,
 )
-from utils.config import TIMEOUTS, SCREENSHOT_ON_FAILURE, SCREENSHOTS_DIR, get_browser_config
-from utils.helpers import take_screenshot, generate_registration_data, generate_card_data
-
-logger = logging.getLogger(__name__)
+from utils.config import get_browser_config
+from utils.helpers import generate_registration_data
+from shared_utils.helpers import generate_card_data
+# from base.pwpo.base_page import take_screenshot
+# logger = logging.getLogger(__name__)
 
 
 # ===========================================================================
@@ -58,20 +59,20 @@ logger = logging.getLogger(__name__)
 #     os.makedirs(SCREENSHOTS_DIR, exist_ok=True)
 
 
-def pytest_runtest_makereport(item, call):
-    """
-    Hook that runs after each test phase (setup / call / teardown).
-
-    Attaches a failure screenshot to the HTML report when a test fails,
-    if SCREENSHOT_ON_FAILURE is enabled in config.
-    """
-    if call.when == "call" and call.excinfo is not None:
-        if SCREENSHOT_ON_FAILURE:
-            page: Page = item.funcargs.get("page")
-            if page:
-                test_name = item.nodeid.replace("/", "_").replace("::", "_")
-                path = take_screenshot(page, f"FAILED_{test_name}")
-                logger.info(f"Failure screenshot saved: {path}")
+# def pytest_runtest_makereport(item, call):
+#     """
+#     Hook that runs after each test phase (setup / call / teardown).
+#
+#     Attaches a failure screenshot to the HTML report when a test fails,
+#     if SCREENSHOT_ON_FAILURE is enabled in config.
+#     """
+#     if call.when == "call" and call.excinfo is not None:
+#         if SCREENSHOT_ON_FAILURE:
+#             page: Page = item.funcargs.get("page")
+#             if page:
+#                 test_name = item.nodeid.replace("/", "_").replace("::", "_")
+#                 path = take_screenshot(page, f"FAILED_{test_name}")
+#                 logger.info(f"Failure screenshot saved: {path}")
 
 
 # ===========================================================================
