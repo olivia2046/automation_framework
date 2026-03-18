@@ -10,3 +10,4 @@ chrome_driver/
 *.pyc
 .venv/
 *.env*
+assets/
