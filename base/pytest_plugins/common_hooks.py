@@ -28,7 +28,7 @@ from base.allure_report_handler import allure_pre_process, make_allure_report
 # print(f"[conftest] inserting into sys.path: {_FRAMEWORK_ROOT}")
 # sys.path.insert(0, _FRAMEWORK_ROOT)
 
-from util.clean_expired_files import remove_old_files
+from shared_utils.clean_expired_files import remove_old_files
 
 _HOOKS_DIR = os.path.dirname(os.path.abspath(__file__))
 _CONFIG_DIR = os.path.abspath(os.path.join(_HOOKS_DIR, "..", "..", "config"))

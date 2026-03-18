@@ -6,8 +6,8 @@ import json
 
 import allure
 from base import globalvars as glo
-from util.api import request_tool
-from util.report import log_tool
+from shared_utils.api import request_tool
+from shared_utils.report import log_tool
 
 
 def get_request_url(url,path):

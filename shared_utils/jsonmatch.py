@@ -13,7 +13,7 @@ __revision__ = "$Revision: 1.4 $"
 
 import sys,logging
 from decimal import Decimal
-from util.number_util import approx_Equal
+from shared_utils.number_util import approx_Equal
 
 # For python3 portability
 if sys.version_info[0] == 3:

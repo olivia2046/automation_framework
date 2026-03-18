@@ -16,7 +16,7 @@ automation_framework/
             ├── tests/
             └── pages/
     └── project B
-└── util            # utility
+└── shared_utils            # shared utilities
   
 ```
 

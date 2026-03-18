@@ -17,7 +17,7 @@ if _FRAMEWORK_ROOT not in sys.path:
 
 import base.config as global_config
 from base.allure_report_handler import allure_pre_process, make_allure_report
-from util.clean_expired_files import remove_old_files
+from shared_utils.clean_expired_files import remove_old_files
 
 #import base.globalvars as glo
 

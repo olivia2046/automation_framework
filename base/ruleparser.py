@@ -13,8 +13,8 @@ import json,logging,re,math
 from jsonpath import jsonpath
 import pandas as pd
 from base.expression_evaluation import eval_from_string
-from util.collection_util import is_list
-from util.jsonmatch import my_list_cmp
+from shared_utils.collection_util import is_list
+from shared_utils.jsonmatch import my_list_cmp
 
 class RuleParser(object):
     def __init__(self, rule, response):

@@ -16,7 +16,7 @@ import pytest
 from jsonpath import jsonpath # used in eval. DON'T REMOVE THIS LINE
 sys.path.append('../../case/interface')
 from base import ddt
-from util.jsonmatch import jsonmatch
+from shared_utils.jsonmatch import jsonmatch
 from base.executestep import ExecuteStep
 #from base.get_config import get_testcase_file,get_run_specific_case,get_tc_rootdir
 from base.expression_evaluation import eval_from_string

@@ -70,7 +70,7 @@ def get_email_config():
     """
 
     """
-    from util.crypt_util import decryption
+    from shared_utils.crypt_util import decryption
     try:
         email_host = config['Email']['email_host']
         if 'email_port' in config['Email']:
