@@ -53,9 +53,9 @@ logger = logging.getLogger(__name__)
 # Pytest Hooks
 # ===========================================================================
 
-def pytest_configure(config):
-    """Ensure the screenshots output directory exists before tests run."""
-    os.makedirs(SCREENSHOTS_DIR, exist_ok=True)
+# def pytest_configure(config):
+#     """Ensure the screenshots output directory exists before tests run."""
+#     os.makedirs(SCREENSHOTS_DIR, exist_ok=True)
 
 
 def pytest_runtest_makereport(item, call):

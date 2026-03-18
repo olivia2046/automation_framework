@@ -28,7 +28,7 @@ from base.allure_report_handler import allure_pre_process, make_allure_report
 # print(f"[conftest] inserting into sys.path: {_FRAMEWORK_ROOT}")
 # sys.path.insert(0, _FRAMEWORK_ROOT)
 
-from util.clean_expired_files import delfile
+from util.clean_expired_files import remove_old_files
 
 _HOOKS_DIR = os.path.dirname(os.path.abspath(__file__))
 _CONFIG_DIR = os.path.abspath(os.path.join(_HOOKS_DIR, "..", "..", "config"))
@@ -284,11 +284,14 @@ def pytest_configure(config):
 
     global_config.config['report_file_path'] = config.option.htmlpath
     allure_pre_process(reports_dir)
+    # Ensure the screenshots output directory exists before tests run.
+    screenshot_dir = os.path.join(report_root_path, "reports", "screenshots")
+    os.makedirs(screenshot_dir, exist_ok=True)
 
 
 def pytest_unconfigure(config):
-
-
+    """
+    """
     # html_report_file_path = global_config.config['report_file_path']
     # report_root_dir = os.path.dirname(html_report_file_path)
     root_path = os.path.abspath(os.path.join(_HOOKS_DIR, "..",".."))
@@ -296,7 +299,7 @@ def pytest_unconfigure(config):
 
     # allure_resultdir_path = f'{report_root_dir}/allure-result/'
     # allure_reportdir_path = f'{report_root_dir}/allure-report/'
-    delfile(report_root_path, 30)
+    remove_old_files(report_root_path, 30)
 
     # cmd = "allure generate %s -o %s --clean" % (allure_resultdir_path, allure_reportdir_path)
     #

@@ -17,7 +17,7 @@ if _FRAMEWORK_ROOT not in sys.path:
 
 import base.config as global_config
 from base.allure_report_handler import allure_pre_process, make_allure_report
-from util.clean_expired_files import delfile
+from util.clean_expired_files import remove_old_files
 
 #import base.globalvars as glo
 
@@ -131,7 +131,7 @@ def main():
     if not os.path.exists(reportdir):
         os.makedirs(reportdir)
     # # clean the outdated reports
-    delfile(reportdir, 30)
+    remove_old_files(reportdir, 30)
 
 
     report_file_path = f'{reportdir}/pytest_report-{args.config}-{now}.html'
