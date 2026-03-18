@@ -4,7 +4,7 @@
 *reports/
 **/__pycache__
 logs/
-util/SCPTXFR/1_Full.txt
+shared_utils/SCPTXFR/1_Full.txt
 .gitignore
 chrome_driver/
 *.pyc
