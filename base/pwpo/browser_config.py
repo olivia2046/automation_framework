@@ -11,6 +11,8 @@ from base import config as global_config
 # BrowserConfig is of dataclass, so code will be executed when importing,
     # while code in default_factory will be delayed when BrowserConfig is instantiated
 def get_headless_value():
+    """ get headless browser launch options
+    """
     # if not called in default_factory of BrowserConfig, get_env_filepath() will return None
     from dotenv import load_dotenv
     env_file_path = global_config.get_env_filepath()
@@ -18,7 +20,8 @@ def get_headless_value():
     return os.getenv("HEADLESS", "true").lower()
 
 def get_slowmo_value():
-
+    """ get slowmo launch options
+    """
     # if not called in default_factory of BrowserConfig, get_env_filep1ath() will return None
     from dotenv import load_dotenv
     env_file_path = global_config.get_env_filepath()
