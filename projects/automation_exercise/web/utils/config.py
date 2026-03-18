@@ -89,9 +89,9 @@ def get_browser_config() -> BrowserConfig:
 # ---------------------------------------------------------------------------
 # Screenshot & Reporting
 # ---------------------------------------------------------------------------
-SCREENSHOT_ON_FAILURE = os.getenv("SCREENSHOT_ON_FAILURE", "true").lower() == "true"
-SCREENSHOTS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "reports", "screenshots")
-REPORTS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "reports")
+# SCREENSHOT_ON_FAILURE = os.getenv("SCREENSHOT_ON_FAILURE", "true").lower() == "true"
+# SCREENSHOTS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "reports", "screenshots")
+# REPORTS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "reports")
 
 
 # ---------------------------------------------------------------------------
