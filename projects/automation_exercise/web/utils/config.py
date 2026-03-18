@@ -11,9 +11,8 @@ import os
 from dataclasses import dataclass
 
 import base.config as global_config
-from base.pwpo.base_page import Timeouts, BrowserConfig
-
-
+from base.pwpo.base_page import Timeouts
+from base.pwpo.browser_config import BrowserConfig
 
 
 # ---------------------------------------------------------------------------
@@ -78,9 +77,13 @@ TIMEOUTS = Timeouts()
 # ---------------------------------------------------------------------------
 # Browser Configuration
 # ---------------------------------------------------------------------------
+def get_browser_config() -> BrowserConfig:
+    return BrowserConfig()
 
-# need to set slow_mo to at least 500, otherwise the test may be too quick that some page refresh hasn't finished before doing assertions
-BROWSER_CONFIG = BrowserConfig(headless=False, slow_mo=500, viewport_width=1920, viewport_height=1080)
+
+
+#BROWSER_CONFIG = BrowserConfig(headless=False, slow_mo=500, viewport_width=1920, viewport_height=1080)
+
 
 
 # ---------------------------------------------------------------------------

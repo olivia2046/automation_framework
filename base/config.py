@@ -57,9 +57,12 @@ def get_env_filepath():
         but each environment only have one .env file(those insensitive configuration are put in .yaml file for each test type)
 
     """
-    config_name = config['config_name']
-    environment = config_name.rsplit("_",1)[0]
-    return abspath + os.sep + '..' + os.sep + f"config/.env.{environment}"
+    if 'config_name' in config:
+        config_name = config['config_name']
+        environment = config_name.rsplit("_",1)[0]
+        return abspath + os.sep + '..' + os.sep + f"config/.env.{environment}"
+    else:
+        return None
 
 
 

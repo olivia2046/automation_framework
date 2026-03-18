@@ -43,7 +43,7 @@ from pages import (
     CheckoutPage,
     ContactPage,
 )
-from utils.config import BROWSER_CONFIG, TIMEOUTS, SCREENSHOT_ON_FAILURE, SCREENSHOTS_DIR
+from utils.config import get_browser_config, TIMEOUTS, SCREENSHOT_ON_FAILURE, SCREENSHOTS_DIR, get_browser_config
 from utils.helpers import take_screenshot, generate_registration_data, generate_card_data
 
 logger = logging.getLogger(__name__)
@@ -86,14 +86,15 @@ def browser_context_args(browser_context_args):
     Applies viewport size, locale, and timezone from BrowserConfig.
     This fixture is recognized and merged by pytest-playwright automatically.
     """
+    browser_config = get_browser_config()
     return {
         **browser_context_args,
         "viewport": {
-            "width": BROWSER_CONFIG.viewport_width,
-            "height": BROWSER_CONFIG.viewport_height,
+            "width": browser_config.viewport_width,
+            "height": browser_config.viewport_height,
         },
-        "locale": BROWSER_CONFIG.locale,
-        "timezone_id": BROWSER_CONFIG.timezone,
+        "locale": browser_config.locale,
+        "timezone_id": browser_config.timezone,
     }
 
 
@@ -104,10 +105,11 @@ def browser_type_launch_args(browser_type_launch_args):
 
     Controls headless mode and slow-motion playback speed.
     """
+    browser_config = get_browser_config()
     return {
         **browser_type_launch_args,
-        "headless": BROWSER_CONFIG.headless,
-        "slow_mo": BROWSER_CONFIG.slow_mo,
+        "headless": browser_config.headless,
+        "slow_mo": browser_config.slow_mo,
 
     }
 
