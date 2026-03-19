@@ -91,11 +91,12 @@ def contains_text(haystack: str, needle: str, case_sensitive: bool = False) -> b
     return needle in haystack
 
 
-def take_screenshot(page: Page, name: str, full_page: bool = True) -> None:
+def take_screenshot(page: Page, name: str, full_page: bool = True) -> str:
     """
     Capture a screenshot and save it to the screenshots directory
 
     Args:
+        page:      Page to take screenshot.
         name:      Descriptive name for the screenshot file.
         full_page: When True, captures the entire scrollable page (default).
     """
@@ -110,7 +111,7 @@ def take_screenshot(page: Page, name: str, full_page: bool = True) -> None:
     # logger.info(f"Screenshot saved: {filepath}")
 
     try:
-        page.screenshot(path=filepath, full_page=True)
+        page.screenshot(path=filepath, full_page=full_page)
         logging.info(f"Screenshot saved: {filepath}")
     except Exception as e:
         logging.warning(f"Failed to take screenshot '{name}': {e}")
