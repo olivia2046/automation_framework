@@ -179,59 +179,75 @@ def pytest_html_results_table_row(report, cells):
 def pytest_runtest_makereport(item,call):
     """
     Hook that runs after each test phase (setup / call / teardown).
-    Attaches a failure screenshot to the HTML report when a test fails,
-    if SCREENSHOT_ON_FAILURE is enabled in config.
-    and display in html report
-    :param item:
-    """
 
+    On test failure:
+      1. Takes a screenshot (Playwright tests only, detected via 'page' fixture).
+      2. Attaches the screenshot to the Allure report via allure.attach().
+      3. Embeds the screenshot as a Base64 inline image in the pytest-html report.
+      4. Sets the test description from the first line of the docstring.
+
+    Screenshot is only taken when SCREENSHOT_ON_FAILURE env var is 'true' (default).
+    """
+    # Must yield first so that report object is available before we attach extras.
+    # Screenshot is captured before yield so page is still in the failure state.
+    screenshot_bytes = None
 
     if call.when == "call" and call.excinfo is not None:
         scr_on_failure = os.getenv("SCREENSHOT_ON_FAILURE", "true").lower() == "true"
         if scr_on_failure:
-            screenshot_bytes = None
             page: Page = item.funcargs.get("page")
-            if page: # it's playwright test since only playwright has the 'page' fixture
+            if page:  # 'page' fixture is pytest-playwright specific — indicates a Playwright test
                 test_name = item.nodeid.replace("/", "_").replace("::", "_")
+
+                # Save screenshot to disk for reference
                 path = take_screenshot(page, f"FAILED_{test_name}")
                 logging.info(f"Failure screenshot saved: {path}")
-                screenshot_bytes = page.screenshot(full_page=True)
-            # todo: for Selenium/Appium tests
 
-            # if screenshot_bytes:
-            #     import allure
-            #     # --- 1. Inject into Allure Report ---
-            #     try:
-            #
-            #         allure.attach(
-            #             screenshot_bytes,
-            #             name="failure_screenshot",
-            #             attachment_type=allure.attachment_type.PNG
-            #         )
-            #     except ImportError:
-            #         pass
-            #
-            #     # --- 2. Inject into pytest-html Report ---
-            #     if hasattr(item.config, "_html"):
-            #         import base64
-            #         # Embed screenshot as Base64 HTML string
-            #         html_img = '<div><img src="data:image/png;base64,{}" alt="screenshot" style="width:600px;height:auto;" align="right"/></div>'.format(
-            #             base64.b64encode(screenshot_bytes).decode()
-            #         )
-            #
-            #         # Access the report's extra content list and append the HTML snippet
-            #         extras = getattr(report, "extra", [])
-            #         extras.append(item.config._html.extras.html(html_img))
-            #         report.extra = extras
+                # Capture raw bytes for embedding in reports
+                try:
+                    screenshot_bytes = page.screenshot(full_page=True)
+                except Exception as e:
+                    logging.warning(f"Failed to capture screenshot bytes: {e}")
 
+            # todo: add Selenium / Appium screenshot support here
 
+    # --- Allure: attach screenshot before yield so it is associated with the correct test ---
+    if screenshot_bytes:
+        try:
+            import allure
+            allure.attach(
+                screenshot_bytes,
+                name="Failure Screenshot",
+                attachment_type=allure.attachment_type.PNG,
+            )
+        except ImportError:
+            logging.debug("allure-pytest not installed — skipping Allure screenshot attachment")
+        except Exception as e:
+            logging.warning(f"Failed to attach screenshot to Allure report: {e}")
 
-
-    #pytest_html = item.config.pluginmanager.getplugin('html')
-    # Execute the test and get the result
+    # Yield to let pytest collect the test result
     outcome = yield
     report = outcome.get_result()
-    extra = getattr(report, 'extra', [])
+    extra = getattr(report, "extra", [])
+
+    # --- pytest-html: embed screenshot as Base64 inline image ---
+    if screenshot_bytes and report.when == "call" and report.failed:
+        try:
+            import base64
+            pytest_html = item.config.pluginmanager.getplugin("html")
+            if pytest_html:
+                img_b64 = base64.b64encode(screenshot_bytes).decode()
+                html_img = (
+                    '<div>'
+                    '<img src="data:image/png;base64,{}" '
+                    'alt="Failure Screenshot" '
+                    'style="width:800px; height:auto; cursor:pointer;" '
+                    'onclick="window.open(this.src)" />'
+                    '</div>'
+                ).format(img_b64)
+                extra.append(pytest_html.extras.html(html_img))
+        except Exception as e:
+            logging.warning(f"Failed to attach screenshot to pytest-html report: {e}")
 
     # if report.when == 'call' or report.when == "setup":
     #     xfail = hasattr(report, 'wasxfail')
