@@ -4,9 +4,15 @@
 # @Author : Olivia
 # Desc:
 # **************************************
+import logging
+import os
 import random, string
+import re
 from datetime import datetime
 from faker import Faker
+from playwright.sync_api import Page
+
+import base.config as global_config
 
 fake = Faker()
 # from utils.config import SCREENSHOTS_DIR
@@ -85,5 +91,28 @@ def contains_text(haystack: str, needle: str, case_sensitive: bool = False) -> b
     return needle in haystack
 
 
+def take_screenshot(page: Page, name: str, full_page: bool = True) -> None:
+    """
+    Capture a screenshot and save it to the screenshots directory
 
+    Args:
+        name:      Descriptive name for the screenshot file.
+        full_page: When True, captures the entire scrollable page (default).
+    """
 
+    screenshot_dir = global_config.config['screenshot_dir']
+    os.makedirs(screenshot_dir, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    safe_name = re.sub(r"[^\w\-_]", "_", name)
+    filepath = os.path.join(screenshot_dir, f"{safe_name}_{timestamp}.png")
+
+    # self.page.screenshot(path=filepath, full_page=full_page)
+    # logger.info(f"Screenshot saved: {filepath}")
+
+    try:
+        page.screenshot(path=filepath, full_page=True)
+        logging.info(f"Screenshot saved: {filepath}")
+    except Exception as e:
+        logging.warning(f"Failed to take screenshot '{name}': {e}")
+
+    return filepath

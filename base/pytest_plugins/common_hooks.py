@@ -8,18 +8,19 @@ which leads to top-level conftest.py not loaded, put these hook definitions here
 pytest_plugins = ["base.pytest_plugins.common_hooks"]
 '''
 
-import os, subprocess, logging, sys
+import os, logging
 from logging.handlers import TimedRotatingFileHandler
 from datetime import datetime
 from pathlib import Path
 import pytest
 from urllib.parse import urlparse
 import yaml
+from playwright.sync_api import Page
 
 import base.globalvars as glo
 import base.config as global_config
 from base.allure_report_handler import allure_pre_process, make_allure_report
-from base.pwpo.base_page import BasePage as CoreBasePage
+
 
 # add automation_framework/ to sys.path, so base/ and projects/ both can be imported as top level package
 # sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -29,6 +30,8 @@ from base.pwpo.base_page import BasePage as CoreBasePage
 # sys.path.insert(0, _FRAMEWORK_ROOT)
 
 from shared_utils.clean_expired_files import remove_old_files
+from shared_utils.helpers import take_screenshot
+
 #from base.pwpo.base_page import BasePage
 
 _HOOKS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -44,7 +47,7 @@ def pytest_addoption(parser):
     parser.addoption(
         "--config",  # to specify test cases of which project/environement is to be executed
         action="store",
-        default="automation_exercise_web",
+        #default="automation_exercise_web",
         help="locate the config file for testing"
     )
 
@@ -182,17 +185,50 @@ def pytest_runtest_makereport(item,call):
     :param item:
     """
 
+
     if call.when == "call" and call.excinfo is not None:
         scr_on_failure = os.getenv("SCREENSHOT_ON_FAILURE", "true").lower() == "true"
         if scr_on_failure:
-            page = item.funcargs.get("page") # it's playwright test since only playwright has the 'page' fixture
-            if page:
+            screenshot_bytes = None
+            page: Page = item.funcargs.get("page")
+            if page: # it's playwright test since only playwright has the 'page' fixture
                 test_name = item.nodeid.replace("/", "_").replace("::", "_")
-                path = CoreBasePage(page).take_screenshot(f"FAILED_{test_name}")
+                path = take_screenshot(page, f"FAILED_{test_name}")
                 logging.info(f"Failure screenshot saved: {path}")
-            # todo: for selenium and appium tests
+                screenshot_bytes = page.screenshot(full_page=True)
+            # todo: for Selenium/Appium tests
+
+            # if screenshot_bytes:
+            #     import allure
+            #     # --- 1. Inject into Allure Report ---
+            #     try:
+            #
+            #         allure.attach(
+            #             screenshot_bytes,
+            #             name="failure_screenshot",
+            #             attachment_type=allure.attachment_type.PNG
+            #         )
+            #     except ImportError:
+            #         pass
+            #
+            #     # --- 2. Inject into pytest-html Report ---
+            #     if hasattr(item.config, "_html"):
+            #         import base64
+            #         # Embed screenshot as Base64 HTML string
+            #         html_img = '<div><img src="data:image/png;base64,{}" alt="screenshot" style="width:600px;height:auto;" align="right"/></div>'.format(
+            #             base64.b64encode(screenshot_bytes).decode()
+            #         )
+            #
+            #         # Access the report's extra content list and append the HTML snippet
+            #         extras = getattr(report, "extra", [])
+            #         extras.append(item.config._html.extras.html(html_img))
+            #         report.extra = extras
+
+
+
 
     #pytest_html = item.config.pluginmanager.getplugin('html')
+    # Execute the test and get the result
     outcome = yield
     report = outcome.get_result()
     extra = getattr(report, 'extra', [])
@@ -206,6 +242,7 @@ def pytest_runtest_makereport(item,call):
     #     #         html = '<div><img src="data:image/png;base64,%s" alt="screenshot" style="width:600px;height:300px;" ' \
     #     #                'onclick="window.open(this.src)" align="right"/></div>' % screen_img
     #     #         extra.append(pytest_html.extras.html(html))
+
     report.extra = extra
     # report.description = str(item.function.__doc__)
     if item.function.__doc__ is not None:
