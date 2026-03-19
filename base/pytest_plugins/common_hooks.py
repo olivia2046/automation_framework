@@ -106,7 +106,10 @@ def pytest_addoption(parser):
 
 
 def pytest_collection_modifyitems(session, config, items):
-    """根据命令行参数传入的limit数，在执行参数化的一组用例时，仅执行前limit个用例（适用场景如一组用例中若干个为高优先级用例/Smoke test用例，执行全组用例太耗时时）
+    """Based on the `limit` value passed via command-line arguments, when executing a parameterized set of test cases,
+    only the first `limit` cases are executed. (This is applicable in scenarios where, for instance,
+    a subset of the cases consists of high-priority or Smoke Test cases, and executing the entire set would be too time-consuming.)
+
 
     :param session:
     :param config:
@@ -147,6 +150,34 @@ def pytest_collection_modifyitems(session, config, items):
                 limit:]  # for cases where multiple test cases have save substring, to prevent test case skipped by mistake
             for t in to_skip:
                 t.add_marker("skip")
+
+
+@pytest.fixture(autouse=True)
+def auto_trace(context):
+    """
+    Start Playwright tracing before each test and stop it after.
+
+    Strategy: retain-on-failure
+      - Tracing is started for every Playwright test (detected via 'context' fixture).
+      - On failure: pytest_runtest_makereport stops tracing and saves the trace file.
+      - On success: tracing is stopped here without saving, discarding the data.
+
+    Defined in common_hooks.py so all projects inherit it automatically
+    via pytest_plugins = ["base.pytest_plugins.common_hooks"].
+
+    to view trace: playwright show-trace xxx.zip, or python -m playwright show-trace xxx.zip
+    """
+    trace_on_failure = os.getenv("TRACE_ON_FAILURE", "true").lower() == "true"
+    if trace_on_failure:
+        context.tracing.start(screenshots=True, snapshots=True, sources=True)
+    yield
+    # On success: stop tracing without saving (discard trace data).
+    # On failure: already stopped by pytest_runtest_makereport — ignore the error.
+    if trace_on_failure:
+        try:
+            context.tracing.stop()
+        except Exception:
+            pass
 
 
 @pytest.mark.optionalhook
@@ -230,34 +261,73 @@ def pytest_runtest_makereport(item,call):
     report = outcome.get_result()
     extra = getattr(report, "extra", [])
 
-    # --- pytest-html: embed screenshot as Base64 inline image ---
-    if screenshot_bytes and report.when == "call" and report.failed:
-        try:
-            import base64
-            pytest_html = item.config.pluginmanager.getplugin("html")
-            if pytest_html:
-                img_b64 = base64.b64encode(screenshot_bytes).decode()
-                html_img = (
-                    '<div>'
-                    '<img src="data:image/png;base64,{}" '
-                    'alt="Failure Screenshot" '
-                    'style="width:800px; height:auto; cursor:pointer;" '
-                    'onclick="window.open(this.src)" />'
-                    '</div>'
-                ).format(img_b64)
-                extra.append(pytest_html.extras.html(html_img))
-        except Exception as e:
-            logging.warning(f"Failed to attach screenshot to pytest-html report: {e}")
+    if report.when == "call" and report.failed:
+        # --- Save and attach Playwright trace on failure ---
+        # trace_on_failure = os.getenv("TRACE_ON_FAILURE", "true").lower() == "true"
+        # if trace_on_failure:
+        #     context = item.funcargs.get("context")
+        #     if context:  # 'context' fixture is pytest-playwright specific
+        #         test_name = item.nodeid.replace("/", "_").replace("::", "_")
+        #         trace_dir = global_config.config.get("trace_dir", "traces")
+        #         trace_path = os.path.join(
+        #             trace_dir,
+        #             f"FAILED_{test_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.zip"
+        #         )
+        #         try:
+        #             # Stop tracing and save the trace file
+        #             context.tracing.stop(path=trace_path)
+        #             logging.info(f"Trace saved: {trace_path}")
+        #
+        #             # Attach trace file to Allure report
+        #             try:
+        #                 import allure
+        #                 with open(trace_path, "rb") as f:
+        #                     allure.attach(
+        #                         f.read(),
+        #                         name="Playwright Trace",
+        #                         attachment_type=allure.attachment_type.ZIP,
+        #                     )
+        #             except ImportError:
+        #                 logging.debug("allure-pytest not installed — skipping Allure trace attachment")
+        #             except Exception as e:
+        #                 logging.warning(f"Failed to attach trace to Allure report: {e}")
+        #
+        #             # Add trace link to pytest-html report
+        #             try:
+        #                 pytest_html = item.config.pluginmanager.getplugin("html")
+        #                 if pytest_html:
+        #                     trace_link = (
+        #                         f'<div>Playwright Trace: '
+        #                         f'<a href="{trace_path}" target="_blank">{os.path.basename(trace_path)}</a>'
+        #                         f' — open with <code>playwright show-trace {os.path.basename(trace_path)}</code>'
+        #                         f'</div>'
+        #                     )
+        #                     extra.append(pytest_html.extras.html(trace_link))
+        #             except Exception as e:
+        #                 logging.warning(f"Failed to add trace link to pytest-html report: {e}")
+        #
+        #         except Exception as e:
+        #             logging.warning(f"Failed to save Playwright trace: {e}")
 
-    # if report.when == 'call' or report.when == "setup":
-    #     xfail = hasattr(report, 'wasxfail')
-    #     # if (report.skipped and xfail) or (report.failed and not xfail):
-    #     #     file_name = report.nodeid.replace("::", "_")+".png"
-    #     #     screen_img = _capture_screenshot()
-    #     #     if file_name:
-    #     #         html = '<div><img src="data:image/png;base64,%s" alt="screenshot" style="width:600px;height:300px;" ' \
-    #     #                'onclick="window.open(this.src)" align="right"/></div>' % screen_img
-    #     #         extra.append(pytest_html.extras.html(html))
+        # --- pytest-html: embed screenshot as
+        # Base64 inline image ---
+        if screenshot_bytes:
+            try:
+                import base64
+                pytest_html = item.config.pluginmanager.getplugin("html")
+                if pytest_html:
+                    img_b64 = base64.b64encode(screenshot_bytes).decode()
+                    html_img = (
+                        '<div>'
+                        '<img src="data:image/png;base64,{}" '
+                        'alt="Failure Screenshot" '
+                        'style="width:800px; height:auto; cursor:pointer;" '
+                        'onclick="window.open(this.src)" />'
+                        '</div>'
+                    ).format(img_b64)
+                    extra.append(pytest_html.extras.html(html_img))
+            except Exception as e:
+                logging.warning(f"Failed to attach screenshot to pytest-html report: {e}")
 
     report.extra = extra
     # report.description = str(item.function.__doc__)
@@ -304,11 +374,17 @@ def pytest_configure(config):
     # logger.setLevel(level=logging.INFO)
 
     #root_path = os.path.split(os.path.realpath(__file__))[0]
-    root_path = os.path.abspath(os.path.join(_HOOKS_DIR, "..",".."))
-    report_root_path = root_path + os.sep + config.option.reportdir
-    reports_dir = Path(report_root_path)
+    # root_path = os.path.abspath(os.path.join(_HOOKS_DIR, "..",".."))
+    #root_path = str(config.rootdir)
+    report_dir = config.option.reportdir
+    if os.path.isabs(report_dir):
+        report_root_path = report_dir
+    else:
+        report_root_path = os.path.join(os.getcwd(), report_dir)
+    #report_root_path = root_path + os.sep + config.option.reportdir
+    report_root_dir = Path(report_root_path)
     # create testreport foler if doesn't exist
-    reports_dir.mkdir(exist_ok=True, parents=True)
+    report_root_dir.mkdir(exist_ok=True, parents=True)
     handler = TimedRotatingFileHandler(report_root_path + os.sep + 'run.log', when='d', interval=1, backupCount=30,
                                        encoding='utf-8')
     # handler.setLevel(eval("logging." + GetConfig.get_log_level()))
@@ -338,9 +414,9 @@ def pytest_configure(config):
         environment_str = (global_config.config.get('device_name','') + "_" + global_config.config.get('platform_name','')
                            + "_"+ global_config.config.get('platform_version',''))
         if environment_str != "__":  # run case by different device environment(mobile cases)
-            report_file_path = reports_dir / f"pytest_{environment_str}_{config_name}_{now.strftime('%Y%m%d %H%M%S')}.html"
+            report_file_path = report_root_dir / f"pytest_{environment_str}_{config_name}_{now.strftime('%Y%m%d %H%M%S')}.html"
         else:
-            report_file_path = reports_dir / f"pytest_{config_name}_{now.strftime('%Y%m%d %H%M%S')}.html"
+            report_file_path = report_root_dir / f"pytest_{config_name}_{now.strftime('%Y%m%d %H%M%S')}.html"
         # adjust plugin options
         config.option.htmlpath = report_file_path
         config.option.self_contained_html = True
@@ -351,20 +427,28 @@ def pytest_configure(config):
     # config.option.clean_alluredir = True
 
     global_config.config['report_file_path'] = config.option.htmlpath
-    allure_pre_process(reports_dir)
+    #allure_pre_process(report_root_dir)
+    allure_pre_process(report_root_path)
     # Ensure the screenshots output directory exists before tests run.
     screenshot_dir = os.path.join(report_root_path, "screenshots")
     os.makedirs(screenshot_dir, exist_ok=True)
     global_config.config['screenshot_dir'] = screenshot_dir
 
+    # Ensure the traces output directory exists before tests run.
+    # Traces are only saved for failed tests (retain-on-failure strategy).
+    trace_dir = os.path.join(report_root_path, "traces")
+    os.makedirs(trace_dir, exist_ok=True)
+    global_config.config['trace_dir'] = trace_dir
+
 
 def pytest_unconfigure(config):
     """
     """
-    # html_report_file_path = global_config.config['report_file_path']
-    # report_root_dir = os.path.dirname(html_report_file_path)
-    root_path = os.path.abspath(os.path.join(_HOOKS_DIR, "..",".."))
-    report_root_path = root_path + os.sep + config.option.reportdir
+    html_report_file_path = global_config.config['report_file_path']
+    report_root_path = os.path.dirname(html_report_file_path)
+
+    # root_path = os.path.abspath(os.path.join(_HOOKS_DIR, "..",".."))
+    # report_root_path = root_path + os.sep + config.option.reportdir
 
     # allure_resultdir_path = f'{report_root_dir}/allure-result/'
     # allure_reportdir_path = f'{report_root_dir}/allure-report/'
@@ -396,3 +480,7 @@ def pytest_unconfigure(config):
     #     email_obj.send_test_report_email(html_body_flag=True, attachment_flag=True,
     #                                      report_file_path=str(html_report_file_path),
     #                                      subject_prefix="%s test %s" % (test_type, config_name))
+
+
+
+
