@@ -153,6 +153,7 @@ class ProductsPage(BasePage):
         card.hover()
         add_btn = card.locator(".add-to-cart").first
         self.click(add_btn)
+        self.wait_for_visible(self.page.locator(".modal-content"))
 
     def dismiss_modal_and_continue(self) -> None:
         """
@@ -172,6 +173,8 @@ class ProductsPage(BasePage):
         view_cart_btn = self.page.locator("a:has-text('View Cart')")
         if view_cart_btn.is_visible():
             self.click(view_cart_btn)
+            logging.debug("Clicked 'View Cart'")
+            self.page.wait_for_url("**/view_cart**")
 
     def click_brand(self, brand_name: str) -> None:
         """
