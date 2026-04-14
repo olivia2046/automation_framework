@@ -9,7 +9,7 @@ Test suite for shopping cart functionality:
   - Cart persists after navigating away
 """
 
-import pytest
+import pytest,re
 from pages import ProductsPage, ProductDetailPage, CartPage
 
 
@@ -237,8 +237,14 @@ class TestCartContents:
 
         # Extract numeric value (handle "Rs. 500" → 500)
         def extract_amount(text):
-            digits = "".join(c for c in text if c.isdigit() or c == ".")
-            return float(digits) if digits else 0.0
+            """
+            Extract numeric value from a price string.
+            Examples: "Rs. 1000" → 1000.0, "$9.99" → 9.99, "1,500.00" → 1500.0
+            """
+            # Remove thousands separators, then find the first number (int or decimal)
+            cleaned = text.replace(",", "")
+            match = re.search(r"\d+(\.\d+)?", cleaned)
+            return float(match.group()) if match else 0.0
 
         unit_price = extract_amount(price_str)
         row_total = extract_amount(total_str)
