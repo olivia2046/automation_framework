@@ -186,6 +186,8 @@ class CheckoutPage(BasePage):
     def confirm_payment(self) -> None:
         """Click 'Pay and Confirm Order' to submit the payment form."""
         logger.info("Confirming payment")
+        # self.pay_and_confirm_btn.wait_for(state="visible")
+        # self.pay_and_confirm_btn.wait_for(state="enabled")
         self.click(self.pay_and_confirm_btn)
 
     def is_order_placed_successfully(self) -> bool:

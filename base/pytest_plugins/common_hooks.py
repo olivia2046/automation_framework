@@ -180,7 +180,8 @@ def auto_trace(context):
             pass
 
 
-@pytest.mark.optionalhook
+#@pytest.mark.optionalhook
+pytest.hookimpl(optionalhook=True)
 def pytest_html_results_table_header(cells):
     cells.insert(2, "<th>Description</th>")
     cells.insert(2, "<th>Test_nodeid</th>")
@@ -188,7 +189,8 @@ def pytest_html_results_table_header(cells):
     cells.pop(2)
 
 
-@pytest.mark.optionalhook
+#@pytest.mark.optionalhook
+pytest.hookimpl(optionalhook=True)
 def pytest_html_results_table_row(report, cells):
     if hasattr(report, 'description'):
         cells.insert(2, "<td>%s</td>" % report.description)
