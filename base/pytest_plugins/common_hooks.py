@@ -19,7 +19,7 @@ from playwright.sync_api import Page
 
 import base.globalvars as glo
 import base.config as global_config
-from base.allure_report_handler import allure_pre_process, make_allure_report
+#from base.allure_report_handler import allure_pre_process, make_allure_report
 
 
 # add automation_framework/ to sys.path, so base/ and projects/ both can be imported as top level package
@@ -208,7 +208,8 @@ def pytest_html_results_table_row(report, cells):
 #     report = outcome.get_result()
 #     report.description = str(item.function.__doc__)
 
-@pytest.mark.hookwrapper
+@pytest.mark.hookwrapper #deprecated, but it will fail with internal error if use pytest.hookimpl(hookwrapper=True) as suggested
+#pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item,call):
     """
     Hook that runs after each test phase (setup / call / teardown).
@@ -429,8 +430,7 @@ def pytest_configure(config):
     # config.option.clean_alluredir = True
 
     global_config.config['report_file_path'] = config.option.htmlpath
-    #allure_pre_process(report_root_dir)
-    allure_pre_process(report_root_path)
+    #allure_pre_process(report_root_path)
     # Ensure the screenshots output directory exists before tests run.
     screenshot_dir = os.path.join(report_root_path, "screenshots")
     os.makedirs(screenshot_dir, exist_ok=True)
@@ -459,7 +459,7 @@ def pytest_unconfigure(config):
     # cmd = "allure generate %s -o %s --clean" % (allure_resultdir_path, allure_reportdir_path)
     #
     # subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
-    make_allure_report(report_root_path)
+    #make_allure_report(report_root_path)
 
     # cmd="allure serve testreport/xml"
     # subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
