@@ -8,19 +8,19 @@ desc: to be added in jenkins job, to calculate test result
 import json
 import os
 
-# Define the path to the Allure summary file
-summary_file = "../testreport/allure-report/widgets/summary.json"
+# Define the path to the Allure summary file(**** to be executed from project root folder ****)
+summary_file = "testreport/allure-report/widgets/summary.json"
 
 # Open the summary file and load the data
 with open(summary_file, 'r') as f:
     summary_data = json.load(f)
 
 # Extract the values from the JSON
-test_count = summary_data['tests']
-passed_tests = summary_data['passed']
-failed_tests = summary_data['failed']
-skipped_tests = summary_data['skipped']
-duration = summary_data['time']
+test_count = summary_data['statistic']['total']
+passed_tests = summary_data['statistic']['passed']
+failed_tests = summary_data['statistic']['failed']
+skipped_tests = summary_data['statistic']['skipped']
+duration = summary_data['time']['duration']
 
 # Print the results (for debugging)
 print(f"Total Tests: {test_count}")
