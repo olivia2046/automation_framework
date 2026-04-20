@@ -9,7 +9,7 @@ import json
 import os
 
 # Define the path to the Allure summary file
-summary_file = "testreport/allure-results/allure-summary.json"
+summary_file = "../testreport/allure-results/allure-summary.json"
 
 # Open the summary file and load the data
 with open(summary_file, 'r') as f:
