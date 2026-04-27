@@ -11,14 +11,6 @@ import base64
 from Crypto.Cipher import AES #pycryptodome
 #from binascii import b2a_hex, a2b_hex
 
-def decryption(code):
-    """base64解密
-
-    :param code: 加密字符串
-
-    :return: base64解密后的字符串
-    """
-    return  base64.b64decode(bytes(code,encoding='utf-8'))
 
 def aes_encrypt(text, key, mode, iv):
     """使用AES加密
